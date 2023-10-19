@@ -1,8 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package pkg3dmarkers;
+
+import java.awt.Color;
 
 /**
  *
@@ -15,6 +14,7 @@ public class Transacciones extends javax.swing.JFrame {
      */
     public Transacciones() {
         initComponents();
+      //  this.getContentPane().setBackground(Color.GRAY);
     }
 
     /**
@@ -42,6 +42,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Transacción");
+        setBackground(new java.awt.Color(255, 255, 255));
 
         BtnInicioTransaccion.setText("Inicio");
         BtnInicioTransaccion.addActionListener(new java.awt.event.ActionListener() {
@@ -114,7 +115,7 @@ public class Transacciones extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addContainerGap(327, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,13 +139,13 @@ public class Transacciones extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnInicioTransaccion)
                     .addComponent(BtnInventarioTransaccion)
                     .addComponent(BtnTransaTransaccion)
                     .addComponent(BtnReportesTransaccion))
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -154,7 +155,7 @@ public class Transacciones extends javax.swing.JFrame {
                 .addComponent(BtnEditarTransaccion)
                 .addGap(18, 18, 18)
                 .addComponent(BtnEliminarTransaccion)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
