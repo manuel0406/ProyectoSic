@@ -2,6 +2,9 @@
 package pkg3dmarkers;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -11,9 +14,13 @@ public class Transacciones extends javax.swing.JFrame {
 
     /**
      * Creates new form Transacciones
-     */
+     */ 
+    
+    Conexion conexion= new Conexion();
+    
     public Transacciones() {
         initComponents();
+       conexion.conectar();
       //  this.getContentPane().setBackground(Color.GRAY);
     }
 
