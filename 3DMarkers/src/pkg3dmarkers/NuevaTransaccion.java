@@ -100,7 +100,7 @@ public class NuevaTransaccion extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(92, 92, 92)
                         .addComponent(BtnGuardarTransaccion)
-                        .addGap(64, 64, 64)
+                        .addGap(56, 56, 56)
                         .addComponent(jButton2)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
