@@ -26,6 +26,7 @@ public class NuevaTransaccion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCalendar1 = new com.toedter.calendar.JCalendar();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtMontoTransaccion = new javax.swing.JTextField();
@@ -178,6 +179,7 @@ public class NuevaTransaccion extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboCuentaTransacion;
     private javax.swing.JComboBox<String> cboSaldo;
     private javax.swing.JButton jButton2;
+    private com.toedter.calendar.JCalendar jCalendar1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
