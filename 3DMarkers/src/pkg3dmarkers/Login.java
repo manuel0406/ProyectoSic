@@ -133,7 +133,7 @@ public class Login extends javax.swing.JFrame {
                 buttonCancelarMouseExited(evt);
             }
         });
-        getContentPane().add(buttonCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 100, 40));
+        getContentPane().add(buttonCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 120, 40));
 
         buttonIniciarSesion.setBackground(new java.awt.Color(0, 0, 255));
         buttonIniciarSesion.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
