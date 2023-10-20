@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pkg3dmarkers;
+package clases;
 
 /**
  *
  * @author manue
  */
-public class AjusteBalanceComprobacion {
+public class PeriodoContable {
     
 }
