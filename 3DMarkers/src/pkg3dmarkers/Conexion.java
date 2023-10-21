@@ -16,7 +16,8 @@ public class Conexion {
     
      private Connection conectado;
      
-     public void conectar() { 
+     
+     public Connection conectar() { 
         try { 
         conectado = DriverManager.getConnection("jdbc:postgresql://localhost:5432/dmakers", "dmakers", "1234"); 
             System.out.println("exito");
@@ -24,9 +25,8 @@ public class Conexion {
         catch (SQLException ex) {
             System.out.println("ocurrio un error");
         
-        } 
-        
-        
+        }      
+        return conectado;
         
      } 
     
