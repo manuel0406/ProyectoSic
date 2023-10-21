@@ -3,6 +3,7 @@ package pkg3dmarkers;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 //@author Iván Alexander Carranza Sánchez
 
@@ -140,11 +141,19 @@ public class Login extends javax.swing.JFrame {
         buttonIniciarSesion.setForeground(new java.awt.Color(255, 255, 255));
         buttonIniciarSesion.setText("Iniciar Sesión");
         buttonIniciarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonIniciarSesionMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 buttonIniciarSesionMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 buttonIniciarSesionMouseExited(evt);
+            }
+        });
+        buttonIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonIniciarSesionActionPerformed(evt);
             }
         });
         getContentPane().add(buttonIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 210, 40));
@@ -254,6 +263,38 @@ public class Login extends javax.swing.JFrame {
         // Cierre de sistema
         System.exit(0);
     }//GEN-LAST:event_buttonCancelarMouseClicked
+
+    private void buttonIniciarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonIniciarSesionMouseClicked
+        // Acción de inicio de sesión
+        String contra = textContrasena.getText().trim(); 
+        String usuario = textUsuario.getText().trim();
+        String user = "3DMakers";
+        String password = "SIC115";
+        if(contra.equals(password) && usuario.equals(user))
+        {
+            // Crea una nueva instancia de NuevoVentana
+            Inicio inicio = new Inicio();
+            inicio.setVisible(true);
+             // Cierra la ventana actual
+             this.dispose();
+        }
+        else if ((contra.isEmpty() || contra.equals("Ingrese contraseña...")) && (usuario.isEmpty() || usuario.equals("Ingrese usuario...")))
+        {
+            JOptionPane.showMessageDialog(this, "Ingrese el usuario y contraseña correspondiente.", "Información no ingresada.", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else 
+        {
+             JOptionPane.showMessageDialog(this, "La constraseña o el usuario se han introducido de manera erronea, por favor verificar.", "Credenciales Invalidas.", JOptionPane.ERROR_MESSAGE);
+             textContrasena.setText("Ingrese contraseña...");
+             textContrasena.setForeground(new java.awt.Color(187,187,187));
+             textUsuario.setText("Ingrese contraseña...");
+             textUsuario.setForeground(new java.awt.Color(187,187,187));
+        }
+    }//GEN-LAST:event_buttonIniciarSesionMouseClicked
+
+    private void buttonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarSesionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonIniciarSesionActionPerformed
 
     /**
      * @param args the command line arguments
