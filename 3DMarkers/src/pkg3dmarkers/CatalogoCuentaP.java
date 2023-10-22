@@ -3,6 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package pkg3dmarkers;
+import java.awt.event.KeyEvent;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.Statement;
+
 
 /**
  *
@@ -13,10 +23,16 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     /**
      * Creates new form CatalogoCuentaP
      */
+    
+    
     public CatalogoCuentaP() {
         initComponents();
-    }
+        
+        lblData.setText("Editor de registros");
+        mostrarCatalogo(tableCatalogo);
 
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,10 +48,20 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         BtnReportesCatalogo = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TableCatalogo = new javax.swing.JTable();
-        BtnIngresarCuenta = new javax.swing.JButton();
-        BtnEditarCuenta = new javax.swing.JButton();
-        BtnEliminarCuenta = new javax.swing.JButton();
+        tableCatalogo = new javax.swing.JTable();
+        btnNuevaCuenta = new javax.swing.JButton();
+        btnEliminarCuenta = new javax.swing.JButton();
+        lblData = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtCuentaCodigo = new javax.swing.JTextField();
+        txtCuentaNombre = new javax.swing.JTextField();
+        btnGuardarCuenta = new javax.swing.JButton();
+        btnCancelarNuevaCuenta = new javax.swing.JButton();
+        btnModificarCuenta = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,97 +73,485 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         BtnReportesCatalogo.setText("Reportes");
 
-        jLabel1.setText("Catalogo actual");
+        jLabel1.setText("Catálogo actual");
 
-        TableCatalogo.setModel(new javax.swing.table.DefaultTableModel(
+        tableCatalogo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Código ", "Nombre  de la cuenta"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            }
+        ));
+        tableCatalogo.setFocusable(false);
+        tableCatalogo = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        tableCatalogo.getTableHeader().setResizingAllowed(false);
+        tableCatalogo.getTableHeader().setReorderingAllowed(false);
+        tableCatalogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableCatalogoMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(TableCatalogo);
+        jScrollPane1.setViewportView(tableCatalogo);
 
-        BtnIngresarCuenta.setText("Ingresar cuenta");
-        BtnIngresarCuenta.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevaCuenta.setText("Nueva Cuenta");
+        btnNuevaCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnIngresarCuentaActionPerformed(evt);
+                btnNuevaCuentaActionPerformed(evt);
             }
         });
 
-        BtnEditarCuenta.setText("Editar cuenta");
+        btnEliminarCuenta.setText("Eliminar Registro");
+        btnEliminarCuenta.setEnabled(false);
+        btnEliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCuentaActionPerformed(evt);
+            }
+        });
 
-        BtnEliminarCuenta.setText("Eliminar cuenta");
+        lblData.setText("Mostrando registro");
+
+        jLabel3.setText("Código:");
+
+        jLabel4.setText("Nombre:");
+
+        txtCuentaCodigo.setEnabled(false);
+        txtCuentaCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuentaCodigoKeyTyped(evt);
+            }
+        });
+
+        txtCuentaNombre.setEnabled(false);
+        txtCuentaNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuentaNombreKeyTyped(evt);
+            }
+        });
+
+        btnGuardarCuenta.setText("Guardar Registro");
+        btnGuardarCuenta.setEnabled(false);
+        btnGuardarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarCuentaActionPerformed(evt);
+            }
+        });
+
+        btnCancelarNuevaCuenta.setText("Cancelar");
+        btnCancelarNuevaCuenta.setEnabled(false);
+        btnCancelarNuevaCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarNuevaCuentaActionPerformed(evt);
+            }
+        });
+
+        btnModificarCuenta.setText("Actualizar Registro");
+        btnModificarCuenta.setEnabled(false);
+        btnModificarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarCuentaActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("ID:");
+        jLabel2.setEnabled(false);
+
+        txtID.setEditable(false);
+        txtID.setEnabled(false);
+        txtID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setForeground(new java.awt.Color(219, 0, 0));
+        jLabel5.setText("Nota: Para actualizar o eliminar un registro, haga clic en la tabla y seleccione la fila correspondiente. ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(BtnInicioCatalogo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnTransaCatalogo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnInventarioCatalogo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnReportesCatalogo))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblData)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
+                                .addGap(23, 23, 23)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCancelarNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(btnEliminarCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtCuentaNombre)
+                                        .addComponent(txtCuentaCodigo)
+                                        .addComponent(btnGuardarCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnModificarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(48, 48, 48))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(191, 191, 191)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 25, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BtnIngresarCuenta)
-                    .addComponent(BtnEditarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnEliminarCuenta)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BtnInicioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(BtnTransaCatalogo)
+                .addGap(18, 18, 18)
+                .addComponent(BtnReportesCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(228, 228, 228))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnInicioCatalogo)
+                    .addComponent(BtnReportesCatalogo)
                     .addComponent(BtnTransaCatalogo)
-                    .addComponent(BtnInventarioCatalogo)
-                    .addComponent(BtnReportesCatalogo))
-                .addGap(44, 44, 44)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnInventarioCatalogo))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblData)
+                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(25, 25, 25)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtCuentaNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGuardarCuenta)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnModificarCuenta)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminarCuenta)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelarNuevaCuenta)))
                 .addGap(18, 18, 18)
-                .addComponent(BtnIngresarCuenta)
+                .addComponent(btnNuevaCuenta)
                 .addGap(18, 18, 18)
-                .addComponent(BtnEditarCuenta)
-                .addGap(18, 18, 18)
-                .addComponent(BtnEliminarCuenta)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jLabel5)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnIngresarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarCuentaActionPerformed
+    private void btnNuevaCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCuentaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BtnIngresarCuentaActionPerformed
+        txtCuentaCodigo.setText("");
+        txtCuentaNombre.setText("");
+        txtID.setText("");
+        txtCuentaCodigo.setEnabled(true);
+        txtCuentaNombre.setEnabled(true);
+        
+        lblData.setText("Ingresando nuevo registro");
+        btnGuardarCuenta.setEnabled(true);        
+        btnCancelarNuevaCuenta.setEnabled(true); 
+        btnModificarCuenta.setEnabled(false);
+        btnEliminarCuenta.setEnabled(false);
+    }//GEN-LAST:event_btnNuevaCuentaActionPerformed
 
+    //Metodo que bloquea las teclas no numericas
+    private void txtCuentaCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuentaCodigoKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String text = txtCuentaCodigo.getText();
+
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) || (text.length() >= 5)) {
+            evt.consume(); // Bloquea la entrada de caracteres no numéricos o más de 5 cifras
+        }
+    }//GEN-LAST:event_txtCuentaCodigoKeyTyped
+
+    private void txtCuentaNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuentaNombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!(Character.isLetter(c) || c == ' ' || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '\u00E1' || c == '\u00E9' || c == '\u00ED' || c == '\u00F3' || c == '\u00FA' || c == '\u00C1' || c == '\u00C9' || c == '\u00CD' || c == '\u00D3' || c == '\u00DA' || c == '\u00F1' || c == '\u00D1')) {
+            evt.consume(); // Bloquea la entrada de otros caracteres
+        }
+        
+    }//GEN-LAST:event_txtCuentaNombreKeyTyped
+
+    private void btnGuardarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCuentaActionPerformed
+        // TODO add your handling code here:
+        //CatalogoCuentaQ nuevaCuenta = new CatalogoCuentaQ();
+        
+        nuevaCuenta(txtCuentaCodigo, txtCuentaNombre);
+        mostrarCatalogo(tableCatalogo);
+
+        txtCuentaCodigo.setText("");
+        txtCuentaNombre.setText("");
+    }//GEN-LAST:event_btnGuardarCuentaActionPerformed
+
+    private void btnCancelarNuevaCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNuevaCuentaActionPerformed
+        // TODO add your handling code here:
+        txtCuentaCodigo.setText("");
+        txtCuentaNombre.setText("");
+        txtCuentaCodigo.setEnabled(false);
+        txtCuentaNombre.setEnabled(false);
+
+        btnGuardarCuenta.setEnabled(false);
+        btnModificarCuenta.setEnabled(false);
+        btnCancelarNuevaCuenta.setEnabled(false);
+        btnEliminarCuenta.setEnabled(false);
+
+        lblData.setText("Editor de registros");
+    }//GEN-LAST:event_btnCancelarNuevaCuentaActionPerformed
+
+    private void tableCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCatalogoMouseClicked
+        // TODO add your handling code here:
+        //CatalogoCuentaQ editarCuenta = new CatalogoCuentaQ();
+        seleccionarRegistro(tableCatalogo, txtID,txtCuentaCodigo, txtCuentaNombre);
+        
+        //activando entradas
+        txtCuentaCodigo.setEnabled(true);
+        txtCuentaNombre.setEnabled(true);
+        
+        //activando botones especiales
+        btnGuardarCuenta.setEnabled(false);                
+        btnModificarCuenta.setEnabled(true);        
+        btnCancelarNuevaCuenta.setEnabled(true);        
+        btnEliminarCuenta.setEnabled(true);        
+        lblData.setText("Mostrando registro");
+    }//GEN-LAST:event_tableCatalogoMouseClicked
+
+    private void btnModificarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCuentaActionPerformed
+        // TODO add your handling code here:
+        editarCuenta(txtID, txtCuentaCodigo, txtCuentaNombre);
+        mostrarCatalogo(tableCatalogo);
+
+        //txtCuentaCodigo.setText("");
+        //txtCuentaNombre.setText("");
+        //txtID.setText("");
+
+    }//GEN-LAST:event_btnModificarCuentaActionPerformed
+
+    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDActionPerformed
+
+    private void btnEliminarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCuentaActionPerformed
+        // TODO add your handling code here:
+        eliminarCuenta(txtID, txtCuentaCodigo, txtCuentaNombre);
+        mostrarCatalogo(tableCatalogo);
+
+        
+    }//GEN-LAST:event_btnEliminarCuentaActionPerformed
+    
+    
+    
+    public void mostrarCatalogo(JTable tablaCatalogo) {
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        modelo.addColumn("id");
+        modelo.addColumn("Código");
+        modelo.addColumn("Nombre");
+
+        tablaCatalogo.setModel(modelo);
+
+        String sql = "SELECT idcatalgo, codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
+
+        String[] datos = new String[3];
+
+        Statement statement = null;
+
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                datos[0] = resultSet.getString(1);
+                datos[1] = resultSet.getString(2);
+                datos[2] = resultSet.getString(3);
+                modelo.addRow(datos);
+            }
+
+            // Codigo usado para ocultar la columna "id"
+            int columnIndexToHide = 0;
+            tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setMinWidth(0);
+            tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setMaxWidth(0);
+            tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setWidth(0);
+
+            tablaCatalogo.setModel(modelo);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+
+        }
+    }
+    
+    
+    public void nuevaCuenta(JTextField paramCodigo, JTextField paramNombre) {
+        int codigo = Integer.parseInt(paramCodigo.getText());
+        String nombre = paramNombre.getText();
+        
+        Conexion objetoConexion = new Conexion();
+
+        String consulta = "insert into catalogocuenta (codigo, nombrecuenta) values (?, ?);";
+
+        try {
+            CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+            cs.setInt(1, codigo);
+            cs.setString(2, nombre);
+
+            cs.execute();
+            JOptionPane.showMessageDialog(null, "Cuenta agregada");
+
+        } catch (Exception e) {
+            if (e.getMessage().contains("llave duplicada viola restricción de unicidad")) {
+                JOptionPane.showMessageDialog(null,
+                        "No se puede agregar una nueva cuenta con un código que ya se encuentra en uso.\n"
+                        + "Sin embargo, puede modificar la cuenta existente asociada a este código.",
+                        "Error: Código Duplicado",
+                        JOptionPane.ERROR_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+            }
+        }
+    }
+    
+    
+    public void seleccionarRegistro(JTable paramTabla, JTextField paramID,JTextField paramCodigo, JTextField paramNombre) {
+        try {
+            int fila = paramTabla.getSelectedRow();
+            
+            if(fila >= 0){
+                
+                paramID.setText(paramTabla.getValueAt(fila, 0).toString());
+                paramCodigo.setText(paramTabla.getValueAt(fila, 1).toString());
+                paramNombre.setText(paramTabla.getValueAt(fila, 2).toString());
+                
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Ninguna fila ha sido seleccionada aun");
+
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+
+        }   
+    }
+    
+    
+    public void editarCuenta(JTextField paramID, JTextField paramCodigo, JTextField paramNombre) {
+        int id = Integer.parseInt(paramID.getText());
+        int codigo = Integer.parseInt(paramCodigo.getText());
+        String nombre = paramNombre.getText();
+
+        Conexion objetoConexion = new Conexion();
+
+        String consulta = "UPDATE catalogocuenta SET codigo = ?, nombrecuenta = ? WHERE catalogocuenta.idcatalgo = ?;";
+
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de actualizar este registro?", "Actualizar registro", JOptionPane.YES_NO_OPTION);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setInt(1, codigo);
+                cs.setString(2, nombre);
+                cs.setInt(3, id);
+
+                cs.execute();
+                JOptionPane.showMessageDialog(null, "Cuenta actualizada");
+ 
+                // Limpia del formulario el registro eliminado  para evitar problemas
+                txtCuentaCodigo.setText("");
+                txtCuentaNombre.setText("");
+                txtID.setText("");
+
+            } catch (Exception e) {
+                if (e.getMessage().contains("llave duplicada viola restricción de unicidad")) {
+                    JOptionPane.showMessageDialog(null,
+                            "No puedes editar la cuenta actual porque el código que intentas usar ya está en uso por otro registro.\n"
+                            + "Por favor, utiliza un código único para esta cuenta.",
+                            "Error: Código Duplicado",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+                }
+            }
+        }
+    }
+
+  
+    public void eliminarCuenta(JTextField paramID, JTextField paramCodigo, JTextField paramNombre) {
+        int id = Integer.parseInt(paramID.getText());
+        int codigo = Integer.parseInt(paramCodigo.getText());
+        String nombre = paramNombre.getText();
+
+        Conexion objetoConexion = new Conexion();
+
+        String consulta = "DELETE FROM catalogocuenta WHERE catalogocuenta.idcatalgo = ?;";
+
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este registro?", "Eliminar registro", JOptionPane.YES_NO_OPTION);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            try {
+                int codigoAEliminar = codigo;
+                String nombreAEliminar = nombre;
+
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setInt(1, id);
+
+                cs.execute();
+
+                // Mostrando el registro eliminado
+                String mensaje = "La cuenta:    " + codigoAEliminar + " " + nombreAEliminar + "     ha sido eliminada";
+                JOptionPane.showMessageDialog(null, mensaje);
+
+                // Limpia del formulario el registro eliminado  para evitar problemas
+                txtCuentaCodigo.setText("");
+                txtCuentaNombre.setText("");
+                txtID.setText("");
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -164,6 +578,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(CatalogoCuentaP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -174,15 +591,25 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnEditarCuenta;
-    private javax.swing.JButton BtnEliminarCuenta;
-    private javax.swing.JButton BtnIngresarCuenta;
     private javax.swing.JButton BtnInicioCatalogo;
     private javax.swing.JButton BtnInventarioCatalogo;
     private javax.swing.JButton BtnReportesCatalogo;
     private javax.swing.JButton BtnTransaCatalogo;
-    private javax.swing.JTable TableCatalogo;
+    private javax.swing.JButton btnCancelarNuevaCuenta;
+    private javax.swing.JButton btnEliminarCuenta;
+    private javax.swing.JButton btnGuardarCuenta;
+    private javax.swing.JButton btnModificarCuenta;
+    private javax.swing.JButton btnNuevaCuenta;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblData;
+    private javax.swing.JTable tableCatalogo;
+    private javax.swing.JTextField txtCuentaCodigo;
+    private javax.swing.JTextField txtCuentaNombre;
+    private javax.swing.JTextField txtID;
     // End of variables declaration//GEN-END:variables
 }
