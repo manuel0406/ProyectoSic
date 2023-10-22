@@ -21,6 +21,9 @@ public class Transacciones extends javax.swing.JFrame {
     public Transacciones() {
         initComponents();
        conexion.conectar();
+       
+        
+       
      
     }
 
