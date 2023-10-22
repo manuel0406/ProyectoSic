@@ -1,19 +1,76 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package pkg3dmarkers;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.SwingConstants;
 
 /**
  *
- * @author ivuan
+ * @author Iván Alexander Carranza Sánchez
  */
 public class Inicio extends javax.swing.JFrame {
 
     //Inicio del formulario
     public Inicio() {
         initComponents();
+        centrarVentanaEnPantalla();
+         iconoBotones();
     }
+    
+     //CENTRADO DE VENTANA
+    private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
+    private void iconoBotones()
+    {
+        //Asignación de Iconos a botones
+        
+        //INVENTARIO
+        btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoInventario.png"))); 
+        btnInventario.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnInventario.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        //TRANSACCIONES
+         btnTransacciones.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoTransaccion.png"))); 
+         btnTransacciones.setHorizontalTextPosition(SwingConstants.CENTER);
+         btnTransacciones.setVerticalTextPosition(SwingConstants.BOTTOM);
+         
+         //CATALOGO
+        btnCatalogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoCatalogo.png"))); 
+        btnCatalogo.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCatalogo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        //ESTADO DE RESULTADOS
+        btnResultado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoResultado.png"))); 
+        btnResultado.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnResultado.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        //BALANCE DE COMPROBACIÓN
+        btnComprobación.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoComprobacion.png"))); 
+        btnComprobación.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnComprobación.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        //ESTADO DE CAPITAL
+        btnCapital.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoCapital.png"))); 
+        btnCapital.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCapital.setVerticalTextPosition(SwingConstants.BOTTOM);
+         
+        //BALANCE GENERAL
+        btnGeneral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoGeneral.png"))); 
+        btnGeneral.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnGeneral.setVerticalTextPosition(SwingConstants.BOTTOM);
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -24,21 +81,328 @@ public class Inicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        btnCerrar = new javax.swing.JButton();
+        btnCatalogo = new javax.swing.JButton();
+        btnTransacciones = new javax.swing.JButton();
+        btnInventario = new javax.swing.JButton();
+        btnCapital = new javax.swing.JButton();
+        btnResultado = new javax.swing.JButton();
+        btnComprobación = new javax.swing.JButton();
+        btnGeneral = new javax.swing.JButton();
+        lblInicio = new javax.swing.JLabel();
+        lblReportes = new javax.swing.JLabel();
+        lblFondoInicio = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 359, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setSize(new java.awt.Dimension(510, 316));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 160, 30));
+
+        btnCatalogo.setBackground(new java.awt.Color(153, 255, 153));
+        btnCatalogo.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCatalogo.setForeground(new java.awt.Color(0, 0, 0));
+        btnCatalogo.setText("\nGestión de Catalogo");
+        btnCatalogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCatalogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 200, 110));
+
+        btnTransacciones.setBackground(new java.awt.Color(255, 153, 153));
+        btnTransacciones.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnTransacciones.setForeground(new java.awt.Color(0, 0, 0));
+        btnTransacciones.setText("\n\n\n\nTransacciones");
+        btnTransacciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTransaccionesMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnTransaccionesMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnTransaccionesMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnTransacciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 70, 150, 110));
+
+        btnInventario.setBackground(new java.awt.Color(255, 255, 153));
+        btnInventario.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnInventario.setForeground(new java.awt.Color(0, 0, 0));
+        btnInventario.setText("\nInventario");
+        btnInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 160, 110));
+
+        btnCapital.setBackground(new java.awt.Color(153, 153, 255));
+        btnCapital.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCapital.setForeground(new java.awt.Color(0, 0, 0));
+        btnCapital.setText("\nEstado de Capital");
+        btnCapital.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCapitalMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCapitalMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCapitalMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCapital, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 260, 170, 100));
+
+        btnResultado.setBackground(new java.awt.Color(153, 204, 255));
+        btnResultado.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnResultado.setForeground(new java.awt.Color(0, 0, 0));
+        btnResultado.setText("\nEstado de Resultados");
+        btnResultado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnResultadoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnResultadoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnResultadoMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnResultado, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 180, 100));
+
+        btnComprobación.setBackground(new java.awt.Color(153, 255, 255));
+        btnComprobación.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnComprobación.setForeground(new java.awt.Color(0, 0, 0));
+        btnComprobación.setText("\nBalance de Comprobación");
+        btnComprobación.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnComprobación, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 220, 100));
+
+        btnGeneral.setBackground(new java.awt.Color(255, 153, 255));
+        btnGeneral.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnGeneral.setForeground(new java.awt.Color(0, 0, 0));
+        btnGeneral.setText("\nBalance General");
+        btnGeneral.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGeneralMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnGeneralMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnGeneralMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnGeneral, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 180, 100));
+
+        lblInicio.setFont(new java.awt.Font("Franklin Gothic Demi Cond", 1, 36)); // NOI18N
+        lblInicio.setForeground(new java.awt.Color(0, 0, 0));
+        lblInicio.setText("REPORTES");
+        getContentPane().add(lblInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, -1, -1));
+
+        lblReportes.setFont(new java.awt.Font("Franklin Gothic Demi Cond", 1, 36)); // NOI18N
+        lblReportes.setForeground(new java.awt.Color(0, 0, 0));
+        lblReportes.setText("INICIO");
+        getContentPane().add(lblReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, -1, -1));
+
+        lblFondoInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoBlanco.jpg"))); // NOI18N
+        lblFondoInicio.setMaximumSize(new java.awt.Dimension(450, 450));
+        lblFondoInicio.setPreferredSize(new java.awt.Dimension(640, 400));
+        getContentPane().add(lblFondoInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTransaccionesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaccionesMouseExited
+        // Regresa al color original fuera
+        btnTransacciones.setBackground(new Color(255,153,153));
+        btnTransacciones.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnTransaccionesMouseExited
+
+    private void btnTransaccionesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaccionesMouseEntered
+        btnTransacciones.setBackground(new Color(255,255,255));
+        btnTransacciones.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnTransaccionesMouseEntered
+
+    private void btnInventarioMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseExited
+        // Regresa al color original fuera
+        btnInventario.setBackground(new Color(255,255,153));
+        btnInventario.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnInventarioMouseExited
+
+    private void btnInventarioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseEntered
+        btnInventario.setBackground(new Color(255,255,255));
+        btnInventario.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnInventarioMouseEntered
+
+    private void btnCatalogoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseEntered
+        btnCatalogo.setBackground(new Color(255,255,255));
+        btnCatalogo.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnCatalogoMouseEntered
+
+    private void btnCatalogoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseExited
+        // Regresa al color original fuera
+        btnCatalogo.setBackground(new Color(153,255,153));
+        btnCatalogo.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnCatalogoMouseExited
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+       btnCerrar.setBackground(new Color(255,102,102));
+        btnCerrar.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setForeground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+         // Crea una nueva instancia de NuevoVentana
+            Login login = new Login();
+            login.setVisible(true);
+             // Cierra la ventana actual
+             this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnComprobaciónMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseExited
+        // Regresa al color original fuera
+        btnComprobación.setBackground(new Color(153,255,255));
+        btnComprobación.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnComprobaciónMouseExited
+
+    private void btnComprobaciónMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseEntered
+       btnComprobación.setBackground(new Color(255,255,255));
+        btnComprobación.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnComprobaciónMouseEntered
+
+    private void btnResultadoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResultadoMouseExited
+        // Regresa al color original fuera
+        btnResultado.setBackground(new Color(153,204,255));
+        btnResultado.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnResultadoMouseExited
+
+    private void btnResultadoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResultadoMouseEntered
+        btnResultado.setBackground(new Color(255,255,255));
+        btnResultado.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnResultadoMouseEntered
+
+    private void btnCapitalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCapitalMouseExited
+        // Regresa al color original fuera
+        btnCapital.setBackground(new Color(153,153,255));
+        btnCapital.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnCapitalMouseExited
+
+    private void btnCapitalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCapitalMouseEntered
+        btnCapital.setBackground(new Color(255,255,255));
+        btnCapital.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnCapitalMouseEntered
+
+    private void btnGeneralMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseExited
+        // Regresa al color original fuera
+        btnGeneral.setBackground(new Color(255,153,255));
+        btnGeneral.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnGeneralMouseExited
+
+    private void btnGeneralMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseEntered
+       btnGeneral.setBackground(new Color(255,255,255));
+       btnGeneral.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnGeneralMouseEntered
+
+    private void btnTransaccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaccionesMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+       Transacciones transaccion = new Transacciones();
+        transaccion.setVisible(true);
+         // Cierra la ventana actual
+         this.dispose();
+    }//GEN-LAST:event_btnTransaccionesMouseClicked
+
+    private void btnInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseClicked
+       // Crea una nueva instancia de NuevoVentana
+       InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+         // Cierra la ventana actual
+         this.dispose();
+    }//GEN-LAST:event_btnInventarioMouseClicked
+
+    private void btnCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+       CatalogoCuentaP catalogo = new CatalogoCuentaP();
+        catalogo.setVisible(true);
+         // Cierra la ventana actual
+         this.dispose();
+    }//GEN-LAST:event_btnCatalogoMouseClicked
+
+    private void btnComprobaciónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseClicked
+       // Crea una nueva instancia de NuevoVentana
+       BalanceComprobacionP balance = new BalanceComprobacionP();
+        balance.setVisible(true);
+         // Cierra la ventana actual
+         this.dispose();
+    }//GEN-LAST:event_btnComprobaciónMouseClicked
+
+    private void btnResultadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResultadoMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        EstadoResultadoP resultado = new EstadoResultadoP();
+        resultado.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnResultadoMouseClicked
+
+    private void btnCapitalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCapitalMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        EstadoCapitalP capital = new EstadoCapitalP();
+        capital.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCapitalMouseClicked
+
+    private void btnGeneralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        BalanceGeneralP balance = new BalanceGeneralP();
+        balance.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnGeneralMouseClicked
 
     /**
      * @param args the command line arguments
@@ -76,5 +440,16 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCapital;
+    private javax.swing.JButton btnCatalogo;
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnComprobación;
+    private javax.swing.JButton btnGeneral;
+    private javax.swing.JButton btnInventario;
+    private javax.swing.JButton btnResultado;
+    private javax.swing.JButton btnTransacciones;
+    private javax.swing.JLabel lblFondoInicio;
+    private javax.swing.JLabel lblInicio;
+    private javax.swing.JLabel lblReportes;
     // End of variables declaration//GEN-END:variables
 }

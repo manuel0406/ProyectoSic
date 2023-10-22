@@ -151,11 +151,6 @@ public class Login extends javax.swing.JFrame {
                 buttonIniciarSesionMouseExited(evt);
             }
         });
-        buttonIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonIniciarSesionActionPerformed(evt);
-            }
-        });
         getContentPane().add(buttonIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 210, 40));
 
         Formulario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoBlanco.jpg"))); // NOI18N
@@ -190,7 +185,6 @@ public class Login extends javax.swing.JFrame {
         // Regresa al color original fuera
         buttonIniciarSesion.setBackground(new Color(0, 0, 255));
         buttonIniciarSesion.setForeground(new java.awt.Color(255,255,255));
-        //textUsuario.setForeground(new java.awt.Color(187,187,187));
     }//GEN-LAST:event_buttonIniciarSesionMouseExited
 
     private void buttonCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonCancelarMouseEntered
@@ -291,10 +285,6 @@ public class Login extends javax.swing.JFrame {
              textUsuario.setForeground(new java.awt.Color(187,187,187));
         }
     }//GEN-LAST:event_buttonIniciarSesionMouseClicked
-
-    private void buttonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIniciarSesionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonIniciarSesionActionPerformed
 
     /**
      * @param args the command line arguments
