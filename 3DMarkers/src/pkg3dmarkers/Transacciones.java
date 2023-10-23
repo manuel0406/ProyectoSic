@@ -105,8 +105,6 @@ public class Transacciones extends javax.swing.JFrame {
         cboCuentaTrasaccion = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         cboSaldoTransaccion = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        fechaTransaccion = new com.toedter.calendar.JDateChooser();
         bntGuardarTransaccion = new javax.swing.JButton();
         btnCancelarTransaccion = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
@@ -169,8 +167,6 @@ public class Transacciones extends javax.swing.JFrame {
 
         cboSaldoTransaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber", " " }));
 
-        jLabel7.setText("Seleccionar fecha:");
-
         bntGuardarTransaccion.setText("Guardar");
 
         btnCancelarTransaccion.setText("Cancelar");
@@ -187,7 +183,7 @@ public class Transacciones extends javax.swing.JFrame {
                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
                                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,7 +191,7 @@ public class Transacciones extends javax.swing.JFrame {
                                     .addComponent(jLabel8))
                                 .addGap(40, 40, 40)
                                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(cboCuentaTrasaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
@@ -207,22 +203,18 @@ public class Transacciones extends javax.swing.JFrame {
                                             .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(txtConceptoTransaccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(txtMontoTransaccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(cboSaldoTransaccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, Short.MAX_VALUE)
-                                            .addComponent(fechaTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                        .addComponent(bntGuardarTransaccion)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnCancelarTransaccion))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
+                                                        .addComponent(bntGuardarTransaccion)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(btnCancelarTransaccion))
+                                                    .addComponent(cboSaldoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(btnActualizarTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
                                 .addComponent(btnNuevaTransaccion)
                                 .addGap(33, 33, 33)
-                                .addComponent(btnEliminarTransaccion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnActualizarTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnEliminarTransaccion))))
                     .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
                         .addGap(261, 261, 261)
                         .addComponent(BtnInicioTransaccion)
@@ -230,7 +222,7 @@ public class Transacciones extends javax.swing.JFrame {
                         .addComponent(BtnInventarioTransaccion)
                         .addGap(18, 18, 18)
                         .addComponent(BtnReportesReportes)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         cboCuentaAjusteLayout.setVerticalGroup(
             cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,21 +258,16 @@ public class Transacciones extends javax.swing.JFrame {
                         .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(cboSaldoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(fechaTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
+                        .addGap(33, 33, 33)
                         .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bntGuardarTransaccion)
-                            .addComponent(btnCancelarTransaccion))))
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEliminarTransaccion)
-                        .addComponent(btnNuevaTransaccion))
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnCancelarTransaccion))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnActualizarTransaccion)))
+                .addGap(10, 10, 10)
+                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEliminarTransaccion)
+                    .addComponent(btnNuevaTransaccion))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -352,7 +339,6 @@ public class Transacciones extends javax.swing.JFrame {
     private javax.swing.JPanel cboCuentaAjuste;
     private javax.swing.JComboBox<String> cboCuentaTrasaccion;
     private javax.swing.JComboBox<String> cboSaldoTransaccion;
-    private com.toedter.calendar.JDateChooser fechaTransaccion;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -360,7 +346,6 @@ public class Transacciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableTransacion;

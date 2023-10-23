@@ -14,12 +14,11 @@ public class Transaccion {
    // CatalogoCuenta cuenta = new CatalogoCuenta();
     
     int id;
-    Date fecha;    
     String cuenta;
     String concepto;
     Double  debe;
     Double haber;            
-    double monto;
+   
     
     
     
