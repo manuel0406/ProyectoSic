@@ -15,6 +15,7 @@ public class Login extends javax.swing.JFrame {
         centrarVentanaEnPantalla();
         textUsuario.setForeground(new java.awt.Color(187,187,187));
         textContrasena.setForeground(new java.awt.Color(187,187,187));
+        textContrasena.setEchoChar((char) 0);
     }
 
     //CENTRADO DE VENTANA
@@ -42,7 +43,7 @@ public class Login extends javax.swing.JFrame {
         labelConstrasena = new javax.swing.JLabel();
         labelUsuario = new javax.swing.JLabel();
         Encabezada = new javax.swing.JLabel();
-        textContrasena = new javax.swing.JTextField();
+        textContrasena = new javax.swing.JPasswordField();
         textUsuario = new javax.swing.JTextField();
         buttonCancelar = new javax.swing.JButton();
         buttonIniciarSesion = new javax.swing.JButton();
@@ -84,11 +85,6 @@ public class Login extends javax.swing.JFrame {
         textContrasena.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 textContrasenaMouseClicked(evt);
-            }
-        });
-        textContrasena.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textContrasenaActionPerformed(evt);
             }
         });
         getContentPane().add(textContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 210, 30));
@@ -163,10 +159,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textContrasenaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textContrasenaActionPerformed
-
     private void textUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textUsuarioActionPerformed
@@ -214,25 +206,6 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_textUsuarioFocusLost
 
-    private void textContrasenaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textContrasenaFocusLost
-        // TODO add your handling code here:
-         // Modificación al quitar el enfoque
-        String texto = textContrasena.getText().trim();
-        if (texto.isEmpty() || texto.equals(".")) {
-            textContrasena.setText("Ingrese contraseña...");
-            textContrasena.setForeground(new java.awt.Color(187,187,187));
-        }
-    }//GEN-LAST:event_textContrasenaFocusLost
-
-    private void textContrasenaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textContrasenaMouseClicked
-        // Verificacion del textbox
-        String texto = textContrasena.getText().trim();
-        if (texto.equals("Ingrese contraseña...")) {
-            textContrasena.setText("");
-            textContrasena.setForeground(new java.awt.Color(0,0,0));
-        } 
-    }//GEN-LAST:event_textContrasenaMouseClicked
-
     private void textUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textUsuarioFocusGained
          // Verificacion del textbox
         String texto = textUsuario.getText().trim();
@@ -240,15 +213,6 @@ public class Login extends javax.swing.JFrame {
             textUsuario.setText("");
             textUsuario.setForeground(new java.awt.Color(0,0,0));}
     }//GEN-LAST:event_textUsuarioFocusGained
-
-    private void textContrasenaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textContrasenaFocusGained
-        // Verificacion del textbox
-        String texto = textContrasena.getText().trim();
-        if (texto.equals("Ingrese contraseña...")) {
-            textContrasena.setText("");
-            textContrasena.setForeground(new java.awt.Color(0,0,0));
-        } 
-    }//GEN-LAST:event_textContrasenaFocusGained
 
     private void buttonCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonCancelarMouseClicked
         // Cierre de sistema
@@ -283,6 +247,36 @@ public class Login extends javax.swing.JFrame {
              this.dispose();
         }
     }//GEN-LAST:event_buttonIniciarSesionMouseClicked
+
+    private void textContrasenaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textContrasenaMouseClicked
+         // Verificacion del textbox
+        String texto = textContrasena.getText().trim();
+        if (texto.equals("Ingrese contraseña...")) {
+            textContrasena.setText("");
+            textContrasena.setForeground(new java.awt.Color(0,0,0));
+            //textContrasena.setEchoChar((char) 0);
+        } 
+    }//GEN-LAST:event_textContrasenaMouseClicked
+
+    private void textContrasenaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textContrasenaFocusLost
+        // Modificación al quitar el enfoque
+        String texto = textContrasena.getText().trim();
+        if (texto.isEmpty() || texto.equals(".")) {
+            textContrasena.setText("Ingrese contraseña...");
+            textContrasena.setForeground(new java.awt.Color(187,187,187));
+            textContrasena.setEchoChar((char) 0);
+        }
+    }//GEN-LAST:event_textContrasenaFocusLost
+
+    private void textContrasenaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textContrasenaFocusGained
+        // Verificacion del textbox
+        String texto = textContrasena.getText().trim();
+        if (texto.equals("Ingrese contraseña...")) {
+            textContrasena.setText("");
+            textContrasena.setForeground(new java.awt.Color(0,0,0));
+            textContrasena.setEchoChar('\u2022');
+        } 
+    }//GEN-LAST:event_textContrasenaFocusGained
 
     /**
      * @param args the command line arguments
@@ -328,7 +322,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton buttonIniciarSesion;
     private javax.swing.JLabel labelConstrasena;
     private javax.swing.JLabel labelUsuario;
-    private javax.swing.JTextField textContrasena;
+    private javax.swing.JPasswordField textContrasena;
     private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables
 }
