@@ -14,7 +14,7 @@ public class Inicio extends javax.swing.JFrame {
     //Inicio del formulario
     public Inicio() {
         initComponents();
-        centrarVentanaEnPantalla();
+         centrarVentanaEnPantalla();
          iconoBotones();
     }
     

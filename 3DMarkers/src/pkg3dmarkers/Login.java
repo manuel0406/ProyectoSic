@@ -29,9 +29,6 @@ public class Login extends javax.swing.JFrame {
         // Establece la ubicación de la ventana
         setLocation(x, y);
     }
-
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -279,10 +276,11 @@ public class Login extends javax.swing.JFrame {
         else 
         {
              JOptionPane.showMessageDialog(this, "La constraseña o el usuario se han introducido de manera erronea, por favor verificar.", "Credenciales Invalidas.", JOptionPane.ERROR_MESSAGE);
-             textContrasena.setText("Ingrese contraseña...");
-             textContrasena.setForeground(new java.awt.Color(187,187,187));
-             textUsuario.setText("Ingrese contraseña...");
-             textUsuario.setForeground(new java.awt.Color(187,187,187));
+             // Crea una nueva instancia de NuevoVentana
+            Login login = new Login();
+            login.setVisible(true);
+             // Cierra la ventana actual
+             this.dispose();
         }
     }//GEN-LAST:event_buttonIniciarSesionMouseClicked
 

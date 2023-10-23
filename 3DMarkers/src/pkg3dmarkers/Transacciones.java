@@ -1,14 +1,15 @@
-
 package pkg3dmarkers;
 
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import javax.swing.SwingConstants;
+import javax.swing.table.JTableHeader;
 
 /**
  *
- * @author manue
+ * @author Manuel Alcides Ascencio Aleman
  */
 public class Transacciones extends javax.swing.JFrame {
 
@@ -21,10 +22,56 @@ public class Transacciones extends javax.swing.JFrame {
     public Transacciones() {
         initComponents();
        conexion.conectar();
+       centrarVentanaEnPantalla();
+       iconoBotones();
        
+       //Establece color a texto
+        txtMontoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        txtConceptoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        cboCuentaTransacion.setForeground(new java.awt.Color(187,187,187));
+        cboSaldo.setForeground(new java.awt.Color(187,187,187));
+
+        // Fuente personalizada a calendario
+        Font customFont = new Font("Dubai", Font.BOLD, 18);
+        Fecha.setFont(customFont);
         
-       
-     
+        //TABLA RENDERIZADA
+        //Fuente a cuerpo
+        tableTransacc.setFont(customFont);
+        //Fuente a encabezado
+        JTableHeader header = tableTransacc.getTableHeader();
+        header.setFont(customFont);
+        header.setForeground(Color.BLACK);
+        tableTransacc.getTableHeader().setBackground(new Color(0,0,0));
+    }
+    
+     //CENTRADO DE VENTANA
+    private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
+
+    private void iconoBotones()
+    {
+        //Asignación de Iconos a botones
+        
+        //INICIO
+        btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoInicio.png"))); 
+        btnInicio.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnInicio.setVerticalTextPosition(SwingConstants.BOTTOM);
+        
+        //Cerrar Sesion
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAfueraCerrar.png"))); 
+        btnCerrar.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCerrar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
     }
 
     /**
@@ -37,38 +84,198 @@ public class Transacciones extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton2 = new javax.swing.JButton();
+        btnInicio = new javax.swing.JButton();
+        btnCatalogo = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
+        btnInventario = new javax.swing.JButton();
+        lblBarraMenu1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        lblMonto = new javax.swing.JLabel();
+        txtMontoTransaccion = new javax.swing.JTextField();
+        lblConcepto = new javax.swing.JLabel();
+        txtConceptoTransaccion = new javax.swing.JTextField();
+        lblCuentaAfectada = new javax.swing.JLabel();
+        lblSaldo = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
+        lblEncabezada2 = new javax.swing.JLabel();
+        lblEncabezada = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableTransacc = new javax.swing.JTable();
-        BtnAgregarTransaccion = new javax.swing.JButton();
-        BtnEditarTransaccion = new javax.swing.JButton();
-        BtnEliminarTransaccion = new javax.swing.JButton();
-        BtnInicioTransaccion = new javax.swing.JButton();
-        BtnInventarioTransaccion = new javax.swing.JButton();
-        BtnTransaTransaccion = new javax.swing.JButton();
-        BtnReportesTransaccion = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtConceptoTransaccion = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        btnAgregarTransaccion = new javax.swing.JButton();
+        btnEditarTransaccion = new javax.swing.JButton();
+        btnEliminarTransaccion = new javax.swing.JButton();
         cboSaldo = new javax.swing.JComboBox<>();
         cboCuentaTransacion = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         Fecha = new com.toedter.calendar.JDateChooser();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        txtMontoTransaccion = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        BtnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnComprobación = new javax.swing.JButton();
+        lblBarraMenu = new javax.swing.JLabel();
+        lblFondo = new javax.swing.JLabel();
 
         jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Transacción");
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnInicio.setBackground(new java.awt.Color(102, 102, 255));
+        btnInicio.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnInicio.setForeground(new java.awt.Color(0, 0, 0));
+        btnInicio.setText("Inicio");
+        btnInicio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInicioMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnInicioMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnInicioMouseExited(evt);
+            }
+        });
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 80, 70));
+
+        btnCatalogo.setBackground(new java.awt.Color(153, 255, 153));
+        btnCatalogo.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCatalogo.setForeground(new java.awt.Color(0, 0, 0));
+        btnCatalogo.setText("\nGestión de Catalogo");
+        btnCatalogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCatalogoMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCatalogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 10, 200, 50));
+
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 0, 130, 70));
+
+        btnInventario.setBackground(new java.awt.Color(255, 255, 153));
+        btnInventario.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnInventario.setForeground(new java.awt.Color(0, 0, 0));
+        btnInventario.setText("\nInventario");
+        btnInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnInventarioMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, 140, 50));
+
+        lblBarraMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoNegro.png"))); // NOI18N
+        getContentPane().add(lblBarraMenu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 960, 30));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblMonto.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        lblMonto.setForeground(new java.awt.Color(0, 0, 0));
+        lblMonto.setText("Monto: ");
+        jPanel1.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 60, 30));
+
+        txtMontoTransaccion.setBackground(new java.awt.Color(255, 255, 255));
+        txtMontoTransaccion.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        txtMontoTransaccion.setText("Ingrese monto...");
+        txtMontoTransaccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtMontoTransaccionFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtMontoTransaccionFocusLost(evt);
+            }
+        });
+        txtMontoTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtMontoTransaccionMouseClicked(evt);
+            }
+        });
+        jPanel1.add(txtMontoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 50, 150, 30));
+
+        lblConcepto.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        lblConcepto.setForeground(new java.awt.Color(0, 0, 0));
+        lblConcepto.setText("Concepto:");
+        jPanel1.add(lblConcepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 90, 80, 30));
+
+        txtConceptoTransaccion.setBackground(new java.awt.Color(255, 255, 255));
+        txtConceptoTransaccion.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        txtConceptoTransaccion.setText("Ingrese concepto...");
+        txtConceptoTransaccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtConceptoTransaccionFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtConceptoTransaccionFocusLost(evt);
+            }
+        });
+        txtConceptoTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtConceptoTransaccionMouseClicked(evt);
+            }
+        });
+        jPanel1.add(txtConceptoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 90, 150, 30));
+
+        lblCuentaAfectada.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        lblCuentaAfectada.setForeground(new java.awt.Color(0, 0, 0));
+        lblCuentaAfectada.setText("Cuenta Afectada:");
+        jPanel1.add(lblCuentaAfectada, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 130, -1, 30));
+
+        lblSaldo.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        lblSaldo.setForeground(new java.awt.Color(0, 0, 0));
+        lblSaldo.setText("Saldo:");
+        jPanel1.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 50, 30));
+
+        lblFecha.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        lblFecha.setForeground(new java.awt.Color(0, 0, 0));
+        lblFecha.setText("Seleccionar Fecha");
+        jPanel1.add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 50, -1, 30));
+
+        lblEncabezada2.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        lblEncabezada2.setForeground(new java.awt.Color(0, 0, 0));
+        lblEncabezada2.setText("REGISTROS DE TRANSACCIONES");
+        jPanel1.add(lblEncabezada2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
+
+        lblEncabezada.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        lblEncabezada.setForeground(new java.awt.Color(0, 0, 0));
+        lblEncabezada.setText("INGRESAR TRANSACCIÓN");
+        jPanel1.add(lblEncabezada, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, -1, -1));
+
+        tableTransacc.setBackground(new java.awt.Color(255, 255, 255));
+        tableTransacc.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        tableTransacc.setForeground(new java.awt.Color(0, 0, 0));
         tableTransacc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -80,250 +287,367 @@ public class Transacciones extends javax.swing.JFrame {
                 "Fecha", "Cuenta", "Debe", "Haber"
             }
         ));
+        tableTransacc.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tableTransacc.setGridColor(new java.awt.Color(0, 0, 0));
+        tableTransacc.setSelectionBackground(new java.awt.Color(153, 153, 153));
+        tableTransacc.setSelectionForeground(new java.awt.Color(204, 204, 204));
+        tableTransacc.setShowGrid(true);
+        tableTransacc.getTableHeader().setResizingAllowed(false);
+        tableTransacc.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tableTransacc);
 
-        BtnAgregarTransaccion.setText("Agregar transacción");
-        BtnAgregarTransaccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnAgregarTransaccionActionPerformed(evt);
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 220));
+
+        btnAgregarTransaccion.setBackground(new java.awt.Color(153, 255, 102));
+        btnAgregarTransaccion.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnAgregarTransaccion.setForeground(new java.awt.Color(0, 0, 0));
+        btnAgregarTransaccion.setText("Agregar transacción");
+        btnAgregarTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAgregarTransaccionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAgregarTransaccionMouseExited(evt);
             }
         });
-
-        BtnEditarTransaccion.setText("Editar transacción");
-        BtnEditarTransaccion.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnEditarTransaccionActionPerformed(evt);
+                btnAgregarTransaccionActionPerformed(evt);
             }
         });
+        jPanel1.add(btnAgregarTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 280, -1, -1));
 
-        BtnEliminarTransaccion.setText("Eliminar transacción");
-        BtnEliminarTransaccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnEliminarTransaccionActionPerformed(evt);
+        btnEditarTransaccion.setBackground(new java.awt.Color(102, 204, 255));
+        btnEditarTransaccion.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnEditarTransaccion.setForeground(new java.awt.Color(0, 0, 0));
+        btnEditarTransaccion.setText("Editar transacción");
+        btnEditarTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditarTransaccionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditarTransaccionMouseExited(evt);
             }
         });
-
-        BtnInicioTransaccion.setText("Inicio");
-        BtnInicioTransaccion.addActionListener(new java.awt.event.ActionListener() {
+        btnEditarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnInicioTransaccionActionPerformed(evt);
+                btnEditarTransaccionActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEditarTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 180, -1));
 
-        BtnInventarioTransaccion.setText("Inventario");
-        BtnInventarioTransaccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnInventarioTransaccionActionPerformed(evt);
+        btnEliminarTransaccion.setBackground(new java.awt.Color(255, 102, 102));
+        btnEliminarTransaccion.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnEliminarTransaccion.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminarTransaccion.setText("Eliminar transacción");
+        btnEliminarTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarTransaccionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarTransaccionMouseExited(evt);
             }
         });
-
-        BtnTransaTransaccion.setText("Transacciones");
-        BtnTransaTransaccion.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnTransaTransaccionActionPerformed(evt);
+                btnEliminarTransaccionActionPerformed(evt);
             }
         });
+        jPanel1.add(btnEliminarTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, -1));
 
-        BtnReportesTransaccion.setText("Reportes");
-        BtnReportesTransaccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnReportesTransaccionActionPerformed(evt);
-            }
-        });
+        cboSaldo.setBackground(new java.awt.Color(255, 255, 255));
+        cboSaldo.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        cboSaldo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Deudor", "Acredor" }));
+        jPanel1.add(cboSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 180, 154, -1));
 
-        jLabel1.setText("Registros de transacciones");
-
-        jLabel4.setText("Concepto");
-
-        txtConceptoTransaccion.setToolTipText("");
-
-        jLabel5.setText("Cuenta afectada");
-
-        cboSaldo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccion", "Deudor", "Acredor" }));
-
+        cboCuentaTransacion.setBackground(new java.awt.Color(255, 255, 255));
+        cboCuentaTransacion.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         cboCuentaTransacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
         cboCuentaTransacion.setToolTipText("");
+        jPanel1.add(cboCuentaTransacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 130, 154, -1));
 
-        jLabel7.setText("Saldo");
+        Fecha.setBackground(new java.awt.Color(255, 255, 255));
+        Fecha.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        jPanel1.add(Fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 80, 123, 40));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Ingresar Transaccion");
+        btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
+        btnCancelar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseExited(evt);
+            }
+        });
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 240, -1, -1));
 
-        jLabel3.setText("Monto");
+        btnGuardar.setBackground(new java.awt.Color(153, 255, 102));
+        btnGuardar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(0, 0, 0));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseExited(evt);
+            }
+        });
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 240, -1, -1));
 
-        jLabel6.setText("Seleccionar fecha");
+        btnComprobación.setBackground(new java.awt.Color(153, 255, 255));
+        btnComprobación.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnComprobación.setForeground(new java.awt.Color(0, 0, 0));
+        btnComprobación.setText("\nBalance de Comprobación");
+        btnComprobación.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnComprobaciónMouseExited(evt);
+            }
+        });
+        jPanel1.add(btnComprobación, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, -40, 220, 40));
 
-        jButton3.setText("Cancelar");
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 330));
 
-        BtnGuardar.setText("Guardar");
+        lblBarraMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoNegro.png"))); // NOI18N
+        getContentPane().add(lblBarraMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 70));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(288, 288, 288)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(BtnInicioTransaccion)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(BtnTransaTransaccion)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(BtnInventarioTransaccion)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BtnReportesTransaccion))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(222, 222, 222)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(BtnGuardar)
-                                .addGap(18, 18, 18)
-                                .addComponent(BtnEditarTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)
-                                .addGap(47, 47, 47))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(161, 161, 161)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(cboSaldo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(35, 35, 35)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtMontoTransaccion)
-                                            .addComponent(txtConceptoTransaccion)
-                                            .addComponent(cboCuentaTransacion, 0, 154, Short.MAX_VALUE))
-                                        .addGap(158, 158, 158)))))
-                        .addGap(41, 41, 41))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(BtnEliminarTransaccion)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnAgregarTransaccion)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(717, 717, 717)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnInicioTransaccion)
-                    .addComponent(BtnInventarioTransaccion)
-                    .addComponent(BtnTransaTransaccion)
-                    .addComponent(BtnReportesTransaccion))
-                .addGap(23, 23, 23)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMontoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtConceptoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cboCuentaTransacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
-                            .addComponent(BtnEditarTransaccion)
-                            .addComponent(BtnGuardar)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnAgregarTransaccion)
-                    .addComponent(BtnEliminarTransaccion))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoBlanco.jpg"))); // NOI18N
+        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 960, 390));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnTransaTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaTransaccionActionPerformed
+    private void btnAgregarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTransaccionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BtnTransaTransaccionActionPerformed
+    }//GEN-LAST:event_btnAgregarTransaccionActionPerformed
 
-    private void BtnInicioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionActionPerformed
+    private void btnEditarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarTransaccionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BtnInicioTransaccionActionPerformed
+    }//GEN-LAST:event_btnEditarTransaccionActionPerformed
 
-    private void BtnInventarioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioTransaccionActionPerformed
+    private void btnEliminarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarTransaccionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BtnInventarioTransaccionActionPerformed
+    }//GEN-LAST:event_btnEliminarTransaccionActionPerformed
 
-    private void BtnReportesTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnReportesTransaccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BtnReportesTransaccionActionPerformed
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
 
-    private void BtnAgregarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarTransaccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BtnAgregarTransaccionActionPerformed
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255,255,255));
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAdentroCerrar.png"))); 
+        btnCerrar.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCerrar.setVerticalTextPosition(SwingConstants.BOTTOM);
+    }//GEN-LAST:event_btnCerrarMouseEntered
 
-    private void BtnEditarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarTransaccionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BtnEditarTransaccionActionPerformed
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAfueraCerrar.png"))); 
+        btnCerrar.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCerrar.setVerticalTextPosition(SwingConstants.BOTTOM);
+    }//GEN-LAST:event_btnCerrarMouseExited
 
-    private void BtnEliminarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarTransaccionActionPerformed
+    private void btnInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnInventarioMouseClicked
+
+    private void btnInventarioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseEntered
+        btnInventario.setBackground(new Color(255,255,255));
+        btnInventario.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnInventarioMouseEntered
+
+    private void btnInventarioMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseExited
+        // Regresa al color original fuera
+        btnInventario.setBackground(new Color(255,255,153));
+        btnInventario.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnInventarioMouseExited
+
+    private void btnComprobaciónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        BalanceComprobacionP balance = new BalanceComprobacionP();
+        balance.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnComprobaciónMouseClicked
+
+    private void btnComprobaciónMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseEntered
+        btnComprobación.setBackground(new Color(255,255,255));
+        btnComprobación.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnComprobaciónMouseEntered
+
+    private void btnComprobaciónMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseExited
+        // Regresa al color original fuera
+        btnComprobación.setBackground(new Color(153,255,255));
+        btnComprobación.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnComprobaciónMouseExited
+
+    private void btnCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        CatalogoCuentaP catalogo = new CatalogoCuentaP();
+        catalogo.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCatalogoMouseClicked
+
+    private void btnCatalogoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseEntered
+        btnCatalogo.setBackground(new Color(255,255,255));
+        btnCatalogo.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnCatalogoMouseEntered
+
+    private void btnCatalogoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseExited
+        // Regresa al color original fuera
+        btnCatalogo.setBackground(new Color(153,255,153));
+        btnCatalogo.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnCatalogoMouseExited
+
+    private void btnInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnInicioMouseClicked
+
+    private void btnInicioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseEntered
+        btnInicio.setBackground(new Color(255,255,255));
+        btnInicio.setForeground(new Color(0,0,0));
+        
+    }//GEN-LAST:event_btnInicioMouseEntered
+
+    private void btnInicioMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseExited
+        // Regresa al color original fuera
+        btnInicio.setBackground(new Color(102,102,255));
+        btnInicio.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnInicioMouseExited
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BtnEliminarTransaccionActionPerformed
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void txtMontoTransaccionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMontoTransaccionFocusGained
+        // Verificacion del textbox
+        String texto = txtMontoTransaccion.getText().trim();
+        if (texto.equals("Ingrese monto...")) {
+            txtMontoTransaccion.setText("");
+            txtMontoTransaccion.setForeground(new java.awt.Color(0,0,0));}
+    }//GEN-LAST:event_txtMontoTransaccionFocusGained
+
+    private void txtMontoTransaccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMontoTransaccionFocusLost
+        // Modificación al quitar el enfoque
+        String texto = txtMontoTransaccion.getText().trim();
+        if (texto.isEmpty() || texto.equals(".")) {
+            txtMontoTransaccion.setText("Ingrese monto...");
+            txtMontoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        }
+    }//GEN-LAST:event_txtMontoTransaccionFocusLost
+
+    private void txtMontoTransaccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtMontoTransaccionMouseClicked
+        // Verificacion del textbox
+        String texto = txtMontoTransaccion.getText().trim();
+        if (texto.equals("Ingrese monto...")) {
+            txtMontoTransaccion.setText("");
+            txtMontoTransaccion.setForeground(new java.awt.Color(0,0,0));
+        }
+    }//GEN-LAST:event_txtMontoTransaccionMouseClicked
+
+    private void txtConceptoTransaccionFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConceptoTransaccionFocusGained
+        // Verificacion del textbox
+        String texto = txtConceptoTransaccion.getText().trim();
+        if (texto.equals("Ingrese concepto...")) {
+            txtConceptoTransaccion.setText("");
+            txtConceptoTransaccion.setForeground(new java.awt.Color(0,0,0));}
+    }//GEN-LAST:event_txtConceptoTransaccionFocusGained
+
+    private void txtConceptoTransaccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConceptoTransaccionFocusLost
+        // Modificación al quitar el enfoque
+        String texto = txtConceptoTransaccion.getText().trim();
+        if (texto.isEmpty() || texto.equals(".")) {
+            txtConceptoTransaccion.setText("Ingrese concepto...");
+            txtConceptoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        }
+    }//GEN-LAST:event_txtConceptoTransaccionFocusLost
+
+    private void txtConceptoTransaccionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtConceptoTransaccionMouseClicked
+        // Verificacion del textbox
+        String texto = txtConceptoTransaccion.getText().trim();
+        if (texto.equals("Ingrese concepto...")) {
+            txtConceptoTransaccion.setText("");
+            txtConceptoTransaccion.setForeground(new java.awt.Color(0,0,0));
+        }
+    }//GEN-LAST:event_txtConceptoTransaccionMouseClicked
+
+    private void btnGuardarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseEntered
+         btnGuardar.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnGuardarMouseEntered
+
+    private void btnEditarTransaccionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarTransaccionMouseEntered
+         btnEditarTransaccion.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnEditarTransaccionMouseEntered
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+         btnCancelar.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnCancelarMouseEntered
+
+    private void btnEliminarTransaccionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarTransaccionMouseEntered
+        btnEliminarTransaccion.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnEliminarTransaccionMouseEntered
+
+    private void btnAgregarTransaccionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarTransaccionMouseEntered
+       btnAgregarTransaccion.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnAgregarTransaccionMouseEntered
+
+    private void btnGuardarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseExited
+       btnGuardar.setBackground(new Color(153,255,102));
+    }//GEN-LAST:event_btnGuardarMouseExited
+
+    private void btnEditarTransaccionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarTransaccionMouseExited
+        btnEditarTransaccion.setBackground(new Color(102,204,255));
+    }//GEN-LAST:event_btnEditarTransaccionMouseExited
+
+    private void btnCancelarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseExited
+        btnCancelar.setBackground(new Color(255,102,102));
+    }//GEN-LAST:event_btnCancelarMouseExited
+
+    private void btnEliminarTransaccionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarTransaccionMouseExited
+        btnEliminarTransaccion.setBackground(new Color(255,102,102));
+    }//GEN-LAST:event_btnEliminarTransaccionMouseExited
+
+    private void btnAgregarTransaccionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarTransaccionMouseExited
+        btnAgregarTransaccion.setBackground(new Color(153,255,102));
+    }//GEN-LAST:event_btnAgregarTransaccionMouseExited
+
+    private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
+        txtMontoTransaccion.setText("Ingrese monto...");
+        txtConceptoTransaccion.setText("Ingrese concepto...");
+        cboCuentaTransacion.setSelectedItem("Seleccione");
+        cboSaldo.setSelectedItem("Seleccione");
+        txtMontoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        txtConceptoTransaccion.setForeground(new java.awt.Color(187,187,187));
+        cboCuentaTransacion.setForeground(new java.awt.Color(187,187,187));
+        cboSaldo.setForeground(new java.awt.Color(187,187,187));
+        Fecha.setDate(null);
+    }//GEN-LAST:event_btnCancelarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -361,28 +685,32 @@ public class Transacciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnAgregarTransaccion;
-    private javax.swing.JButton BtnEditarTransaccion;
-    private javax.swing.JButton BtnEliminarTransaccion;
-    private javax.swing.JButton BtnGuardar;
-    private javax.swing.JButton BtnInicioTransaccion;
-    private javax.swing.JButton BtnInventarioTransaccion;
-    private javax.swing.JButton BtnReportesTransaccion;
-    private javax.swing.JButton BtnTransaTransaccion;
     private com.toedter.calendar.JDateChooser Fecha;
+    private javax.swing.JButton btnAgregarTransaccion;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCatalogo;
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnComprobación;
+    private javax.swing.JButton btnEditarTransaccion;
+    private javax.swing.JButton btnEliminarTransaccion;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnInventario;
     private javax.swing.JComboBox<String> cboCuentaTransacion;
     private javax.swing.JComboBox<String> cboSaldo;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblBarraMenu;
+    private javax.swing.JLabel lblBarraMenu1;
+    private javax.swing.JLabel lblConcepto;
+    private javax.swing.JLabel lblCuentaAfectada;
+    private javax.swing.JLabel lblEncabezada;
+    private javax.swing.JLabel lblEncabezada2;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblFondo;
+    private javax.swing.JLabel lblMonto;
+    private javax.swing.JLabel lblSaldo;
     private javax.swing.JTable tableTransacc;
     private javax.swing.JTextField txtConceptoTransaccion;
     private javax.swing.JTextField txtMontoTransaccion;
