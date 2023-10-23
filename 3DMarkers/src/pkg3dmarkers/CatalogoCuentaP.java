@@ -49,8 +49,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCatalogo = new javax.swing.JTable();
         btnNuevaCuenta = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblData = new javax.swing.JLabel();
@@ -64,6 +62,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnEliminarCuenta = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txtCod = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,17 +103,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnNuevaCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaCuentaActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("ID:");
-        jLabel2.setEnabled(false);
-
-        txtID.setEditable(false);
-        txtID.setEnabled(false);
-        txtID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDActionPerformed(evt);
             }
         });
 
@@ -212,9 +200,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(txtCuentaNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModificarCuenta)
-                    .addComponent(btnGuardarCuenta))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardarCuenta)
+                    .addComponent(btnModificarCuenta))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelarNuevaCuenta)
@@ -226,6 +214,8 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         jLabel7.setText("Para eliminar un registro, haga doble clic en la fila que desea eliminar.");
 
+        txtCod.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -234,33 +224,31 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(btnNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                            .addComponent(btnNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(238, Short.MAX_VALUE)
-                .addComponent(BtnInicioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(BtnTransaCatalogo)
-                .addGap(18, 18, 18)
-                .addComponent(BtnReportesCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(BtnInicioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnTransaCatalogo)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnReportesCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(21, 21, 21))
+                    .addComponent(txtCod, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,20 +267,13 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnNuevaCuenta)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7)
-                        .addGap(0, 24, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))))
-                .addContainerGap())
+                .addComponent(btnNuevaCuenta)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -304,7 +285,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         txtCuentaNombre.setEditable(true);
         txtCuentaCodigo.setText("");
         txtCuentaNombre.setText("");
-        txtID.setText("");
         txtCuentaCodigo.setEnabled(true);
         txtCuentaNombre.setEnabled(true);
         
@@ -315,36 +295,33 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnEliminarCuenta.setEnabled(false);
     }//GEN-LAST:event_btnNuevaCuentaActionPerformed
 
-    //Metodo que bloquea las teclas no numericas
+    //Metodo que bloquea las teclas no numericas Y limita a 5 cifras
     private void txtCuentaCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuentaCodigoKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
         String text = txtCuentaCodigo.getText();
 
         if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) || (text.length() >= 5)) {
-            evt.consume(); // Bloquea la entrada de caracteres no numéricos o más de 5 cifras
+            evt.consume();
         }
     }//GEN-LAST:event_txtCuentaCodigoKeyTyped
 
+    //Metodo que bloquea lsa teclas numericas y caracteres especiales
     private void txtCuentaNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuentaNombreKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
         if (!(Character.isLetter(c) || c == ' ' || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '\u00E1' || c == '\u00E9' || c == '\u00ED' || c == '\u00F3' || c == '\u00FA' || c == '\u00C1' || c == '\u00C9' || c == '\u00CD' || c == '\u00D3' || c == '\u00DA' || c == '\u00F1' || c == '\u00D1')) {
-            evt.consume(); // Bloquea la entrada de otros caracteres
+            evt.consume();
         }
-        
     }//GEN-LAST:event_txtCuentaNombreKeyTyped
-
+       
     private void btnGuardarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCuentaActionPerformed
         // TODO add your handling code here:
-        //CatalogoCuentaQ nuevaCuenta = new CatalogoCuentaQ();
-        
         nuevaCuenta(txtCuentaCodigo, txtCuentaNombre);
         mostrarCatalogo(tableCatalogo);
 
         txtCuentaCodigo.setText("");
-        txtCuentaNombre.setText("");
-        
+        txtCuentaNombre.setText("");        
     }//GEN-LAST:event_btnGuardarCuentaActionPerformed
 
     private void btnCancelarNuevaCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNuevaCuentaActionPerformed
@@ -364,7 +341,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
     private void tableCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCatalogoMouseClicked
         // TODO add your handling code here:
-        //CatalogoCuentaQ editarCuenta = new CatalogoCuentaQ();
         int clics = evt.getClickCount();
         int row = tableCatalogo.rowAtPoint(evt.getPoint());
         
@@ -372,72 +348,65 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         //En este caso esta eliminando un registro
         if (clics == 2) {
             //Desactivando entradas
-            seleccionarRegistro(tableCatalogo, txtID, txtCuentaCodigo, txtCuentaNombre);
+            seleccionarRegistro(tableCatalogo, txtCod,txtCuentaCodigo, txtCuentaNombre);
             txtCuentaCodigo.setEditable(false);
             txtCuentaNombre.setEditable(false);
-
+            
+            //activando botones necesarios
             btnGuardarCuenta.setEnabled(false);
             btnModificarCuenta.setEnabled(false);
             btnCancelarNuevaCuenta.setEnabled(true);
             btnEliminarCuenta.setEnabled(true);
             lblData.setText("Estás eliminando la siguiente cuenta");
         }
+        
         //En este caso esta editando un registro
         else {
             //activando entradas
-            seleccionarRegistro(tableCatalogo, txtID, txtCuentaCodigo, txtCuentaNombre);
+            seleccionarRegistro(tableCatalogo, txtCod, txtCuentaCodigo, txtCuentaNombre);
             txtCuentaCodigo.setEnabled(true);
             txtCuentaNombre.setEnabled(true);
             txtCuentaCodigo.setEditable(true);
             txtCuentaNombre.setEditable(true);
 
-            //activando botones especiales
+            //activando botones necesarios
             btnGuardarCuenta.setEnabled(false);
             btnModificarCuenta.setEnabled(true);
             btnCancelarNuevaCuenta.setEnabled(true);
             btnEliminarCuenta.setEnabled(false);
             lblData.setText("Estás actualizando la siguiente cuenta");
         }
-        
     }//GEN-LAST:event_tableCatalogoMouseClicked
 
     private void btnModificarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCuentaActionPerformed
         // TODO add your handling code here:
-        editarCuenta(txtID, txtCuentaCodigo, txtCuentaNombre);
+        editarCuenta(txtCod, txtCuentaCodigo, txtCuentaNombre);
         mostrarCatalogo(tableCatalogo);
-
-        //txtCuentaCodigo.setText("");
-        //txtCuentaNombre.setText("");
-        //txtID.setText("");
-
     }//GEN-LAST:event_btnModificarCuentaActionPerformed
-
-    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDActionPerformed
 
     private void btnEliminarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCuentaActionPerformed
         // TODO add your handling code here:
-        eliminarCuenta(txtID, txtCuentaCodigo, txtCuentaNombre);
+        eliminarCuenta(txtCuentaCodigo, txtCuentaNombre);
         mostrarCatalogo(tableCatalogo);
-
-        
     }//GEN-LAST:event_btnEliminarCuentaActionPerformed
     
     
-    
     public void mostrarCatalogo(JTable tablaCatalogo) {
+        txtCod.setVisible(false);
         DefaultTableModel modelo = new DefaultTableModel();
 
-        modelo.addColumn("id");
+        //modelo.addColumn("id");
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
 
         tablaCatalogo.setModel(modelo);
 
-        String sql = "SELECT idcatalogo, codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
+        //String sql = "SELECT idcatalgo, codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
+        String sql = "SELECT codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
 
-        String[] datos = new String[3];
+        
+        //String[] datos = new String[3];
+        String[] datos = new String[2];
 
         Statement statement = null;
 
@@ -452,15 +421,16 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             while (resultSet.next()) {
                 datos[0] = resultSet.getString(1);
                 datos[1] = resultSet.getString(2);
-                datos[2] = resultSet.getString(3);
+                //datos[2] = resultSet.getString(3);
                 modelo.addRow(datos);
             }
 
             // Codigo usado para ocultar la columna "id"
+            /*
             int columnIndexToHide = 0;
             tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setMinWidth(0);
             tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setMaxWidth(0);
-            tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setWidth(0);
+            tablaCatalogo.getColumnModel().getColumn(columnIndexToHide).setWidth(0);*/
 
             tablaCatalogo.setModel(modelo);
 
@@ -477,26 +447,23 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                     "No se puede agregar una nueva cuenta si los campos están vacíos",
                     "Error: Campos vacíos",
                     JOptionPane.ERROR_MESSAGE);
-
             return;
         }
-        
         
         int codigo = Integer.parseInt(paramCodigo.getText());
         String nombre = paramNombre.getText();
         
         Conexion objetoConexion = new Conexion();
-
+        
         String consulta = "insert into catalogocuenta (codigo, nombrecuenta) values (?, ?);";
-
+        
         try {
             CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
             cs.setInt(1, codigo);
             cs.setString(2, nombre);
-
+            
             cs.execute();
             JOptionPane.showMessageDialog(null, "Cuenta agregada");
-
         } catch (Exception e) {
             if (e.getMessage().contains("llave duplicada viola restricción de unicidad")) {
                 JOptionPane.showMessageDialog(null,
@@ -504,7 +471,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                         + "Sin embargo, puede modificar la cuenta existente asociada a este código.",
                         "Error: Código Duplicado",
                         JOptionPane.ERROR_MESSAGE);
-
             }
             else {
                 JOptionPane.showMessageDialog(null, "Error: " + e.toString());
@@ -512,64 +478,60 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         }
     }
     
-    public void seleccionarRegistro(JTable paramTabla, JTextField paramID,JTextField paramCodigo, JTextField paramNombre) {
+    
+    public void seleccionarRegistro(JTable paramTabla, JTextField paramCod,JTextField paramCodigo, JTextField paramNombre) {
         try {
             int fila = paramTabla.getSelectedRow();
             
             if(fila >= 0){
                 
-                paramID.setText(paramTabla.getValueAt(fila, 0).toString());
-                paramCodigo.setText(paramTabla.getValueAt(fila, 1).toString());
-                paramNombre.setText(paramTabla.getValueAt(fila, 2).toString());
-                
+                paramCod.setText(paramTabla.getValueAt(fila, 0).toString());
+                paramCodigo.setText(paramTabla.getValueAt(fila, 0).toString());
+                paramNombre.setText(paramTabla.getValueAt(fila, 1).toString());
             }
             else {
                 JOptionPane.showMessageDialog(null, "Ninguna fila ha sido seleccionada aun");
-
             }
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.toString());
-
         }   
     }
     
     
-    public void editarCuenta(JTextField paramID, JTextField paramCodigo, JTextField paramNombre) {
+    public void editarCuenta(JTextField paramCod, JTextField paramCodigo, JTextField paramNombre) {
         if (paramCodigo.getText().isEmpty() || paramNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "No se puede actualizar una nueva cuenta si los campos están vacíos",
                     "Error: Campos vacíos",
                     JOptionPane.ERROR_MESSAGE);
-
             return;
         }
-
-        int id = Integer.parseInt(paramID.getText());
+        
         int codigo = Integer.parseInt(paramCodigo.getText());
+        int cod = Integer.parseInt(paramCod.getText());
         String nombre = paramNombre.getText();
-
+        
         Conexion objetoConexion = new Conexion();
-
-        String consulta = "UPDATE catalogocuenta SET codigo = ?, nombrecuenta = ? WHERE catalogocuenta.idcataolgo = ?;";
-
+        
+        String consulta = "UPDATE catalogocuenta SET codigo = ?, nombrecuenta = ? WHERE catalogocuenta.codigo = ?;";
+        
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de actualizar este registro?", "Actualizar registro", JOptionPane.YES_NO_OPTION);
-
+        
         if (respuesta == JOptionPane.YES_OPTION) {
             try {
                 CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
                 cs.setInt(1, codigo);
                 cs.setString(2, nombre);
-                cs.setInt(3, id);
-
+                cs.setInt(3, cod);
+                
                 cs.execute();
                 JOptionPane.showMessageDialog(null, "Cuenta actualizada");
- 
-                // Limpia del formulario el registro eliminado  para evitar problemas
+                
+                // Limpia del formulario el registro editado  para evitar problemas
                 txtCuentaCodigo.setText("");
                 txtCuentaNombre.setText("");
-                txtID.setText("");
-
+                
             } catch (Exception e) {
                 if (e.getMessage().contains("llave duplicada viola restricción de unicidad")) {
                     JOptionPane.showMessageDialog(null,
@@ -583,16 +545,15 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         }
     }
-
-  
-    public void eliminarCuenta(JTextField paramID, JTextField paramCodigo, JTextField paramNombre) {
-        int id = Integer.parseInt(paramID.getText());
+    
+    
+    public void eliminarCuenta(JTextField paramCodigo, JTextField paramNombre) {
         int codigo = Integer.parseInt(paramCodigo.getText());
         String nombre = paramNombre.getText();
 
         Conexion objetoConexion = new Conexion();
 
-        String consulta = "DELETE FROM catalogocuenta WHERE catalogocuenta.idcatalogo = ?;";
+        String consulta = "DELETE FROM catalogocuenta WHERE catalogocuenta.codigo = ?;";
 
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este registro?", "Eliminar registro", JOptionPane.YES_NO_OPTION);
 
@@ -602,7 +563,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 String nombreAEliminar = nombre;
 
                 CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
-                cs.setInt(1, id);
+                cs.setInt(1, codigo);
 
                 cs.execute();
 
@@ -613,7 +574,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 // Limpia del formulario el registro eliminado  para evitar problemas
                 txtCuentaCodigo.setText("");
                 txtCuentaNombre.setText("");
-                txtID.setText("");
+                //txtID.setText("");
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e.toString());
@@ -655,6 +616,18 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -675,7 +648,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JButton btnModificarCuenta;
     private javax.swing.JButton btnNuevaCuenta;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -685,8 +657,8 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblData;
     private javax.swing.JTable tableCatalogo;
+    private javax.swing.JTextField txtCod;
     private javax.swing.JTextField txtCuentaCodigo;
     private javax.swing.JTextField txtCuentaNombre;
-    private javax.swing.JTextField txtID;
     // End of variables declaration//GEN-END:variables
 }
