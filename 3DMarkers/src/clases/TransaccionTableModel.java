@@ -30,7 +30,7 @@ public class TransaccionTableModel extends AbstractTableModel {
         
         Object valor= null;
         switch (columnIndex) {
-            case 0: valor= transacciones.fecha;
+            case 0: valor= transacciones.codigo;
                 
                 break;
             case 1: valor= transacciones.cuenta;

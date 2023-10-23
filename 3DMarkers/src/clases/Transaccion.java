@@ -13,7 +13,7 @@ public class Transaccion {
     Impuesto impuesto = new Impuesto();
    // CatalogoCuenta cuenta = new CatalogoCuenta();
     
-    int id;
+    int codigo;
     String cuenta;
     String concepto;
     Double  debe;
