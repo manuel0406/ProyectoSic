@@ -28,7 +28,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     public CatalogoCuentaP() {
         initComponents();
         
-        lblData.setText("Editor de registros");
         mostrarCatalogo(tableCatalogo);
 
     }
@@ -50,7 +49,10 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCatalogo = new javax.swing.JTable();
         btnNuevaCuenta = new javax.swing.JButton();
-        btnEliminarCuenta = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         lblData = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -59,9 +61,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnGuardarCuenta = new javax.swing.JButton();
         btnCancelarNuevaCuenta = new javax.swing.JButton();
         btnModificarCuenta = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        btnEliminarCuenta = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,15 +107,20 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
-        btnEliminarCuenta.setText("Eliminar Registro");
-        btnEliminarCuenta.setEnabled(false);
-        btnEliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setText("ID:");
+        jLabel2.setEnabled(false);
+
+        txtID.setEditable(false);
+        txtID.setEnabled(false);
+        txtID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarCuentaActionPerformed(evt);
+                txtIDActionPerformed(evt);
             }
         });
 
-        lblData.setText("Mostrando registro");
+        jLabel5.setText("Para actualizar un registro, haga clic en la fila que desea editar.");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel3.setText("Código:");
 
@@ -133,7 +140,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
-        btnGuardarCuenta.setText("Guardar Registro");
+        btnGuardarCuenta.setText("Guardar");
         btnGuardarCuenta.setEnabled(false);
         btnGuardarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,7 +156,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
-        btnModificarCuenta.setText("Actualizar Registro");
+        btnModificarCuenta.setText("Actualizar");
         btnModificarCuenta.setEnabled(false);
         btnModificarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,19 +164,67 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("ID:");
-        jLabel2.setEnabled(false);
-
-        txtID.setEditable(false);
-        txtID.setEnabled(false);
-        txtID.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarCuenta.setText("Eliminar");
+        btnEliminarCuenta.setEnabled(false);
+        btnEliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDActionPerformed(evt);
+                btnEliminarCuentaActionPerformed(evt);
             }
         });
 
-        jLabel5.setForeground(new java.awt.Color(219, 0, 0));
-        jLabel5.setText("Nota: Para actualizar o eliminar un registro, haga clic en la tabla y seleccione la fila correspondiente. ");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnCancelarNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEliminarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnGuardarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnModificarCuenta))
+                            .addComponent(txtCuentaNombre)
+                            .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtCuentaNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificarCuenta)
+                    .addComponent(btnGuardarCuenta))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelarNuevaCuenta)
+                    .addComponent(btnEliminarCuenta))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel6.setText("Editor de registros");
+
+        jLabel7.setText("Para eliminar un registro, haga doble clic en la fila que desea eliminar.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,43 +237,30 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblData)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addGap(23, 23, 23)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnCancelarNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnEliminarCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtCuentaNombre)
-                                        .addComponent(txtCuentaCodigo)
-                                        .addComponent(btnGuardarCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnModificarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(48, 48, 48))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
                             .addComponent(btnNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(238, Short.MAX_VALUE)
                 .addComponent(BtnInicioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(BtnTransaCatalogo)
                 .addGap(18, 18, 18)
                 .addComponent(BtnReportesCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(228, 228, 228))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,39 +272,27 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                     .addComponent(BtnTransaCatalogo)
                     .addComponent(BtnInventarioCatalogo))
                 .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblData)
-                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(25, 25, 25)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(txtCuentaNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardarCuenta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnModificarCuenta)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminarCuenta)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCancelarNuevaCuenta)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6))
                 .addGap(18, 18, 18)
-                .addComponent(btnNuevaCuenta)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNuevaCuenta)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addGap(0, 24, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))))
+                .addContainerGap())
         );
 
         pack();
@@ -270,13 +300,15 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
     private void btnNuevaCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCuentaActionPerformed
         // TODO add your handling code here:
+        txtCuentaCodigo.setEditable(true);
+        txtCuentaNombre.setEditable(true);
         txtCuentaCodigo.setText("");
         txtCuentaNombre.setText("");
         txtID.setText("");
         txtCuentaCodigo.setEnabled(true);
         txtCuentaNombre.setEnabled(true);
         
-        lblData.setText("Ingresando nuevo registro");
+        lblData.setText("Estás agregando una cuenta nueva");
         btnGuardarCuenta.setEnabled(true);        
         btnCancelarNuevaCuenta.setEnabled(true); 
         btnModificarCuenta.setEnabled(false);
@@ -312,6 +344,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         txtCuentaCodigo.setText("");
         txtCuentaNombre.setText("");
+        
     }//GEN-LAST:event_btnGuardarCuentaActionPerformed
 
     private void btnCancelarNuevaCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNuevaCuentaActionPerformed
@@ -326,24 +359,46 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnCancelarNuevaCuenta.setEnabled(false);
         btnEliminarCuenta.setEnabled(false);
 
-        lblData.setText("Editor de registros");
+        lblData.setText("");
     }//GEN-LAST:event_btnCancelarNuevaCuentaActionPerformed
 
     private void tableCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCatalogoMouseClicked
         // TODO add your handling code here:
         //CatalogoCuentaQ editarCuenta = new CatalogoCuentaQ();
-        seleccionarRegistro(tableCatalogo, txtID,txtCuentaCodigo, txtCuentaNombre);
+        int clics = evt.getClickCount();
+        int row = tableCatalogo.rowAtPoint(evt.getPoint());
         
-        //activando entradas
-        txtCuentaCodigo.setEnabled(true);
-        txtCuentaNombre.setEnabled(true);
         
-        //activando botones especiales
-        btnGuardarCuenta.setEnabled(false);                
-        btnModificarCuenta.setEnabled(true);        
-        btnCancelarNuevaCuenta.setEnabled(true);        
-        btnEliminarCuenta.setEnabled(true);        
-        lblData.setText("Mostrando registro");
+        //En este caso esta eliminando un registro
+        if (clics == 2) {
+            //Desactivando entradas
+            seleccionarRegistro(tableCatalogo, txtID, txtCuentaCodigo, txtCuentaNombre);
+            txtCuentaCodigo.setEditable(false);
+            txtCuentaNombre.setEditable(false);
+
+            btnGuardarCuenta.setEnabled(false);
+            btnModificarCuenta.setEnabled(false);
+            btnCancelarNuevaCuenta.setEnabled(true);
+            btnEliminarCuenta.setEnabled(true);
+            lblData.setText("Estás eliminando la siguiente cuenta");
+        }
+        //En este caso esta editando un registro
+        else {
+            //activando entradas
+            seleccionarRegistro(tableCatalogo, txtID, txtCuentaCodigo, txtCuentaNombre);
+            txtCuentaCodigo.setEnabled(true);
+            txtCuentaNombre.setEnabled(true);
+            txtCuentaCodigo.setEditable(true);
+            txtCuentaNombre.setEditable(true);
+
+            //activando botones especiales
+            btnGuardarCuenta.setEnabled(false);
+            btnModificarCuenta.setEnabled(true);
+            btnCancelarNuevaCuenta.setEnabled(true);
+            btnEliminarCuenta.setEnabled(false);
+            lblData.setText("Estás actualizando la siguiente cuenta");
+        }
+        
     }//GEN-LAST:event_tableCatalogoMouseClicked
 
     private void btnModificarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCuentaActionPerformed
@@ -417,6 +472,16 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     
     
     public void nuevaCuenta(JTextField paramCodigo, JTextField paramNombre) {
+        if (paramCodigo.getText().isEmpty() || paramNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "No se puede agregar una nueva cuenta si los campos están vacíos",
+                    "Error: Campos vacíos",
+                    JOptionPane.ERROR_MESSAGE);
+
+            return;
+        }
+        
+        
         int codigo = Integer.parseInt(paramCodigo.getText());
         String nombre = paramNombre.getText();
         
@@ -440,12 +505,12 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                         "Error: Código Duplicado",
                         JOptionPane.ERROR_MESSAGE);
 
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(null, "Error: " + e.toString());
             }
         }
     }
-    
     
     public void seleccionarRegistro(JTable paramTabla, JTextField paramID,JTextField paramCodigo, JTextField paramNombre) {
         try {
@@ -471,6 +536,15 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     
     
     public void editarCuenta(JTextField paramID, JTextField paramCodigo, JTextField paramNombre) {
+        if (paramCodigo.getText().isEmpty() || paramNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "No se puede actualizar una nueva cuenta si los campos están vacíos",
+                    "Error: Campos vacíos",
+                    JOptionPane.ERROR_MESSAGE);
+
+            return;
+        }
+
         int id = Integer.parseInt(paramID.getText());
         int codigo = Integer.parseInt(paramCodigo.getText());
         String nombre = paramNombre.getText();
@@ -533,8 +607,8 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 cs.execute();
 
                 // Mostrando el registro eliminado
-                String mensaje = "La cuenta:    " + codigoAEliminar + " " + nombreAEliminar + "     ha sido eliminada";
-                JOptionPane.showMessageDialog(null, mensaje);
+                String mensaje = "La cuenta con código: " + codigoAEliminar + " y de nombre: " + nombreAEliminar + " ha sido eliminada.";
+                JOptionPane.showMessageDialog(null, mensaje, "Cuenta eliminada", JOptionPane.INFORMATION_MESSAGE);
 
                 // Limpia del formulario el registro eliminado  para evitar problemas
                 txtCuentaCodigo.setText("");
@@ -605,6 +679,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblData;
     private javax.swing.JTable tableCatalogo;
