@@ -2,7 +2,7 @@
 package clases;
 
 import java.util.ArrayList;
-import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -11,11 +11,11 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TransaccionTableModel extends AbstractTableModel {
 
-    List<Transaccion> transaccion = new ArrayList<Transaccion>();
+  public  ArrayList<Transaccion> transacciones = new ArrayList<Transaccion>();
     
     @Override
     public int getRowCount() {
-       return transaccion.size();
+       return transacciones.size();
     }
 
     @Override
@@ -26,23 +26,25 @@ public class TransaccionTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
        
-        Transaccion transacciones = transaccion.get(rowIndex);
+        Transaccion transaccion = transacciones.get(rowIndex);
         
         Object valor= null;
         switch (columnIndex) {
-            case 0: valor= transacciones.codigo;
+            case 0: valor = transaccion.idTransaccion;
+            break;
+            
+            case 1: valor= transaccion.codigo;
                 
                 break;
-            case 1: valor= transacciones.cuenta;
+            case 2: valor= transaccion.cuenta;
                  break;
-            case 2: valor= transacciones.concepto;
+            case 3: valor= transaccion.concepto;
                 break;
-            case 3: valor=transacciones.debe;
+            case 4: valor=transaccion.debe;
                 break;
-            case 4: valor=transacciones.haber;
+            case 5: valor=transaccion.haber;
                 break;
-            default:
-                throw new AssertionError();
+            
         }
         return valor;
     }

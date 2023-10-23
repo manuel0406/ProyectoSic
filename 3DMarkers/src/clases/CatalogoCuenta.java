@@ -9,8 +9,8 @@ package clases;
  * @author manue
  */
 public class CatalogoCuenta {
-    int id;
-    String nombre;
+   public int id;
+    public String nombre;
     
     
 }

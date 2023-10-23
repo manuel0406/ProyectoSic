@@ -10,15 +10,15 @@ import java.util.Date;
  */
 public class Transaccion {
     
-    Impuesto impuesto = new Impuesto();
-   // CatalogoCuenta cuenta = new CatalogoCuenta();
-    
-    int codigo;
-    String cuenta;
-    String concepto;
-    Double  debe;
-    Double haber;            
    
+    
+    public int idTransaccion;
+    public int codigo;
+    public String cuenta;
+    public String concepto;
+    public Double debe;
+    public Double haber;
+
     
     
     

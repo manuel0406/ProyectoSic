@@ -1,16 +1,27 @@
 package pkg3dmarkers;
 
+
+import clases.CatalogoCuenta;
+import clases.Transaccion;
 import clases.TransaccionTableModel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Manuel Alcides Ascencio Aleman
@@ -21,34 +32,40 @@ public class Transacciones extends javax.swing.JFrame {
      * Creates new form Transacciones
      */ 
     
-    Conexion conexion= new Conexion();
+    //Conexion conexion= new Conexion();
     
-    public TransaccionTableModel transaccionTmodel = new TransaccionTableModel();
+    public TransaccionTableModel transaccionTModel = new TransaccionTableModel();
+      Conexion conexion =new Conexion();
     
     public Transacciones() {
         initComponents();
-       conexion.conectar();
+     //  conexion.conectar();
       inicializarColumnas();
+      consultaIncial();
+      
     }
     
     private void inicializarColumnas(){
         
         TableColumnModel tColumnModel = new DefaultTableColumnModel();
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             
             TableColumn col= new TableColumn(i);
             switch (i) {
-                case 0: col.setHeaderValue("Fecha");
+                case 0: col.setHeaderValue("ID");
+                break;
+                
+                case 1: col.setHeaderValue("Codigo");
                     
                     break;
-                case 1: col.setHeaderValue("Cuenta");
+                case 2: col.setHeaderValue("Cuenta");
                 break;
-                case 2: col.setHeaderValue("Concepto");
+                case 3: col.setHeaderValue("Concepto");
                 break;
-                case 3: col.setHeaderValue("Debe");
+                case 4: col.setHeaderValue("Debe");
                 break;
-                case 4: col.setHeaderValue("Haber");
+                case 5: col.setHeaderValue("Haber");
                 break;
                 
             }
@@ -56,9 +73,130 @@ public class Transacciones extends javax.swing.JFrame {
             
             
         }
-        tableTransacion.setColumnModel(tColumnModel);
+        tablaTransacion.setColumnModel(tColumnModel);
         
         
+    }
+    
+    private void cbo(){
+        try {
+            Statement statement = conexion.conectar().createStatement();
+            String setenciaCBO="SELECT * FROM catalogocuenta";
+            ResultSet resultadoCbo =statement.executeQuery(setenciaCBO);
+            
+            while(resultadoCbo.next()){
+                CatalogoCuenta cuenta = new CatalogoCuenta();
+                        
+              cuenta.nombre=resultadoCbo.getString("nombrecuenta");
+              cboCuentaTrasaccion.addItem( cuenta.nombre);
+            }
+            
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la BD");
+        
+            ex.printStackTrace();
+        }
+    
+    }
+    
+    private void consultaIncial(){
+        
+        
+        Conexion conexion =new Conexion();
+        try{
+             //String sql = "SELECT s.*, p.nombre FROM tabla_secundaria s " +   "JOIN tabla_principal p ON s.id_principal = p.id";
+            String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
+            
+           Statement statement = conexion.conectar().createStatement();
+           
+           ResultSet resultado= statement.executeQuery(setenciaSql);
+          
+        
+            while (resultado.next()) {  
+                
+                Transaccion transaccion= new Transaccion();
+                
+                transaccion.idTransaccion= resultado.getInt("idtransaccion");
+                transaccion.codigo = resultado.getInt("codigo");
+                transaccion.concepto=resultado.getString("concepto");
+                transaccion.cuenta=resultado.getString("nombrecuenta");
+                transaccion.debe = resultado.getDouble("debe");
+                transaccion.haber = resultado.getDouble("haber");
+                
+                this.transaccionTModel.transacciones.add(transaccion);
+            
+            }
+            
+            tablaTransacion.repaint();
+        }
+        catch( SQLException ex){
+            JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base");
+        
+            ex.printStackTrace();
+        }
+        
+        cbo();
+        
+    }
+    private void UpdateJTable(){
+        
+        transaccionTModel.transacciones.clear();
+        
+        try {
+            PreparedStatement statement =null;
+            String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
+            statement = this.conexion.conectar().prepareStatement(setenciaSql);
+            ResultSet resultado = statement.executeQuery();
+            
+             while (resultado.next()) {  
+                
+                Transaccion transaccion= new Transaccion();
+                transaccion.idTransaccion= resultado.getInt("idtransaccion");
+                transaccion.codigo = resultado.getInt("codigo");
+                transaccion.concepto=resultado.getString("concepto");
+                transaccion.cuenta=resultado.getString("nombrecuenta");
+                transaccion.debe = resultado.getDouble("debe");
+                transaccion.haber = resultado.getDouble("haber");
+                
+                transaccionTModel.transacciones.add(transaccion);
+                
+            }
+            
+            tablaTransacion.repaint();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al recuperar las transaciones de la base de datos");
+            
+        }
+    
+    }
+    
+    public int buscandoSeleccion(String seleccion){
+        
+     int codigo=0;
+        
+         try {
+            
+              Statement statement = this.conexion.conectar().createStatement();
+             
+             String setenciaCBO="SELECT * FROM catalogocuenta Where nombrecuenta = "+ "'"+ seleccion + "'" ;
+          
+             System.out.println(seleccion + " ya en el metodo");
+           
+            
+           
+             ResultSet resultadoCbo= statement.executeQuery(setenciaCBO);
+           
+             if (resultadoCbo.next()) {
+            codigo = resultadoCbo.getInt("codigo");
+                 System.out.println(codigo);
+        }
+            
+        } catch (SQLException e) {
+            
+            JOptionPane.showMessageDialog(this,"Error en la seleccion bato");
+        }
+         return codigo;
+    
     }
     
     
@@ -92,7 +230,7 @@ public class Transacciones extends javax.swing.JFrame {
         BtnInventarioTransaccion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableTransacion = new javax.swing.JTable();
+        tablaTransacion = new javax.swing.JTable();
         btnNuevaTransaccion = new javax.swing.JButton();
         btnEliminarTransaccion = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -132,8 +270,9 @@ public class Transacciones extends javax.swing.JFrame {
 
         jLabel1.setText("Registros de las transacciones");
 
-        tableTransacion.setModel(transaccionTmodel);
-        jScrollPane1.setViewportView(tableTransacion);
+        tablaTransacion.setModel(transaccionTModel);
+        tablaTransacion.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(tablaTransacion);
 
         btnNuevaTransaccion.setText("Nueva transaccion");
         btnNuevaTransaccion.addActionListener(new java.awt.event.ActionListener() {
@@ -143,6 +282,11 @@ public class Transacciones extends javax.swing.JFrame {
         });
 
         btnEliminarTransaccion.setText("Eliminar transaccion");
+        btnEliminarTransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarTransaccionActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Ingresar nueva transaccion");
@@ -151,7 +295,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         jLabel4.setText("Concepto");
 
-        jLabel5.setText("Cuenta afecta:");
+        jLabel5.setText("Cuenta afectada:");
 
         cboCuentaTrasaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
 
@@ -160,6 +304,11 @@ public class Transacciones extends javax.swing.JFrame {
         cboSaldoTransaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber", " " }));
 
         bntGuardarTransaccion.setText("Guardar");
+        bntGuardarTransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntGuardarTransaccionActionPerformed(evt);
+            }
+        });
 
         btnCancelarTransaccion.setText("Cancelar");
 
@@ -175,20 +324,21 @@ public class Transacciones extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addComponent(btnNuevaTransaccion)
-                        .addGap(33, 33, 33)
-                        .addComponent(btnEliminarTransaccion))
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                .addComponent(BtnInicioTransaccion)
-                                .addGap(27, 27, 27)
-                                .addComponent(BtnInventarioTransaccion))
-                            .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel8)))
-                        .addGap(40, 40, 40)
+                                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
+                                        .addComponent(BtnInicioTransaccion)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(BtnInventarioTransaccion)
+                                        .addGap(68, 68, 68))
+                                    .addComponent(jLabel8))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
+                                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)))
                         .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(cboCuentaTrasaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -209,8 +359,12 @@ public class Transacciones extends javax.swing.JFrame {
                                                 .addComponent(btnCancelarTransaccion))
                                             .addComponent(cboSaldoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(btnActualizarTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
+                        .addComponent(btnNuevaTransaccion)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnEliminarTransaccion)))
+                .addGap(62, 62, 62))
         );
         cboCuentaAjusteLayout.setVerticalGroup(
             cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,18 +372,17 @@ public class Transacciones extends javax.swing.JFrame {
                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnInicioTransaccion)
                     .addComponent(BtnInventarioTransaccion))
-                .addGap(53, 53, 53)
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel8))
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabel2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cboCuentaAjusteLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addGap(14, 14, 14)))
+                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addGap(46, 46, 46)
                         .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(txtMontoTransaccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -250,7 +403,12 @@ public class Transacciones extends javax.swing.JFrame {
                             .addComponent(bntGuardarTransaccion)
                             .addComponent(btnCancelarTransaccion))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnActualizarTransaccion)))
+                        .addComponent(btnActualizarTransaccion))
+                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)))
                 .addGap(10, 10, 10)
                 .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminarTransaccion)
@@ -258,7 +416,7 @@ public class Transacciones extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        getContentPane().add(cboCuentaAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 890, -1));
+        getContentPane().add(cboCuentaAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -274,6 +432,75 @@ public class Transacciones extends javax.swing.JFrame {
     private void btnNuevaTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaTransaccionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnNuevaTransaccionActionPerformed
+
+    private void btnEliminarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarTransaccionActionPerformed
+        // TODO add your handling code here:
+
+        // indices de las filas seleccionadas
+        int[] indices = tablaTransacion.getSelectedRows();
+        ArrayList<Transaccion> aEliminar = new ArrayList<Transaccion>();
+
+        for (int i : indices) {
+            Transaccion transaccion = transaccionTModel.transacciones.get(i);
+            String setenciaSql = "DELETE FROM transaccion Where idtransaccion= ?";
+            aEliminar.add(transaccion);
+            try {
+                PreparedStatement prepStat = conexion.conectar().prepareStatement(setenciaSql);
+                prepStat.setInt(1, transaccion.idTransaccion);
+                prepStat.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Elimino correctamente " + transaccion.idTransaccion);
+                UpdateJTable();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        tablaTransacion.repaint();
+    }//GEN-LAST:event_btnEliminarTransaccionActionPerformed
+
+    private void bntGuardarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntGuardarTransaccionActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            Transaccion transaccion = new Transaccion();
+            String seleccion;
+
+            seleccion = (String) cboCuentaTrasaccion.getSelectedItem();
+
+            System.out.println(seleccion);
+
+            transaccion.codigo = buscandoSeleccion(seleccion);
+
+            transaccion.concepto = txtConceptoTransaccion.getText();
+            if (cboSaldoTransaccion.getSelectedItem() == "Debe") {
+                transaccion.debe = Double.parseDouble(txtMontoTransaccion.getText());
+                transaccion.haber = 0.00;
+            } else {
+                transaccion.haber = Double.parseDouble(txtMontoTransaccion.getText());
+                transaccion.debe = 0.00;
+            }
+
+            String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+            PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+            preparedStatement.setInt(1, transaccion.codigo);
+            preparedStatement.setString(2, transaccion.concepto);
+            preparedStatement.setDouble(3, transaccion.debe);
+            preparedStatement.setDouble(4, transaccion.haber);
+            preparedStatement.execute();
+
+            transaccionTModel.transacciones.add(transaccion);
+          
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error bato");
+            e.printStackTrace();
+        }
+    //  UpdateJTable();
+    
+    consultaIncial();
+
+    }//GEN-LAST:event_bntGuardarTransaccionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,7 +557,7 @@ public class Transacciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableTransacion;
+    private javax.swing.JTable tablaTransacion;
     private javax.swing.JTextField txtConceptoTransaccion;
     private javax.swing.JTextField txtMontoTransaccion;
     // End of variables declaration//GEN-END:variables
