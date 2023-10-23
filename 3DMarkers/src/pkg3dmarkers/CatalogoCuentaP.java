@@ -435,7 +435,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         tablaCatalogo.setModel(modelo);
 
-        String sql = "SELECT idcatalgo, codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
+        String sql = "SELECT idcatalogo, codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
 
         String[] datos = new String[3];
 
