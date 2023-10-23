@@ -2,6 +2,7 @@
 package clases;
 
 import clases.Impuesto;
+import java.util.Date;
 
 /**
  *
@@ -9,10 +10,18 @@ import clases.Impuesto;
  */
 public class Transaccion {
     
-    Impuesto impuesto;
+    Impuesto impuesto = new Impuesto();
+   // CatalogoCuenta cuenta = new CatalogoCuenta();
     
     int id;
+    Date fecha;    
+    String cuenta;
+    String concepto;
+    Double  debe;
+    Double haber;            
     double monto;
+    
+    
     
     
 }

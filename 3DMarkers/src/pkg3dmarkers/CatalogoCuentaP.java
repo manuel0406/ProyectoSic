@@ -551,7 +551,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         Conexion objetoConexion = new Conexion();
 
-        String consulta = "UPDATE catalogocuenta SET codigo = ?, nombrecuenta = ? WHERE catalogocuenta.idcatalgo = ?;";
+        String consulta = "UPDATE catalogocuenta SET codigo = ?, nombrecuenta = ? WHERE catalogocuenta.idcataolgo = ?;";
 
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de actualizar este registro?", "Actualizar registro", JOptionPane.YES_NO_OPTION);
 
@@ -592,7 +592,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
         Conexion objetoConexion = new Conexion();
 
-        String consulta = "DELETE FROM catalogocuenta WHERE catalogocuenta.idcatalgo = ?;";
+        String consulta = "DELETE FROM catalogocuenta WHERE catalogocuenta.idcatalogo = ?;";
 
         int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este registro?", "Eliminar registro", JOptionPane.YES_NO_OPTION);
 
