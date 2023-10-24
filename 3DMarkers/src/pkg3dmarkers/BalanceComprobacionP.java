@@ -4,6 +4,13 @@
  */
 package pkg3dmarkers;
 
+import clases.Cuenta;
+import clases.Transaccion;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author manue
@@ -17,6 +24,45 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         initComponents();
     }
 
+    Cuenta cuenta = new Cuenta();
+/**
+    public void totalizacion() {
+
+        
+        Conexion conexion = new Conexion();
+        try {
+
+            String setenciaSql = "SELECT   c.codigo AS codigo, c.nombrecuenta AS nombre, SUM(t.haber) AS suma_haber, SUM(t.debe) AS suma_deber \n"
+                    + "FROM catalogocuenta c INNER JOIN transaccion t ON c.codigo = t.codigo ";
+
+            Statement statement = conexion.conectar().createStatement();
+
+            ResultSet resultado = statement.executeQuery(setenciaSql);
+
+            while (resultado.next()) {
+
+                Transaccion transaccion = new Transaccion();
+
+                transaccion.idTransaccion = resultado.getInt("idtransaccion");
+                transaccion.codigo = resultado.getInt("codigo");
+                transaccion.concepto = resultado.getString("concepto");
+                transaccion.cuenta = resultado.getString("nombrecuenta");
+                transaccion.debe = resultado.getDouble("debe");
+                transaccion.haber = resultado.getDouble("haber");
+
+                this.transaccionTModel.transacciones.add(transaccion);
+
+            }
+
+            tablaTransacion.repaint();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base");
+
+            ex.printStackTrace();
+        }
+
+    }
+**/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
