@@ -4,6 +4,12 @@
  */
 package pkg3dmarkers;
 
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samue
@@ -15,6 +21,8 @@ public class BalanceGeneralP extends javax.swing.JFrame {
      */
     public BalanceGeneralP() {
         initComponents();
+        
+        mostrarGeneral(tableGeneral);
     }
 
     /**
@@ -26,22 +34,173 @@ public class BalanceGeneralP extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableGeneral = new javax.swing.JTable();
+        btnInicio = new javax.swing.JButton();
+        btnTransacciones = new javax.swing.JButton();
+        btnInventario = new javax.swing.JButton();
+        BtnImprimir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tableGeneral.setFocusable(false);
+        tableGeneral = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        jScrollPane1.setViewportView(tableGeneral);
+
+        btnInicio.setText("Inicio");
+
+        btnTransacciones.setText("Transacciones");
+
+        btnInventario.setText("Inventario");
+
+        BtnImprimir.setText("Imprimir");
+        BtnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnImprimirActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Balance general");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTransacciones)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel1)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTransacciones)
+                    .addComponent(btnInicio)
+                    .addComponent(btnInventario))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(BtnImprimir)
+                .addGap(22, 22, 22))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+
+        String tituloTabla = "Reporte - Balance general";
+        imprimirTabla(tableGeneral, tituloTabla);
+
+     }//GEN-LAST:event_BtnImprimirActionPerformed
+
+    public void mostrarGeneral(JTable tablaGeneral) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        
+        tableGeneral.getTableHeader().setResizingAllowed(false);
+        tableGeneral.getTableHeader().setReorderingAllowed(false);
+
+        modelo.addColumn("Código");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Debe");
+        modelo.addColumn("Haber");
+
+        tablaGeneral.setModel(modelo);
+
+        String[] datos = new String[4];
+        datos[0] = "111";
+        datos[1] = "Caja";
+        datos[2] = "$300";
+        datos[3] = "$0";
+        modelo.addRow(datos);
+
+        /*
+        String sql = "SELECT codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
+
+        String[] datos = new String[4];
+
+        Statement statement = null;
+
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                datos[0] = resultSet.getString(1);
+                datos[1] = resultSet.getString(2);
+                datos[2] = resultSet.getString(3);
+                datos[3] = resultSet.getString(4);
+                modelo.addRow(datos);
+            }
+
+            tablaCatalogo.setModel(modelo);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+
+        }*/
+    }
+
+    private void imprimirTabla(JTable tabla, String tituloTabla) {
+        try {
+            MessageFormat header = new MessageFormat(tituloTabla);
+            MessageFormat footer = new MessageFormat("Dmakers contabilidad");
+
+            tabla.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+
+        } catch (PrinterException e) {
+            JOptionPane.showMessageDialog(null, "Impresión fallida: " + e.getMessage());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Error al imprimir la tabla: " + e.getMessage());
+        }
+    }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -78,5 +237,12 @@ public class BalanceGeneralP extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnImprimir;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnInventario;
+    private javax.swing.JButton btnTransacciones;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableGeneral;
     // End of variables declaration//GEN-END:variables
 }
