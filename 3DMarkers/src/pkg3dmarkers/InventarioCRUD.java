@@ -1,12 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package pkg3dmarkers;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 /**
  *
- * @author ivuan
+ * @author Iván Alexander Carranza Sánchez
  */
 public class InventarioCRUD extends javax.swing.JFrame {
 
@@ -15,6 +22,41 @@ public class InventarioCRUD extends javax.swing.JFrame {
      */
     public InventarioCRUD() {
         initComponents();
+        centrarVentanaEnPantalla();
+        
+        //Color de Fuente a Inventario.
+        txtCosto.setForeground(new java.awt.Color(187,187,187));
+        txtCantidad.setForeground(new java.awt.Color(187,187,187));
+        cbxMovimiento.setForeground(new java.awt.Color(187,187,187));
+        btnCancelar.setForeground(new java.awt.Color(0,0,0));
+        
+        //Cabezera de Inventario
+        tbInventario.getTableHeader().setReorderingAllowed(false);
+        tbInventario.getTableHeader().setFont(new Font("Dubai", Font.BOLD, 18));
+        tbInventario.getTableHeader().setBackground(new java.awt.Color(255,255,5));
+        
+        //Arreglo de etiquetas de tabla
+        lblEntrada.setHorizontalAlignment(SwingConstants.CENTER);
+        lblEntrada.setBackground(new java.awt.Color(255,255,5));
+        lblSalida.setHorizontalAlignment(SwingConstants.CENTER);
+        lblSalida.setBackground(new java.awt.Color(0,0,0));
+        lblSalida.setForeground(new java.awt.Color(255,255,255));
+        lblMonto.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMonto.setBackground(new java.awt.Color(255,255,5));
+        
+    }
+    
+    //CENTRADO DE VENTANA
+    private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
     }
 
     /**
@@ -26,21 +68,613 @@ public class InventarioCRUD extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        btnInicio = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
+        Encabezada = new javax.swing.JLabel();
+        cbxProducto = new javax.swing.JComboBox<>();
+        lblProductos = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lblCantidad = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
+        lblCostoUnitario = new javax.swing.JLabel();
+        lblMovimiento = new javax.swing.JLabel();
+        cbxMovimiento = new javax.swing.JComboBox<>();
+        txtCantidad = new javax.swing.JTextField();
+        txtCosto = new javax.swing.JTextField();
+        jdcFecha = new com.toedter.calendar.JDateChooser();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbInventario = new javax.swing.JTable();
+        lblMonto = new javax.swing.JLabel();
+        lblSalida = new javax.swing.JLabel();
+        lblEntrada = new javax.swing.JLabel();
+        lblMontoT = new javax.swing.JLabel();
+        lblEntradaT = new javax.swing.JLabel();
+        lblSalidaT = new javax.swing.JLabel();
+        btnNuevoMovimiento = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnIngresar = new javax.swing.JButton();
+        lblCuerpo = new javax.swing.JLabel();
+        lblMenu = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnInicio.setBackground(new java.awt.Color(153, 255, 153));
+        btnInicio.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnInicio.setForeground(new java.awt.Color(0, 0, 0));
+        btnInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoInicio.png"))); // NOI18N
+        btnInicio.setText("Inicio");
+        btnInicio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInicioMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnInicioMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnInicioMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 120, 40));
+
+        btnCerrar.setBackground(new java.awt.Color(255, 102, 102));
+        btnCerrar.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAfueraCerrar.png"))); // NOI18N
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 170, 40));
+
+        Encabezada.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        Encabezada.setForeground(new java.awt.Color(0, 0, 0));
+        Encabezada.setText("Realizando Movimiento");
+        getContentPane().add(Encabezada, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, -1, -1));
+
+        cbxProducto.setBackground(new java.awt.Color(255, 255, 255));
+        cbxProducto.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        cbxProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        getContentPane().add(cbxProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 200, 36));
+
+        lblProductos.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblProductos.setForeground(new java.awt.Color(0, 0, 0));
+        lblProductos.setText("Tipo de Movimiento:");
+        getContentPane().add(lblProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 150, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setEnabled(false);
+
+        lblCantidad.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblCantidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblCantidad.setText("Cantidad:");
+        lblCantidad.setEnabled(false);
+
+        lblFecha.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblFecha.setForeground(new java.awt.Color(0, 0, 0));
+        lblFecha.setText("Seleccion Fecha:");
+        lblFecha.setEnabled(false);
+
+        lblCostoUnitario.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblCostoUnitario.setForeground(new java.awt.Color(0, 0, 0));
+        lblCostoUnitario.setText("Costo Unitario:");
+        lblCostoUnitario.setEnabled(false);
+
+        lblMovimiento.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblMovimiento.setForeground(new java.awt.Color(0, 0, 0));
+        lblMovimiento.setText("Tipo de Movimiento:");
+        lblMovimiento.setEnabled(false);
+
+        cbxMovimiento.setBackground(new java.awt.Color(255, 255, 255));
+        cbxMovimiento.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        cbxMovimiento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Entrada", "Salida" }));
+        cbxMovimiento.setEnabled(false);
+        cbxMovimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxMovimientoActionPerformed(evt);
+            }
+        });
+
+        txtCantidad.setBackground(new java.awt.Color(255, 255, 255));
+        txtCantidad.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        txtCantidad.setText("Ingrese cantidad...");
+        txtCantidad.setEnabled(false);
+        txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtCantidadFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCantidadFocusLost(evt);
+            }
+        });
+        txtCantidad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtCantidadMouseClicked(evt);
+            }
+        });
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
+
+        txtCosto.setBackground(new java.awt.Color(255, 255, 255));
+        txtCosto.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        txtCosto.setText("Ingrese costo unitario...");
+        txtCosto.setEnabled(false);
+        txtCosto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtCostoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCostoFocusLost(evt);
+            }
+        });
+        txtCosto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtCostoMouseClicked(evt);
+            }
+        });
+        txtCosto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCostoKeyTyped(evt);
+            }
+        });
+
+        jdcFecha.setBackground(new java.awt.Color(255, 255, 255));
+        jdcFecha.setEnabled(false);
+        jdcFecha.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCostoUnitario)
+                    .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCosto, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(txtCantidad)
+                    .addComponent(jdcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbxMovimiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMovimiento))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jdcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblCostoUnitario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(58, 58, 58))
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 150, 390, 180));
+
+        jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
+        jScrollPane1.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+
+        tbInventario.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Fecha", "Unit", "C/U", "Total", "Unit", "C/U", "Total", "Unit", "C/U", "Total"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbInventario.setToolTipText("Seleccion la linea a editar");
+        tbInventario.setGridColor(new java.awt.Color(0, 0, 0));
+        tbInventario.setSelectionBackground(new java.awt.Color(255, 255, 153));
+        tbInventario.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        tbInventario.setShowGrid(true);
+        jScrollPane1.setViewportView(tbInventario);
+        if (tbInventario.getColumnModel().getColumnCount() > 0) {
+            tbInventario.getColumnModel().getColumn(0).setResizable(false);
+            tbInventario.getColumnModel().getColumn(1).setResizable(false);
+            tbInventario.getColumnModel().getColumn(2).setResizable(false);
+            tbInventario.getColumnModel().getColumn(3).setResizable(false);
+            tbInventario.getColumnModel().getColumn(4).setResizable(false);
+            tbInventario.getColumnModel().getColumn(5).setResizable(false);
+            tbInventario.getColumnModel().getColumn(6).setResizable(false);
+            tbInventario.getColumnModel().getColumn(7).setResizable(false);
+            tbInventario.getColumnModel().getColumn(8).setResizable(false);
+            tbInventario.getColumnModel().getColumn(9).setResizable(false);
+        }
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 590, 210));
+
+        lblMonto.setBackground(new java.awt.Color(255, 255, 51));
+        lblMonto.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        lblMonto.setForeground(new java.awt.Color(0, 0, 0));
+        lblMonto.setText("Monto");
+        lblMonto.setOpaque(true);
+        getContentPane().add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(423, 131, 175, -1));
+
+        lblSalida.setBackground(new java.awt.Color(0, 0, 0));
+        lblSalida.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        lblSalida.setForeground(new java.awt.Color(255, 255, 255));
+        lblSalida.setText("Salida");
+        lblSalida.setOpaque(true);
+        getContentPane().add(lblSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(242, 131, 180, -1));
+
+        lblEntrada.setBackground(new java.awt.Color(255, 255, 51));
+        lblEntrada.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
+        lblEntrada.setForeground(new java.awt.Color(0, 0, 0));
+        lblEntrada.setText("Entradas");
+        lblEntrada.setOpaque(true);
+        getContentPane().add(lblEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 131, 180, -1));
+
+        lblMontoT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblMontoT.setForeground(new java.awt.Color(0, 0, 0));
+        lblMontoT.setText("Total de Saldo:");
+        getContentPane().add(lblMontoT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 140, 30));
+
+        lblEntradaT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblEntradaT.setForeground(new java.awt.Color(0, 0, 0));
+        lblEntradaT.setText("Total de Entradas:");
+        getContentPane().add(lblEntradaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 140, 30));
+
+        lblSalidaT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
+        lblSalidaT.setForeground(new java.awt.Color(0, 0, 0));
+        lblSalidaT.setText("Total de Salida:");
+        getContentPane().add(lblSalidaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 140, 30));
+
+        btnNuevoMovimiento.setBackground(new java.awt.Color(255, 255, 51));
+        btnNuevoMovimiento.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnNuevoMovimiento.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevoMovimiento.setText("Nuevo Movimiento");
+        btnNuevoMovimiento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNuevoMovimientoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnNuevoMovimientoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnNuevoMovimientoMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnNuevoMovimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 190, 40));
+
+        btnEliminar.setBackground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("Eliminar Movimiento");
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 190, 40));
+
+        btnCancelar.setBackground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCancelarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 340, 110, 40));
+
+        btnIngresar.setBackground(new java.awt.Color(255, 255, 51));
+        btnIngresar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
+        btnIngresar.setForeground(new java.awt.Color(0, 0, 0));
+        btnIngresar.setText("Ingresar");
+        btnIngresar.setEnabled(false);
+        btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnIngresarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnIngresarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnIngresarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 340, 110, 40));
+
+        lblCuerpo.setBackground(new java.awt.Color(255, 255, 255));
+        lblCuerpo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoBlanco.jpg"))); // NOI18N
+        getContentPane().add(lblCuerpo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1050, 430));
+
+        lblMenu.setBackground(new java.awt.Color(0, 0, 0));
+        lblMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoNegro.png"))); // NOI18N
+        getContentPane().add(lblMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255,255,255));
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAdentroCerrar.png"))); 
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255,102,102));
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/icoAfueraCerrar.png"))); 
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+    private void btnInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseClicked
+         // Crea una nueva instancia de NuevoVentana
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnInicioMouseClicked
+
+    private void btnInicioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseEntered
+        // Sobre el boton
+        btnInicio.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnInicioMouseEntered
+
+    private void btnInicioMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseExited
+          // Regresa al color original fuera
+        btnInicio.setBackground(new Color(153,255,153));
+    }//GEN-LAST:event_btnInicioMouseExited
+
+    private void txtCantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusGained
+        // Verificacion del textbox
+        String texto = txtCantidad.getText().trim();
+        if (texto.equals("Ingrese cantidad...")) {
+            txtCantidad.setText("");
+            txtCantidad.setForeground(new java.awt.Color(0,0,0));}
+    }//GEN-LAST:event_txtCantidadFocusGained
+
+    private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
+        // Modificación al quitar el enfoque
+        String texto = txtCantidad.getText().trim();
+        if (texto.isEmpty() || texto.equals(".")) {
+            txtCantidad.setText("Ingrese cantidad...");
+            txtCantidad.setForeground(new java.awt.Color(187,187,187));
+        }
+    }//GEN-LAST:event_txtCantidadFocusLost
+
+    private void txtCantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCantidadMouseClicked
+        // Verificacion del textbox
+        if(txtCosto.isEnabled())
+        {
+            String texto = txtCantidad.getText().trim();
+            if (texto.equals("Ingrese cantidad...")) {
+                txtCantidad.setText("");
+                txtCantidad.setForeground(new java.awt.Color(0,0,0));
+            }
+        }
+    }//GEN-LAST:event_txtCantidadMouseClicked
+
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadActionPerformed
+
+    private void txtCostoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCostoFocusGained
+        // Verificacion del textbox
+        String texto = txtCosto.getText().trim();
+        if (texto.equals("Ingrese costo unitario...")) {
+            txtCosto.setText("");
+            txtCosto.setForeground(new java.awt.Color(0,0,0));}
+    }//GEN-LAST:event_txtCostoFocusGained
+
+    private void txtCostoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCostoFocusLost
+        // Modificación al quitar el enfoque
+        String texto = txtCosto.getText().trim();
+        if (texto.isEmpty() || texto.equals(".")) {
+            txtCosto.setText("Ingrese costo unitario...");
+            txtCosto.setForeground(new java.awt.Color(187,187,187));
+        }
+    }//GEN-LAST:event_txtCostoFocusLost
+
+    private void txtCostoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCostoMouseClicked
+        // Verificacion del textbox
+        if(txtCosto.isEnabled())
+        {
+             String texto = txtCosto.getText().trim();
+            if (texto.equals("Ingrese costo unitario...")) {
+            txtCosto.setText("");
+            txtCosto.setForeground(new java.awt.Color(0,0,0));
+            }
+        }
+    }//GEN-LAST:event_txtCostoMouseClicked
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+       int key = evt.getKeyChar();
+       boolean numeros = key >= 48 && key <= 57  ; //Rango de caracteres  numericos    
+       if (!numeros)
+       {
+            evt.consume();
+       }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCostoKeyTyped
+         int key = evt.getKeyChar();
+       boolean numeros = key >= 48 && key <= 57 || key == 46 ; //Rango de caracteres  numericos    
+       if (!numeros)
+       {
+            evt.consume();
+       }
+    }//GEN-LAST:event_txtCostoKeyTyped
+
+    private void cbxMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxMovimientoActionPerformed
+        // Diferenciación de movimiento
+        String selectedItem = (String) cbxMovimiento.getSelectedItem();
+        if (selectedItem.equals("Seleccione"))
+        {
+            txtCosto.setVisible(true);
+            lblCostoUnitario.setVisible(true);
+        }
+        else if (selectedItem.equals("Entrada"))
+        {
+            txtCosto.setVisible(true);
+            lblCostoUnitario.setVisible(true);
+        }
+        else if (selectedItem.equals("Salida"))
+        {
+            txtCosto.setVisible(false);
+            lblCostoUnitario.setVisible(false);
+        }
+    }//GEN-LAST:event_cbxMovimientoActionPerformed
+
+    private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIngresarMouseClicked
+
+    private void btnIngresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseEntered
+       //Color cambiante
+        btnIngresar.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnIngresarMouseEntered
+
+    private void btnIngresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseExited
+        // Color retorno
+        btnIngresar.setBackground(new Color(255,255,51));
+    }//GEN-LAST:event_btnIngresarMouseExited
+
+    private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
+        // Limpiar Ingrese costo unitario...
+        txtCosto.setText("Ingrese costo unitario...");
+        txtCantidad.setText("Ingrese cantidad...");
+        cbxMovimiento.setSelectedItem("Seleccione");
+        jdcFecha.setDate(null);
+        txtCosto.setVisible(true);
+        lblCostoUnitario.setVisible(true);
+         
+       lblMovimiento.setEnabled(false);
+       lblFecha.setEnabled(false);
+       lblCantidad.setEnabled(false);
+       lblCostoUnitario.setEnabled(false);
+       txtCosto.setEnabled(false);
+       jdcFecha.setEnabled(false);
+       cbxMovimiento.setEnabled(false);
+       txtCantidad.setEnabled(false);
+       btnNuevoMovimiento.setEnabled(true);
+       btnIngresar.setEnabled(false);
+       btnCancelar.setEnabled(false);
+       btnCancelar.setForeground(new java.awt.Color(0,0,0));
+    }//GEN-LAST:event_btnCancelarMouseClicked
+
+    private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
+        //Color cambiante
+        if(btnCancelar.isEnabled())
+        {
+            btnCancelar.setBackground(new Color(255,255,255));
+            btnCancelar.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_btnCancelarMouseEntered
+
+    private void btnCancelarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseExited
+         // Color retorno
+         if(btnCancelar.isEnabled())
+        {
+            btnCancelar.setBackground(new Color(0,0,0));
+            btnCancelar.setForeground(new Color(255,255,255));
+        }
+    }//GEN-LAST:event_btnCancelarMouseExited
+
+    private void btnNuevoMovimientoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseClicked
+       lblMovimiento.setEnabled(true);
+       lblFecha.setEnabled(true);
+       lblCantidad.setEnabled(true);
+       lblCostoUnitario.setEnabled(true);
+       txtCosto.setEnabled(true);
+       jdcFecha.setEnabled(true);
+       cbxMovimiento.setEnabled(true);
+       txtCantidad.setEnabled(true);
+       btnIngresar.setEnabled(true);
+       btnCancelar.setEnabled(true);
+       btnCancelar.setForeground(new java.awt.Color(255,255,255));
+       btnNuevoMovimiento.setEnabled(false);
+    }//GEN-LAST:event_btnNuevoMovimientoMouseClicked
+
+    private void btnNuevoMovimientoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseEntered
+        //Color cambiante
+        btnNuevoMovimiento.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_btnNuevoMovimientoMouseEntered
+
+    private void btnNuevoMovimientoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseExited
+         // Color retorno
+        btnNuevoMovimiento.setBackground(new Color(255,255,51));
+    }//GEN-LAST:event_btnNuevoMovimientoMouseExited
+
+    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarMouseClicked
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+      //Color cambiante
+        btnEliminar.setBackground(new Color(255,255,255));
+        btnEliminar.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+       // Color retorno
+        btnEliminar.setBackground(new Color(0,0,0));
+        btnEliminar.setForeground(new Color(255,255,255));
+    }//GEN-LAST:event_btnEliminarMouseExited
 
     /**
      * @param args the command line arguments
@@ -78,5 +712,33 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Encabezada;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btnInicio;
+    private javax.swing.JButton btnNuevoMovimiento;
+    private javax.swing.JComboBox<String> cbxMovimiento;
+    private javax.swing.JComboBox<String> cbxProducto;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser jdcFecha;
+    private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblCostoUnitario;
+    private javax.swing.JLabel lblCuerpo;
+    private javax.swing.JLabel lblEntrada;
+    private javax.swing.JLabel lblEntradaT;
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblMenu;
+    private javax.swing.JLabel lblMonto;
+    private javax.swing.JLabel lblMontoT;
+    private javax.swing.JLabel lblMovimiento;
+    private javax.swing.JLabel lblProductos;
+    private javax.swing.JLabel lblSalida;
+    private javax.swing.JLabel lblSalidaT;
+    private javax.swing.JTable tbInventario;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtCosto;
     // End of variables declaration//GEN-END:variables
 }
