@@ -35,7 +35,7 @@ public class Transacciones extends javax.swing.JFrame {
     //Conexion conexion= new Conexion();
     public TransaccionTableModel transaccionTModel = new TransaccionTableModel();
     Conexion conexion = new Conexion();
-    Transaccion transaccionActual = new Transaccion();
+    Transaccion transaccionActual = new Transaccion(); 
 
     public Transacciones() {
         initComponents();
@@ -246,7 +246,6 @@ public class Transacciones extends javax.swing.JFrame {
                     + "FROM catalogocuenta c INNER JOIN transaccion t ON c.codigo = t.codigo GROUP BY c.codigo, c.nombrecuenta;";
 
             Statement statement = conexion.conectar().createStatement();
-
             ResultSet resultado = statement.executeQuery(setenciaSql);
 
             while (resultado.next()) {
@@ -264,11 +263,10 @@ public class Transacciones extends javax.swing.JFrame {
                 }
 
                 listCuenta.add(cuenta);
-                /*
-                 */
+                
             }
 
-            tablaTransacion.repaint();
+            //tablaTransacion.repaint();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la base");
 
@@ -283,6 +281,7 @@ public class Transacciones extends javax.swing.JFrame {
             PreparedStatement statement = null;
 
             for (Cuenta cuenta : listCuenta) {
+                
                 String sentenciaSql = "Select * from cuenta where codigo=?";
                 statement = this.conexion.conectar().prepareStatement(sentenciaSql);
                 statement.setInt(1, cuenta.codigo);
@@ -660,6 +659,7 @@ public class Transacciones extends javax.swing.JFrame {
         // consultaIncial();
         limpiar();
         habilitarControles(false);
+        totalizacion();
 
     }//GEN-LAST:event_btnGuardarTransaccionActionPerformed
 

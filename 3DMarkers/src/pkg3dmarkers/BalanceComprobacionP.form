@@ -92,8 +92,6 @@
                           <Component id="BtnTransaBalanceC" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="BtnInventarioBalanceC" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="BtnReportesBalanceC" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="45" max="32767" attributes="0"/>
@@ -107,7 +105,6 @@
                       <Component id="BtnInicioBalanceC" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="BtnTransaBalanceC" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="BtnInventarioBalanceC" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="BtnReportesBalanceC" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -260,14 +257,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="BtnReportesBalanceC">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Reportes"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnReportesBalanceCActionPerformed"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

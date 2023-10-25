@@ -9,6 +9,7 @@ package clases;
  * @author manue
  */
 public class Cuenta {
+    public int idCuenta;
     public int codigo;
     public double totalizacion;
     public boolean deudor;

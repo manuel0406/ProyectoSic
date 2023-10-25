@@ -10,5 +10,9 @@ package clases;
  */
 public class BalanceComprobacion {
     
+    public int codigo;
+    public double saldoacredor;
+    public double saldodeudor;
+    
     
 }
