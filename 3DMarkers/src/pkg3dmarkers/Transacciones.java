@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,7 +36,7 @@ public class Transacciones extends javax.swing.JFrame {
     //Conexion conexion= new Conexion();
     public TransaccionTableModel transaccionTModel = new TransaccionTableModel();
     Conexion conexion = new Conexion();
-    Transaccion transaccionActual = new Transaccion(); 
+    Transaccion transaccionActual = new Transaccion();
 
     public Transacciones() {
         initComponents();
@@ -92,7 +93,22 @@ public class Transacciones extends javax.swing.JFrame {
             tColumnModel.addColumn(col);
 
         }
+        
         tablaTransacion.setColumnModel(tColumnModel);
+        
+        TableColumn columna0 = tablaTransacion.getColumnModel().getColumn(0); // Reemplaza 'indiceColumna' con el índice de la columna que deseas ajustar.
+        columna0.setPreferredWidth(1);
+        
+      TableColumn   columna1 = tablaTransacion.getColumnModel().getColumn(1);
+       columna1.setPreferredWidth(10);
+      TableColumn   columna2 = tablaTransacion.getColumnModel().getColumn(2);
+       columna2.setPreferredWidth(2);
+      TableColumn   columna3 = tablaTransacion.getColumnModel().getColumn(3);
+       columna3.setPreferredWidth(250);
+       TableColumn  columna4 = tablaTransacion.getColumnModel().getColumn(4);
+       columna4.setPreferredWidth(2);
+       TableColumn  columna5 = tablaTransacion.getColumnModel().getColumn(5);
+       columna5.setPreferredWidth(2);
 
     }
 
@@ -196,7 +212,7 @@ public class Transacciones extends javax.swing.JFrame {
 
             String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
 
-            System.out.println(seleccion + " ya en el metodo");
+          //  System.out.println(seleccion + " ya en el metodo");
 
             ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
 
@@ -207,7 +223,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         } catch (SQLException e) {
 
-            JOptionPane.showMessageDialog(this, "Error en la seleccion bato");
+            JOptionPane.showMessageDialog(this, "Error en la seleccion ");
         }
         return codigo;
 
@@ -263,7 +279,7 @@ public class Transacciones extends javax.swing.JFrame {
                 }
 
                 listCuenta.add(cuenta);
-                
+
             }
 
             //tablaTransacion.repaint();
@@ -281,7 +297,7 @@ public class Transacciones extends javax.swing.JFrame {
             PreparedStatement statement = null;
 
             for (Cuenta cuenta : listCuenta) {
-                
+
                 String sentenciaSql = "Select * from cuenta where codigo=?";
                 statement = this.conexion.conectar().prepareStatement(sentenciaSql);
                 statement.setInt(1, cuenta.codigo);
@@ -326,7 +342,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
-                  
+
         }
 
     }
@@ -380,6 +396,7 @@ public class Transacciones extends javax.swing.JFrame {
         jLabel1.setText("Registros de las transacciones");
 
         tablaTransacion.setModel(transaccionTModel);
+        tablaTransacion.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tablaTransacion.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tablaTransacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -651,7 +668,7 @@ public class Transacciones extends javax.swing.JFrame {
             transaccionTModel.transacciones.add(transaccion);
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error bato");
+            JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
             e.printStackTrace();
         }
         UpdateJTable();
@@ -660,6 +677,8 @@ public class Transacciones extends javax.swing.JFrame {
         limpiar();
         habilitarControles(false);
         totalizacion();
+        TransaccionTableModel model = (TransaccionTableModel) tablaTransacion.getModel();
+        model.fireTableDataChanged();
 
     }//GEN-LAST:event_btnGuardarTransaccionActionPerformed
 
@@ -700,7 +719,7 @@ public class Transacciones extends javax.swing.JFrame {
             String sentenciaSql = "UPDATE transaccion SET codigo = ?, concepto=?, debe=?, haber=? WHERE idtransaccion= ?";
 
             codigo = buscandoSeleccion(seleccion);
-            System.out.println("probando codigo desde btn +" + codigo);
+            //System.out.println("probando codigo desde btn +" + codigo);
             PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
             preparedStatement.setInt(1, codigo);
             preparedStatement.setString(2, txtConceptoTransaccion.getText());
@@ -738,6 +757,8 @@ public class Transacciones extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
         JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+        
+        
     }//GEN-LAST:event_formWindowClosing
 
     private void btnCancelarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarTransaccionActionPerformed

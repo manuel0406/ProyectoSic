@@ -4,14 +4,20 @@
  */
 package pkg3dmarkers;
 
+import clases.BalanceCTableModel;
+import clases.BalanceComprobacion;
 import clases.Cuenta;
 import clases.Transaccion;
+import clases.TransaccionTableModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -22,14 +28,18 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     /**
      * Creates new form BalanceComprobacionP
      */
-    public BalanceComprobacionP() {
-        initComponents();
-
-        extrayendoCuentas();
-    }
-
+    public BalanceCTableModel balanceTModel = new BalanceCTableModel();
     Cuenta cuenta = new Cuenta();
     ArrayList<Cuenta> listCuenta = new ArrayList<Cuenta>();
+    Conexion conexion= new Conexion();
+
+    public BalanceComprobacionP() {
+        initComponents();
+        extrayendoCuentas();
+        inicializarColumnas();
+        consultaInicial();
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -90,7 +100,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                     try {
 
-                        String sentencia = " UPDATE balancecomprobacion SET saldocreador= ?, saldodeudor= ? WHERE idcuenta=? ";
+                        String sentencia = " UPDATE balancecomprobacion SET saldoacredor= ?, saldodeudor= ? WHERE idcuenta=? ";
 
                         PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
 
@@ -101,8 +111,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         } else {
                             preparedStatement.setDouble(1, cuenta.totalizacion);
                             preparedStatement.setDouble(2, 0.00);
-                            
-
                         }
 
                         preparedStatement.setInt(3, cuenta.idCuenta);
@@ -120,17 +128,16 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
                         preparedStatement.setInt(1, cuenta.idCuenta);
-                         if (cuenta.deudor) {
+                        if (cuenta.deudor) {
                             preparedStatement.setDouble(2, 0.00);
                             preparedStatement.setDouble(3, cuenta.totalizacion);
 
                         } else {
                             preparedStatement.setDouble(2, cuenta.totalizacion);
                             preparedStatement.setDouble(3, 0.00);
-                            
 
                         }
-                       
+
                         preparedStatement.execute();
 
                     } catch (SQLException e) {
@@ -148,12 +155,84 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     }
 
+    public void inicializarColumnas() {
+
+        TableColumnModel tColumnModel = new DefaultTableColumnModel();
+
+        for (int i = 0; i < 4; i++) {
+
+            TableColumn col = new TableColumn(i);
+            switch (i) {
+                case 0:
+                    col.setHeaderValue("Codigo");
+                    break;
+
+                case 1:
+                    col.setHeaderValue("Nombre");
+
+                    break;
+                case 2:
+                    col.setHeaderValue("Debe");
+                    break;
+                case 3:
+                    col.setHeaderValue("Haber");
+                    break;
+
+            }
+            tColumnModel.addColumn(col);
+
+        }
+        tableBcomprobacion.setColumnModel(tColumnModel);
+
+    }
+
+    public void consultaInicial() {
+        Conexion conexion = new Conexion();
+        try {
+
+            String setenciaSql = "SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s \n"
+                    + "JOIN cuenta p ON s.idcuenta = p.idcuenta\n"
+                    + "JOIN catalogoCuenta cc ON p.codigo = cc.codigo;";
+
+            Statement statement = conexion.conectar().createStatement();
+
+            ResultSet resultado = statement.executeQuery(setenciaSql);
+
+            while (resultado.next()) {
+
+                BalanceComprobacion balance = new BalanceComprobacion();
+
+                balance.codigo = resultado.getInt("codigo");
+                balance.nombreCuenta = resultado.getString("nombrecuenta");
+                balance.saldodeudor=resultado.getDouble("saldodeudor");
+                balance.saldoacredor= resultado.getDouble("saldoacredor");
+
+              //  this.transaccionTModel.transacciones.add(transaccion);
+                this.balanceTModel.balances.add(balance);
+                
+
+            }
+
+         //   tablaTransacion.repaint();
+         
+         tableBcomprobacion.repaint();
+         
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
+
+            ex.printStackTrace();
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane3 = new javax.swing.JScrollPane();
         tableBalanceCAjustado = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         BtnInicioBalanceC = new javax.swing.JButton();
         BtnInventarioBalanceC = new javax.swing.JButton();
@@ -179,9 +258,27 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tableBalanceCAjustado);
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Balance de Comprobación");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         BtnInicioBalanceC.setText("Inicio");
         BtnInicioBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -206,17 +303,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         jLabel1.setText("Balance de Comprobación");
 
-        tableBcomprobacion.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Código", "Cuenta", "Debe", "Haber"
-            }
-        ));
+        tableBcomprobacion.setModel(balanceTModel);
+        tableBcomprobacion.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tableBcomprobacion);
 
         btnAjuste.setText("Agregar ajuste");
@@ -312,6 +400,19 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnTransaBalanceCActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+         try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+        JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+        
+        
+        
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -356,8 +457,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable tableBalanceAjustado;
     private javax.swing.JTable tableBalanceCAjustado;
     private javax.swing.JTable tableBcomprobacion;
