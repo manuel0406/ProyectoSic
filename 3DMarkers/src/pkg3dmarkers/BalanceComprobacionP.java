@@ -7,8 +7,6 @@ package pkg3dmarkers;
 import clases.BalanceCTableModel;
 import clases.BalanceComprobacion;
 import clases.Cuenta;
-import clases.Transaccion;
-import clases.TransaccionTableModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,6 +30,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     Cuenta cuenta = new Cuenta();
     ArrayList<Cuenta> listCuenta = new ArrayList<Cuenta>();
     Conexion conexion= new Conexion();
+    double totalDebe=0, totalHaber=0;
 
     public BalanceComprobacionP() {
         initComponents();
@@ -48,6 +47,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
      *
      *
      */
+    
+    
     public void extrayendoCuentas() {
 
         Conexion conexion = new Conexion();
@@ -105,10 +106,12 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
 
                         if (cuenta.deudor) {
+                            totalDebe +=cuenta.totalizacion;
                             preparedStatement.setDouble(1, 0.00);
                             preparedStatement.setDouble(2, cuenta.totalizacion);
 
                         } else {
+                            totalHaber += cuenta.totalizacion;
                             preparedStatement.setDouble(1, cuenta.totalizacion);
                             preparedStatement.setDouble(2, 0.00);
                         }
@@ -152,6 +155,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e);
 
         }
+        
+        txtTotalDebe.setText(String.valueOf(totalDebe));
+        txtTotalHaber.setText(String.valueOf(totalHaber));
 
     }
 
@@ -244,6 +250,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableBalanceAjustado = new javax.swing.JTable();
+        txtTotalDebe = new javax.swing.JTextField();
+        txtTotalHaber = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         tableBalanceCAjustado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -324,6 +333,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(tableBalanceAjustado);
 
+        jLabel2.setText("Total:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -334,11 +345,20 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         .addGap(47, 47, 47)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAjuste)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1))
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(73, 73, 73)
+                                        .addComponent(txtTotalDebe, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(txtTotalHaber, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane1))))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(167, 167, 167)
                         .addComponent(BtnInicioBalanceC)
@@ -359,13 +379,18 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTotalHaber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTotalDebe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAjuste)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -381,8 +406,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -454,6 +479,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JButton BtnTransaBalanceC;
     private javax.swing.JButton btnAjuste;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -464,5 +490,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JTable tableBalanceAjustado;
     private javax.swing.JTable tableBalanceCAjustado;
     private javax.swing.JTable tableBcomprobacion;
+    private javax.swing.JTextField txtTotalDebe;
+    private javax.swing.JTextField txtTotalHaber;
     // End of variables declaration//GEN-END:variables
 }
