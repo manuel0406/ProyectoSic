@@ -8,6 +8,7 @@ import clases.TransaccionTableModel;
 import java.awt.Dimension;
 
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -46,6 +47,7 @@ public class Transacciones extends javax.swing.JFrame {
         habilitarControles(false);
         totalizacion();
         txtidTransaccionTra.setVisible(false);
+        centrarVentanaEnPantalla();
 
     }
 
@@ -380,13 +382,14 @@ public class Transacciones extends javax.swing.JFrame {
         txtidTransaccionTra = new javax.swing.JTextField();
         BtnInicioTransaccion = new javax.swing.JButton();
         BtnInventarioTransaccion = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
 
         jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Transacción");
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -434,6 +437,12 @@ public class Transacciones extends javax.swing.JFrame {
 
         jLabel3.setText("Monto: ");
         cboCuentaAjuste.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 120, 104, -1));
+
+        txtMontoTransaccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMontoTransaccionKeyTyped(evt);
+            }
+        });
         cboCuentaAjuste.add(txtMontoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(784, 117, 165, -1));
 
         jLabel4.setText("Concepto");
@@ -444,13 +453,13 @@ public class Transacciones extends javax.swing.JFrame {
         cboCuentaAjuste.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 244, 104, -1));
 
         cboCuentaTrasaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
-        cboCuentaAjuste.add(cboCuentaTrasaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(784, 241, 165, -1));
+        cboCuentaAjuste.add(cboCuentaTrasaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 165, -1));
 
         jLabel6.setText("Saldo:");
         cboCuentaAjuste.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 303, 104, 22));
 
         cboSaldoTransaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber" }));
-        cboCuentaAjuste.add(cboSaldoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(783, 303, -1, -1));
+        cboCuentaAjuste.add(cboSaldoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 240, 170, -1));
 
         btnGuardarTransaccion.setText("Guardar");
         btnGuardarTransaccion.addActionListener(new java.awt.event.ActionListener() {
@@ -483,12 +492,17 @@ public class Transacciones extends javax.swing.JFrame {
         cboCuentaAjuste.add(txtidTransaccionTra, new org.netbeans.lib.awtextra.AbsoluteConstraints(869, 47, 71, -1));
 
         BtnInicioTransaccion.setText("Inicio");
+        BtnInicioTransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                BtnInicioTransaccionMouseExited(evt);
+            }
+        });
         BtnInicioTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnInicioTransaccionActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(BtnInicioTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(389, 0, 117, -1));
+        cboCuentaAjuste.add(BtnInicioTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, 117, -1));
 
         BtnInventarioTransaccion.setText("Inventario");
         BtnInventarioTransaccion.addActionListener(new java.awt.event.ActionListener() {
@@ -496,10 +510,7 @@ public class Transacciones extends javax.swing.JFrame {
                 BtnInventarioTransaccionActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(BtnInventarioTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(524, 0, 116, -1));
-
-        jRadioButton1.setText("IVA");
-        cboCuentaAjuste.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(909, 304, 69, -1));
+        cboCuentaAjuste.add(BtnInventarioTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, 116, -1));
 
         getContentPane().add(cboCuentaAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 4, 990, 470));
 
@@ -508,10 +519,19 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void BtnInicioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionActionPerformed
         // TODO add your handling code here:
+        
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnInicioTransaccionActionPerformed
 
     private void BtnInventarioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioTransaccionActionPerformed
         // TODO add your handling code here:
+        
+        InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        this.dispose();
+        
     }//GEN-LAST:event_BtnInventarioTransaccionActionPerformed
 
     private void btnNuevaTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaTransaccionActionPerformed
@@ -678,6 +698,20 @@ public class Transacciones extends javax.swing.JFrame {
         limpiar();
     }//GEN-LAST:event_btnCancelarTransaccionActionPerformed
 
+    private void txtMontoTransaccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoTransaccionKeyTyped
+      
+        char c = evt.getKeyChar();
+        String text = txtMontoTransaccion.getText();
+
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '.') || (text.length() >= 5 && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtMontoTransaccionKeyTyped
+
+    private void BtnInicioTransaccionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnInicioTransaccionMouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -732,7 +766,6 @@ public class Transacciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaTransacion;
     private javax.swing.JTextField txtConceptoTransaccion;

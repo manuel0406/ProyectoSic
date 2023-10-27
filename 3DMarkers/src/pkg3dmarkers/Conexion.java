@@ -20,7 +20,7 @@ public class Conexion {
      public Connection conectar() { 
         try { 
         conectado = DriverManager.getConnection("jdbc:postgresql://localhost:5432/dmakers", "dmakers", "1234"); 
-            System.out.println("exito");
+          
         } 
         catch (SQLException ex) {
             System.out.println("ocurrio un error");

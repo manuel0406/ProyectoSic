@@ -9,6 +9,8 @@ import clases.AjusteBalanceTableModel;
 import clases.BalanceCTableModel;
 import clases.BalanceComprobacion;
 import clases.Cuenta;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,9 +45,20 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         inicializarColumnas();
         consultaInicial();
         ajusteBalance();
+        centrarVentanaEnPantalla();
 
     }
-
+ private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,9 +100,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         Conexion conexion = new Conexion();
         double totalDebe = 0, totalHaber = 0;
-        for (Cuenta cuenta1 : listCuenta) {
+      /**  for (Cuenta cuenta1 : listCuenta) {
             System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + " deudor: " + cuenta1.deudor + " Totalizacion: " + cuenta1.totalizacion);
-        }
+        }**/
 
         try {
             PreparedStatement statement = null;
@@ -333,7 +346,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnInicioBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnInicioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(211, 0, -1, -1));
+        jPanel1.add(BtnInicioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 100, -1));
 
         BtnInventarioBalanceC.setText("Inventario");
         BtnInventarioBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -341,7 +354,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnInventarioBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnInventarioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, -1, -1));
+        jPanel1.add(BtnInventarioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 110, -1));
 
         BtnTransaBalanceC.setText("Transacciones");
         BtnTransaBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -349,7 +362,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnTransaBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnTransaBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
+        jPanel1.add(BtnTransaBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Balance de Comprobación");
@@ -362,6 +375,11 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 85, 593, 146));
 
         btnAjuste.setText("Agregar ajuste");
+        btnAjuste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjusteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(539, 581, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -389,10 +407,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -443,11 +460,11 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         }
 
         insertandoAjustes(listaAjustes);
-        for (AjusteBalanceComprobacion ajuste1 : listaAjustes) {
+       /* for (AjusteBalanceComprobacion ajuste1 : listaAjustes) {
 
             System.out.println("Codigo: " + ajuste1.codigo + " Saldo deudor: " + ajuste1.saldodeudor + " Saldo acredor: " + ajuste1.saldoacredor);
 
-        }
+        }*/
 
     }
 
@@ -527,14 +544,23 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void BtnInicioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioBalanceCActionPerformed
         // TODO add your handling code here:
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnInicioBalanceCActionPerformed
 
     private void BtnInventarioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioBalanceCActionPerformed
         // TODO add your handling code here:
+        InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnInventarioBalanceCActionPerformed
 
     private void BtnTransaBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaBalanceCActionPerformed
         // TODO add your handling code here:
+        Transacciones transaccion = new Transacciones();
+        transaccion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnTransaBalanceCActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -548,6 +574,14 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
+        // TODO add your handling code here:
+        AjustesP pAjuste=  new AjustesP();
+        
+        pAjuste.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAjusteActionPerformed
 
     /**
      * @param args the command line arguments

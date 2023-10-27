@@ -8,6 +8,9 @@ import clases.Ajuste;
 import clases.AjusteTableModel;
 import clases.CatalogoCuenta;
 import clases.Transaccion;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,10 +43,22 @@ public class AjustesP extends javax.swing.JFrame {
         inicilizarColumnas();
         consultaIncial();
         txtidAjuste.setVisible(false);
+        centrarVentanaEnPantalla();
 
     }
     Conexion conexion = new Conexion();
 
+     private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
     private void cbo() {
         try {
             Statement statement = conexion.conectar().createStatement();
@@ -263,7 +278,7 @@ public class AjustesP extends javax.swing.JFrame {
                 BtnInicioAjustesActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(BtnInicioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, -1, -1));
+        cboCuentaAjuste.add(BtnInicioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 110, -1));
 
         BtnTransaccionAjustes.setText("Transacciones");
         BtnTransaccionAjustes.addActionListener(new java.awt.event.ActionListener() {
@@ -271,7 +286,7 @@ public class AjustesP extends javax.swing.JFrame {
                 BtnTransaccionAjustesActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(BtnTransaccionAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, -1, -1));
+        cboCuentaAjuste.add(BtnTransaccionAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
 
         BtnInventarioAjustes.setText("Inventario");
         BtnInventarioAjustes.addActionListener(new java.awt.event.ActionListener() {
@@ -279,7 +294,7 @@ public class AjustesP extends javax.swing.JFrame {
                 BtnInventarioAjustesActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(BtnInventarioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
+        cboCuentaAjuste.add(BtnInventarioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 110, -1));
 
         jLabel1.setText("Registros de los Ajustes");
         cboCuentaAjuste.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 78, 172, -1));
@@ -319,6 +334,12 @@ public class AjustesP extends javax.swing.JFrame {
 
         jLabel3.setText("Monto: ");
         cboCuentaAjuste.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 125, 104, -1));
+
+        txtMontoAjuste.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMontoAjusteKeyTyped(evt);
+            }
+        });
         cboCuentaAjuste.add(txtMontoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(699, 122, 165, -1));
 
         jLabel5.setText("Cuenta afecta:");
@@ -383,14 +404,24 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void BtnInicioAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioAjustesActionPerformed
         // TODO add your handling code here:
+         
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnInicioAjustesActionPerformed
 
     private void BtnTransaccionAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaccionAjustesActionPerformed
         // TODO add your handling code here:
+        Transacciones transaccion= new Transacciones();
+        transaccion.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnTransaccionAjustesActionPerformed
 
     private void BtnInventarioAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioAjustesActionPerformed
         // TODO add your handling code here:
+         InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_BtnInventarioAjustesActionPerformed
 
     private void btnGuardarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAjusteActionPerformed
@@ -555,6 +586,18 @@ public class AjustesP extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnEditarAjusteActionPerformed
+
+    private void txtMontoAjusteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoAjusteKeyTyped
+
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        String text = txtMontoAjuste.getText();
+
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '.') || (text.length() >= 5 && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txtMontoAjusteKeyTyped
 
     /**
      * @param args the command line arguments
