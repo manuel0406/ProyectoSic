@@ -23,7 +23,7 @@ public class Conexion {
           
         } 
         catch (SQLException ex) {
-            System.out.println("ocurrio un error");
+            System.out.println("ocurrio un error: "+ex);
         
         }      
         return conectado;

@@ -453,13 +453,18 @@ public class Transacciones extends javax.swing.JFrame {
         cboCuentaAjuste.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 244, 104, -1));
 
         cboCuentaTrasaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
-        cboCuentaAjuste.add(cboCuentaTrasaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 165, -1));
+        cboCuentaAjuste.add(cboCuentaTrasaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 240, 165, -1));
 
         jLabel6.setText("Saldo:");
         cboCuentaAjuste.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 303, 104, 22));
 
         cboSaldoTransaccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber" }));
-        cboCuentaAjuste.add(cboSaldoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 240, 170, -1));
+        cboSaldoTransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSaldoTransaccionActionPerformed(evt);
+            }
+        });
+        cboCuentaAjuste.add(cboSaldoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 170, 30));
 
         btnGuardarTransaccion.setText("Guardar");
         btnGuardarTransaccion.addActionListener(new java.awt.event.ActionListener() {
@@ -579,6 +584,8 @@ public class Transacciones extends javax.swing.JFrame {
 
             transaccion.codigo = buscandoSeleccion(seleccion);
 
+            if(transaccion.codigo== 415 ){
+            }
             transaccion.concepto = txtConceptoTransaccion.getText();
             if (cboSaldoTransaccion.getSelectedItem() == "Debe") {
                 transaccion.debe = Double.parseDouble(txtMontoTransaccion.getText());
@@ -703,7 +710,7 @@ public class Transacciones extends javax.swing.JFrame {
         char c = evt.getKeyChar();
         String text = txtMontoTransaccion.getText();
 
-        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '.') || (text.length() >= 5 && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE)) {
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == '.') || (text.length() >= 10 && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtMontoTransaccionKeyTyped
@@ -711,6 +718,10 @@ public class Transacciones extends javax.swing.JFrame {
     private void BtnInicioTransaccionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnInicioTransaccionMouseExited
+
+    private void cboSaldoTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSaldoTransaccionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboSaldoTransaccionActionPerformed
 
     /**
      * @param args the command line arguments

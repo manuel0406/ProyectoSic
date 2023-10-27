@@ -48,7 +48,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         centrarVentanaEnPantalla();
 
     }
- private void centrarVentanaEnPantalla() {
+
+    private void centrarVentanaEnPantalla() {
         // Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // Obtiene el tamaño de la ventana
@@ -59,6 +60,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         // Establece la ubicación de la ventana
         setLocation(x, y);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,9 +92,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al extraer los datos de la tabla cuenta " + e);
         }
 
-        // for (Cuenta cuenta1 : listCuenta) {
-        //     System.out.println(cuenta1.idCuenta+" "+cuenta1.codigo + " deudor: " + cuenta1.deudor + " Totalizacion: " + cuenta1.totalizacion);
-        //   }
+       
         insertandoDatos(listCuenta);
     }
 
@@ -100,9 +100,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         Conexion conexion = new Conexion();
         double totalDebe = 0, totalHaber = 0;
-      /**  for (Cuenta cuenta1 : listCuenta) {
-            System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + " deudor: " + cuenta1.deudor + " Totalizacion: " + cuenta1.totalizacion);
-        }**/
+        /**
+         * for (Cuenta cuenta1 : listCuenta) {
+         * System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + "
+         * deudor: " + cuenta1.deudor + " Totalizacion: " +
+         * cuenta1.totalizacion);
+        }*
+         */
 
         try {
             PreparedStatement statement = null;
@@ -233,7 +237,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 balance.saldodeudor = resultado.getDouble("saldodeudor");
                 balance.saldoacredor = resultado.getDouble("saldoacredor");
 
-                //  this.transaccionTModel.transacciones.add(transaccion);
+               
                 this.balanceTModel.balances.add(balance);
 
             }
@@ -462,7 +466,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         }
 
         insertandoAjustes(listaAjustes);
-       /* for (AjusteBalanceComprobacion ajuste1 : listaAjustes) {
+        /* for (AjusteBalanceComprobacion ajuste1 : listaAjustes) {
 
             System.out.println("Codigo: " + ajuste1.codigo + " Saldo deudor: " + ajuste1.saldodeudor + " Saldo acredor: " + ajuste1.saldoacredor);
 
@@ -473,6 +477,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private void insertandoAjustes(ArrayList<AjusteBalanceComprobacion> listBalanceAjus) {
 
         double tDebe = 0, tHaber = 0;
+        double costoV=0;
+        double gastoSobreC=0; 
+        
         Conexion conexion = new Conexion();
 
         /**
@@ -495,6 +502,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 ResultSet resultado = statement.executeQuery();
 
                 if (resultado.next()) {
+                   
 
                     try {
 
@@ -579,8 +587,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
         // TODO add your handling code here:
-        AjustesP pAjuste=  new AjustesP();
-        
+        AjustesP pAjuste = new AjustesP();
+
         pAjuste.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAjusteActionPerformed
