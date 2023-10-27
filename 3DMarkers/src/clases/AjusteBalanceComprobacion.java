@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package clases;
 
 /**
@@ -10,4 +7,9 @@ package clases;
  */
 public class AjusteBalanceComprobacion {
     
+    public int codigo;
+    public String nombreCuenta;
+    public double saldoacredor;
+    public double saldodeudor;
+    public boolean deudor;
 }

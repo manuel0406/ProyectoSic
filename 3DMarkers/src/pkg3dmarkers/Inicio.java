@@ -247,7 +247,7 @@ public class Inicio extends javax.swing.JFrame {
         lblFondoInicio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoBlanco.jpg"))); // NOI18N
         lblFondoInicio.setMaximumSize(new java.awt.Dimension(450, 450));
         lblFondoInicio.setPreferredSize(new java.awt.Dimension(640, 400));
-        getContentPane().add(lblFondoInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 400));
+        getContentPane().add(lblFondoInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 410));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

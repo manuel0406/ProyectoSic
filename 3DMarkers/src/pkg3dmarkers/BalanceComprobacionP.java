@@ -4,6 +4,8 @@
  */
 package pkg3dmarkers;
 
+import clases.AjusteBalanceComprobacion;
+import clases.AjusteBalanceTableModel;
 import clases.BalanceCTableModel;
 import clases.BalanceComprobacion;
 import clases.Cuenta;
@@ -27,17 +29,21 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
      * Creates new form BalanceComprobacionP
      */
     public BalanceCTableModel balanceTModel = new BalanceCTableModel();
+    public AjusteBalanceTableModel balanceAjTModel = new AjusteBalanceTableModel();
+
     Cuenta cuenta = new Cuenta();
     ArrayList<Cuenta> listCuenta = new ArrayList<Cuenta>();
-    Conexion conexion= new Conexion();
-    double totalDebe=0, totalHaber=0;
+    ArrayList<AjusteBalanceComprobacion> listaAjustes = new ArrayList<AjusteBalanceComprobacion>();
+
+    Conexion conexion = new Conexion();
 
     public BalanceComprobacionP() {
         initComponents();
         extrayendoCuentas();
         inicializarColumnas();
         consultaInicial();
-        
+        ajusteBalance();
+
     }
 
     /**
@@ -47,8 +53,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
      *
      *
      */
-    
-    
     public void extrayendoCuentas() {
 
         Conexion conexion = new Conexion();
@@ -82,7 +86,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     public void insertandoDatos(ArrayList<Cuenta> listCuenta) {
 
         Conexion conexion = new Conexion();
-
+        double totalDebe = 0, totalHaber = 0;
         for (Cuenta cuenta1 : listCuenta) {
             System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + " deudor: " + cuenta1.deudor + " Totalizacion: " + cuenta1.totalizacion);
         }
@@ -106,7 +110,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
 
                         if (cuenta.deudor) {
-                            totalDebe +=cuenta.totalizacion;
+                            totalDebe += cuenta.totalizacion;
                             preparedStatement.setDouble(1, 0.00);
                             preparedStatement.setDouble(2, cuenta.totalizacion);
 
@@ -132,10 +136,12 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
                         preparedStatement.setInt(1, cuenta.idCuenta);
                         if (cuenta.deudor) {
+                            totalDebe += cuenta.totalizacion;
                             preparedStatement.setDouble(2, 0.00);
                             preparedStatement.setDouble(3, cuenta.totalizacion);
 
                         } else {
+                            totalHaber += cuenta.totalizacion;
                             preparedStatement.setDouble(2, cuenta.totalizacion);
                             preparedStatement.setDouble(3, 0.00);
 
@@ -155,9 +161,9 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e);
 
         }
-        
-        txtTotalDebe.setText(String.valueOf(totalDebe));
-        txtTotalHaber.setText(String.valueOf(totalHaber));
+
+        labelTotalDebe.setText("Total Debe: $ " + totalDebe);
+        labelTotalHaber.setText("Total Haber: $ " + totalHaber);
 
     }
 
@@ -189,6 +195,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         }
         tableBcomprobacion.setColumnModel(tColumnModel);
+        tableBalanceAjustado.setColumnModel(tColumnModel);
 
     }
 
@@ -210,23 +217,48 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                 balance.codigo = resultado.getInt("codigo");
                 balance.nombreCuenta = resultado.getString("nombrecuenta");
-                balance.saldodeudor=resultado.getDouble("saldodeudor");
-                balance.saldoacredor= resultado.getDouble("saldoacredor");
+                balance.saldodeudor = resultado.getDouble("saldodeudor");
+                balance.saldoacredor = resultado.getDouble("saldoacredor");
 
-              //  this.transaccionTModel.transacciones.add(transaccion);
+                //  this.transaccionTModel.transacciones.add(transaccion);
                 this.balanceTModel.balances.add(balance);
-                
 
             }
 
-         //   tablaTransacion.repaint();
-         
-         tableBcomprobacion.repaint();
-         
+            //   tablaTransacion.repaint();
+            tableBcomprobacion.repaint();
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
 
             ex.printStackTrace();
+        }
+
+        try {
+
+            String setenciaAjusteSql = "SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, abc.saldodeudor AS saldo_deudor_ajuste,\n"
+                    + "    abc.saldoacredor AS saldo_acredor_ajuste FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo\n"
+                    + "LEFT JOIN ajustebalancecomprobacion abc ON cc.codigo = abc.codigocuenta;\n";
+            Statement statement = conexion.conectar().createStatement();
+
+            ResultSet resultado1 = statement.executeQuery(setenciaAjusteSql);
+
+            while (resultado1.next()) {
+
+                AjusteBalanceComprobacion ajuste = new AjusteBalanceComprobacion();
+
+                ajuste.codigo = resultado1.getInt("codigo_cuenta");
+                ajuste.nombreCuenta = resultado1.getString("nombre_cuenta");
+                ajuste.saldodeudor = resultado1.getDouble("saldo_deudor_ajuste");
+                ajuste.saldoacredor = resultado1.getDouble("saldo_acredor_ajuste");
+                this.balanceAjTModel.balancesAjus.add(ajuste);
+
+            }
+            tableBalanceAjustado.repaint();
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al extrar los ajustes" + e);
         }
 
     }
@@ -239,6 +271,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         tableBalanceCAjustado = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jTextField1 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         BtnInicioBalanceC = new javax.swing.JButton();
         BtnInventarioBalanceC = new javax.swing.JButton();
@@ -250,9 +283,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableBalanceAjustado = new javax.swing.JTable();
-        txtTotalDebe = new javax.swing.JTextField();
-        txtTotalHaber = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        labelTotalDebe = new javax.swing.JLabel();
+        labelTotalHaber = new javax.swing.JLabel();
+        labelAjusteD = new javax.swing.JLabel();
+        labelAjusteH = new javax.swing.JLabel();
 
         tableBalanceCAjustado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -280,6 +314,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable1);
 
+        jTextField1.setText("jTextField1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Balance de Comprobación");
         setResizable(false);
@@ -289,12 +325,15 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         BtnInicioBalanceC.setText("Inicio");
         BtnInicioBalanceC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnInicioBalanceCActionPerformed(evt);
             }
         });
+        jPanel1.add(BtnInicioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(211, 0, -1, -1));
 
         BtnInventarioBalanceC.setText("Inventario");
         BtnInventarioBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -302,6 +341,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnInventarioBalanceCActionPerformed(evt);
             }
         });
+        jPanel1.add(BtnInventarioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, -1, -1));
 
         BtnTransaBalanceC.setText("Transacciones");
         BtnTransaBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -309,109 +349,181 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnTransaBalanceCActionPerformed(evt);
             }
         });
+        jPanel1.add(BtnTransaBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Balance de Comprobación");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 51, 152, -1));
 
         tableBcomprobacion.setModel(balanceTModel);
         tableBcomprobacion.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tableBcomprobacion);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 85, 593, 146));
+
         btnAjuste.setText("Agregar ajuste");
+        jPanel1.add(btnAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(539, 581, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Balance de comprobación ajustado");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(238, 293, 196, 24));
 
-        tableBalanceAjustado.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Código", "Cuenta", "Debe", "Haber"
-            }
-        ));
+        tableBalanceAjustado.setModel(balanceAjTModel);
         jScrollPane4.setViewportView(tableBalanceAjustado);
 
-        jLabel2.setText("Total:");
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 335, 593, 210));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAjuste)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(73, 73, 73)
-                                        .addComponent(txtTotalDebe, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(28, 28, 28)
-                                        .addComponent(txtTotalHaber, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 593, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane1))))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(167, 167, 167)
-                        .addComponent(BtnInicioBalanceC)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BtnTransaBalanceC)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BtnInventarioBalanceC)))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnInicioBalanceC)
-                    .addComponent(BtnTransaBalanceC)
-                    .addComponent(BtnInventarioBalanceC))
-                .addGap(35, 35, 35)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTotalHaber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtTotalDebe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAjuste)
-                .addGap(16, 16, 16))
-        );
+        labelTotalDebe.setText("Total Debe.");
+        jPanel1.add(labelTotalDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 237, 117, 22));
+
+        labelTotalHaber.setText("Total Haber: ");
+        jPanel1.add(labelTotalHaber, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 271, 117, -1));
+
+        labelAjusteD.setText("Total Debe: ");
+        jPanel1.add(labelAjusteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 553, 154, -1));
+
+        labelAjusteH.setText("Total Haber: ");
+        jPanel1.add(labelAjusteH, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 584, 154, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ajusteBalance() {
+
+        Conexion conexion = new Conexion();
+
+        try {
+            String setenciaSql = "SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, COALESCE(bc.saldoAcredor, 0) + COALESCE(ab.saldoacredor, 0) AS saldo_total_acredor,\n"
+                    + "COALESCE(bc.saldoDeudor, 0) + COALESCE(ab.saldodeudor, 0) AS saldo_total_deudor FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo\n"
+                    + "LEFT JOIN ( SELECT idcuenta, SUM(saldoAcredor) AS saldoAcredor, SUM(saldoDeudor) AS saldoDeudor FROM balanceComprobacion GROUP BY idcuenta\n"
+                    + ") bc ON c.idcuenta = bc.idcuenta LEFT JOIN ( SELECT codigo, SUM(saldoacredor) AS saldoacredor, SUM(saldodeudor) AS saldodeudor FROM ajuste\n"
+                    + "    GROUP BY codigo) ab ON c.codigo = ab.codigo;";
+
+            Statement statement = conexion.conectar().createStatement();
+            ResultSet resultado = statement.executeQuery(setenciaSql);
+
+            while (resultado.next()) {
+                AjusteBalanceComprobacion ajustesBalance = new AjusteBalanceComprobacion();
+
+                ajustesBalance.codigo = resultado.getInt("codigo_cuenta");
+                ajustesBalance.nombreCuenta = resultado.getString("nombre_cuenta");
+                if (resultado.getDouble("saldo_total_acredor") > resultado.getDouble("saldo_total_deudor")) {
+
+                    ajustesBalance.saldoacredor = resultado.getDouble("saldo_total_acredor") - resultado.getDouble("saldo_total_deudor");
+                    ajustesBalance.deudor = false;
+                } else {
+                    ajustesBalance.saldodeudor = resultado.getDouble("saldo_total_deudor") - resultado.getDouble("saldo_total_acredor");
+                    ajustesBalance.deudor = true;
+                }
+
+                listaAjustes.add(ajustesBalance);
+
+            }
+
+        } catch (SQLException e) {
+
+            JOptionPane.showMessageDialog(this, "Error al extraer los datos de la tabla cuenta " + e);
+        }
+
+        insertandoAjustes(listaAjustes);
+        for (AjusteBalanceComprobacion ajuste1 : listaAjustes) {
+
+            System.out.println("Codigo: " + ajuste1.codigo + " Saldo deudor: " + ajuste1.saldodeudor + " Saldo acredor: " + ajuste1.saldoacredor);
+
+        }
+
+    }
+
+    private void insertandoAjustes(ArrayList<AjusteBalanceComprobacion> listBalanceAjus) {
+
+        double tDebe = 0, tHaber = 0;
+        Conexion conexion = new Conexion();
+
+        /**
+         * for (Cuenta cuenta1 : listCuenta) {
+         * System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + "
+         * deudor: " + cuenta1.deudor + " Totalizacion: " +
+         * cuenta1.totalizacion); }*
+         */
+        try {
+            PreparedStatement statement = null;
+
+            for (AjusteBalanceComprobacion ajuste : listBalanceAjus) {
+
+                tDebe += ajuste.saldodeudor;
+                tHaber += ajuste.saldoacredor;
+
+                String sentenciaSql = "select * from ajustebalancecomprobacion where codigocuenta=?";
+                statement = conexion.conectar().prepareStatement(sentenciaSql);
+                statement.setInt(1, ajuste.codigo);
+                ResultSet resultado = statement.executeQuery();
+
+                if (resultado.next()) {
+
+                    try {
+
+                        String sentencia = "UPDATE ajustebalancecomprobacion SET saldoacredor= ?, saldodeudor=? WHERE codigocuenta=? ";
+
+                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
+
+                        preparedStatement.setDouble(1, ajuste.saldoacredor);
+                        preparedStatement.setDouble(2, ajuste.saldodeudor);
+                        preparedStatement.setInt(3, ajuste.codigo);
+
+                        preparedStatement.executeUpdate();
+
+                    } catch (SQLException e) {
+
+                        JOptionPane.showMessageDialog(this, "Error al actualizar " + e);
+                    }
+
+                } else {
+
+                    try {
+                        String sentenciaIn = "INSERT INTO ajustebalancecomprobacion(saldodeudor, saldoacredor, codigocuenta) VALUES ( ?, ?, ?)";
+
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
+
+                        preparedStatement.setDouble(1, ajuste.saldodeudor);
+                        preparedStatement.setDouble(2, ajuste.saldoacredor);
+                        preparedStatement.setInt(3, ajuste.codigo);
+
+                        preparedStatement.execute();
+
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Error insertar los ajustes " + e);
+                    }
+
+                }
+
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
+
+        }
+
+        labelAjusteD.setText("Total Debe: $ " + tDebe);
+        labelAjusteH.setText("Total Haber: $" + tHaber);
+
+    }
 
     private void BtnInicioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioBalanceCActionPerformed
         // TODO add your handling code here:
@@ -427,15 +539,14 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-         try {
+        try {
             conexion.conectar().close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
         JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
-        
-        
-        
+
+
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -479,7 +590,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JButton BtnTransaBalanceC;
     private javax.swing.JButton btnAjuste;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -487,10 +597,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel labelAjusteD;
+    private javax.swing.JLabel labelAjusteH;
+    private javax.swing.JLabel labelTotalDebe;
+    private javax.swing.JLabel labelTotalHaber;
     private javax.swing.JTable tableBalanceAjustado;
     private javax.swing.JTable tableBalanceCAjustado;
     private javax.swing.JTable tableBcomprobacion;
-    private javax.swing.JTextField txtTotalDebe;
-    private javax.swing.JTextField txtTotalHaber;
     // End of variables declaration//GEN-END:variables
 }

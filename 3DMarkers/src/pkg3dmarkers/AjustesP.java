@@ -33,11 +33,14 @@ public class AjustesP extends javax.swing.JFrame {
     Ajuste ajusteActual = new Ajuste();
 
     public AjustesP() {
+
         initComponents();
         habilitarControles(false);
         cbo();
         inicilizarColumnas();
         consultaIncial();
+        txtidAjuste.setVisible(false);
+
     }
     Conexion conexion = new Conexion();
 
@@ -252,12 +255,15 @@ public class AjustesP extends javax.swing.JFrame {
             }
         });
 
+        cboCuentaAjuste.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         BtnInicioAjustes.setText("Inicio");
         BtnInicioAjustes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnInicioAjustesActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(BtnInicioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, -1, -1));
 
         BtnTransaccionAjustes.setText("Transacciones");
         BtnTransaccionAjustes.addActionListener(new java.awt.event.ActionListener() {
@@ -265,6 +271,7 @@ public class AjustesP extends javax.swing.JFrame {
                 BtnTransaccionAjustesActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(BtnTransaccionAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, -1, -1));
 
         BtnInventarioAjustes.setText("Inventario");
         BtnInventarioAjustes.addActionListener(new java.awt.event.ActionListener() {
@@ -272,8 +279,10 @@ public class AjustesP extends javax.swing.JFrame {
                 BtnInventarioAjustesActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(BtnInventarioAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
 
         jLabel1.setText("Registros de los Ajustes");
+        cboCuentaAjuste.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 78, 172, -1));
 
         tablaAjuste.setModel(ajusteTModel);
         tablaAjuste.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -283,12 +292,15 @@ public class AjustesP extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaAjuste);
 
+        cboCuentaAjuste.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 107, 503, 257));
+
         btnNuevoAjuste.setText("Nuevo ajuste");
         btnNuevoAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoAjusteActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(btnNuevoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 410, -1, -1));
 
         btnEliminarAjuste.setText("Eliminar ajuste");
         btnEliminarAjuste.addActionListener(new java.awt.event.ActionListener() {
@@ -296,21 +308,30 @@ public class AjustesP extends javax.swing.JFrame {
                 btnEliminarAjusteActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(btnEliminarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 410, -1, -1));
 
         jButton3.setText("Regresar");
+        cboCuentaAjuste.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(309, 410, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Ingresar nuevos ajuste");
+        cboCuentaAjuste.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 75, 179, -1));
 
         jLabel3.setText("Monto: ");
+        cboCuentaAjuste.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 125, 104, -1));
+        cboCuentaAjuste.add(txtMontoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(699, 122, 165, -1));
 
         jLabel5.setText("Cuenta afecta:");
+        cboCuentaAjuste.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 187, 104, -1));
 
         cboCuentaAfectada.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        cboCuentaAjuste.add(cboCuentaAfectada, new org.netbeans.lib.awtextra.AbsoluteConstraints(699, 184, 165, -1));
 
         jLabel6.setText("Saldo:");
+        cboCuentaAjuste.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 249, 104, -1));
 
         cboSaldoAjuste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber" }));
+        cboCuentaAjuste.add(cboSaldoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(701, 246, 163, -1));
 
         btnGuardarAjuste.setText("Guardar");
         btnGuardarAjuste.addActionListener(new java.awt.event.ActionListener() {
@@ -318,6 +339,7 @@ public class AjustesP extends javax.swing.JFrame {
                 btnGuardarAjusteActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 308, -1, -1));
 
         btnCancelarAjuste.setText("Cancelar");
         btnCancelarAjuste.addActionListener(new java.awt.event.ActionListener() {
@@ -325,8 +347,10 @@ public class AjustesP extends javax.swing.JFrame {
                 btnCancelarAjusteActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(btnCancelarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 308, -1, -1));
 
         jLabel8.setText("Hacer doble clic en un registros para editar");
+        cboCuentaAjuste.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 382, -1, -1));
 
         btnEditarAjuste.setText("Actualizar registro");
         btnEditarAjuste.addActionListener(new java.awt.event.ActionListener() {
@@ -334,118 +358,24 @@ public class AjustesP extends javax.swing.JFrame {
                 btnEditarAjusteActionPerformed(evt);
             }
         });
+        cboCuentaAjuste.add(btnEditarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 342, 166, -1));
 
         txtidAjuste.setEnabled(false);
-
-        javax.swing.GroupLayout cboCuentaAjusteLayout = new javax.swing.GroupLayout(cboCuentaAjuste);
-        cboCuentaAjuste.setLayout(cboCuentaAjusteLayout);
-        cboCuentaAjusteLayout.setHorizontalGroup(
-            cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                .addComponent(btnNuevoAjuste)
-                                .addGap(33, 33, 33)
-                                .addComponent(btnEliminarAjuste)
-                                .addGap(33, 33, 33)
-                                .addComponent(jButton3)))
-                        .addGap(40, 40, 40)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(cboCuentaAfectada, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(16, 16, 16)
-                                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtMontoAjuste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cboSaldoAjuste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtidAjuste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnEditarAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                                        .addComponent(btnGuardarAjuste)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnCancelarAjuste))))))
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addGap(261, 261, 261)
-                        .addComponent(BtnInicioAjustes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BtnTransaccionAjustes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BtnInventarioAjustes)))
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
-        cboCuentaAjusteLayout.setVerticalGroup(
-            cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnInicioAjustes)
-                    .addComponent(BtnTransaccionAjustes)
-                    .addComponent(BtnInventarioAjustes))
-                .addGap(30, 30, 30)
-                .addComponent(txtidAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(cboCuentaAjusteLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtMontoAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(cboCuentaAfectada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(cboSaldoAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(40, 40, 40)
-                        .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnGuardarAjuste)
-                            .addComponent(btnCancelarAjuste))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEditarAjuste)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(cboCuentaAjusteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminarAjuste)
-                    .addComponent(jButton3)
-                    .addComponent(btnNuevoAjuste))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+        cboCuentaAjuste.add(txtidAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 52, 71, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(cboCuentaAjuste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(cboCuentaAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 914, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cboCuentaAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(cboCuentaAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -601,7 +531,6 @@ public class AjustesP extends javax.swing.JFrame {
             System.out.println("probando codigo desde btn +" + codigo);
             PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
             preparedStatement.setInt(1, codigo);
-           
 
             if (cboSaldoAjuste.getSelectedItem() == "Debe") {
 
