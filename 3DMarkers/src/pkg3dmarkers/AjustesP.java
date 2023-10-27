@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -448,6 +449,7 @@ public class AjustesP extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         btnEditarAjuste = new javax.swing.JButton();
         txtidAjuste = new javax.swing.JTextField();
+        dateTransaccion = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ajustes");
@@ -565,7 +567,7 @@ public class AjustesP extends javax.swing.JFrame {
                 btnGuardarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 308, -1, -1));
+        cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 330, -1, -1));
 
         btnCancelarAjuste.setBackground(new java.awt.Color(170, 0, 0));
         btnCancelarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -576,7 +578,7 @@ public class AjustesP extends javax.swing.JFrame {
                 btnCancelarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnCancelarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(788, 308, -1, -1));
+        cboCuentaAjuste.add(btnCancelarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, -1));
 
         jLabel8.setText("Hacer doble clic en un registros para editar");
         cboCuentaAjuste.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 382, -1, -1));
@@ -591,10 +593,11 @@ public class AjustesP extends javax.swing.JFrame {
                 btnEditarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnEditarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 342, 166, -1));
+        cboCuentaAjuste.add(btnEditarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 360, 166, -1));
 
         txtidAjuste.setEnabled(false);
         cboCuentaAjuste.add(txtidAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 52, 71, -1));
+        cboCuentaAjuste.add(dateTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 290, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -635,65 +638,78 @@ public class AjustesP extends javax.swing.JFrame {
         inventario.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BtnInventarioAjustesActionPerformed
+    private boolean validando() {
 
+        boolean vacio = false;
+
+        if (txtMontoAjuste.getText().isEmpty() || cboCuentaAfectada.getSelectedIndex() == 0 || cboSaldoAjuste.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "No dejar casillas en blanco. Seleccione un tipo de saldo y cuenta", "Error", JOptionPane.ERROR_MESSAGE);
+            vacio = true;
+        }
+        return vacio;
+    }
     private void btnGuardarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAjusteActionPerformed
 
-        try {
-            Ajuste ajuste = new Ajuste();
-            String seleccion;
+        if (!validando()) {
 
-            seleccion = (String) cboCuentaAfectada.getSelectedItem();
+            try {
+                Ajuste ajuste = new Ajuste();
+                String seleccion;
 
-            ajuste.codigo = buscandoSeleccion(seleccion);
+                seleccion = (String) cboCuentaAfectada.getSelectedItem();
 
-            if (ajuste.codigo == 113) {
-                try {
-                    String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
-                    PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                ajuste.codigo = buscandoSeleccion(seleccion);
 
-                    preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
+                if (ajuste.codigo == 113) {
+                    try {
+                        String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
+                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
 
-                    preparedStatement.executeUpdate();
-                    calcularCostoVenta();
-                } catch (SQLException e) {
-                    System.out.println("Error: " + e);
+                        preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
 
-                }
+                        preparedStatement.executeUpdate();
+                        calcularCostoVenta();
+                    } catch (SQLException e) {
+                        System.out.println("Error: " + e);
 
-            } else {
-                if (cboSaldoAjuste.getSelectedItem() == "Debe") {
-                    ajuste.debe = Double.parseDouble(txtMontoAjuste.getText());
-                    ajuste.haber = 0.00;
+                    }
+
                 } else {
-                    ajuste.haber = Double.parseDouble(txtMontoAjuste.getText());
-                    ajuste.debe = 0.00;
+                    if (cboSaldoAjuste.getSelectedItem() == "Debe") {
+                        ajuste.debe = Double.parseDouble(txtMontoAjuste.getText());
+                        ajuste.haber = 0.00;
+                    } else {
+                        ajuste.haber = Double.parseDouble(txtMontoAjuste.getText());
+                        ajuste.debe = 0.00;
+                    }
+
+                    String setenciaSql = "INSERT INTO ajuste(codigo, saldodeudor, saldoacredor) VALUES (?, ?, ?)";
+                    PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                    preparedStatement.setInt(1, ajuste.codigo);
+                    preparedStatement.setDouble(2, ajuste.debe);
+                    preparedStatement.setDouble(3, ajuste.haber);
+                    preparedStatement.execute();
+
+                    ajusteTModel.ajustes.add(ajuste);
                 }
+                //transaccion.concepto = txtConceptoTransaccion.getText();
 
-                String setenciaSql = "INSERT INTO ajuste(codigo, saldodeudor, saldoacredor) VALUES (?, ?, ?)";
-                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
-                preparedStatement.setInt(1, ajuste.codigo);
-                preparedStatement.setDouble(2, ajuste.debe);
-                preparedStatement.setDouble(3, ajuste.haber);
-                preparedStatement.execute();
-
-                ajusteTModel.ajustes.add(ajuste);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
+                e.printStackTrace();
             }
-            //transaccion.concepto = txtConceptoTransaccion.getText();
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
-            e.printStackTrace();
+            UpdateJTable();
+
+            limpiar();
+            habilitarControles(false);
+            //totalizacion();
+            AjusteTableModel model = (AjusteTableModel) tablaAjuste.getModel();
+            model.fireTableDataChanged();
+            Date fecha = dateTransaccion.getDate();
+            System.out.println(fecha);
+
         }
-
-        UpdateJTable();
-
-        limpiar();
-        habilitarControles(false);
-        //totalizacion();
-        AjusteTableModel model = (AjusteTableModel) tablaAjuste.getModel();
-        model.fireTableDataChanged();
-
-
     }//GEN-LAST:event_btnGuardarAjusteActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -739,6 +755,7 @@ public class AjustesP extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         habilitarControles(true);
+        btnEditarAjuste.setEnabled(false);
     }//GEN-LAST:event_btnNuevoAjusteActionPerformed
 
     private void btnCancelarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarAjusteActionPerformed
@@ -777,54 +794,58 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void btnEditarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarAjusteActionPerformed
         // TODO add your handling code here:
+
         String seleccion = (String) cboCuentaAfectada.getSelectedItem();
         int codigo = 0;
         codigo = buscandoSeleccion(seleccion);
-        try {
+        if (!validando()) {
+            try {
 
-            if (codigo == 113) {
-                try {
-                    String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
-                    PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                if (codigo == 113) {
+                    try {
+                        String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
+                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
 
-                    preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
+                        preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
 
+                        preparedStatement.executeUpdate();
+                        calcularCostoVenta();
+                        UpdateJTable();
+
+                    } catch (SQLException e) {
+                        System.out.println("Error: " + e);
+
+                    }
+
+                } else {
+                    String sentenciaSql = "UPDATE ajuste SET codigo = ?,  saldodeudor=?, saldoacredor=? WHERE idajuste= ?";
+
+                    System.out.println("probando codigo desde btn +" + codigo);
+                    PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
+                    preparedStatement.setInt(1, codigo);
+
+                    if (cboSaldoAjuste.getSelectedItem() == "Debe") {
+
+                        preparedStatement.setDouble(2, Double.parseDouble(txtMontoAjuste.getText()));
+                        preparedStatement.setDouble(3, 0.00);
+                    } else {
+                        preparedStatement.setDouble(2, 0.00);
+                        preparedStatement.setDouble(3, Double.parseDouble(txtMontoAjuste.getText()));
+                    }
+
+                    preparedStatement.setInt(4, Integer.valueOf(txtidAjuste.getText()));
                     preparedStatement.executeUpdate();
-                    calcularCostoVenta();
+
                     UpdateJTable();
 
-                } catch (SQLException e) {
-                    System.out.println("Error: " + e);
-
                 }
 
-            } else {
-                String sentenciaSql = "UPDATE ajuste SET codigo = ?,  saldodeudor=?, saldoacredor=? WHERE idajuste= ?";
-
-                System.out.println("probando codigo desde btn +" + codigo);
-                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
-                preparedStatement.setInt(1, codigo);
-
-                if (cboSaldoAjuste.getSelectedItem() == "Debe") {
-
-                    preparedStatement.setDouble(2, Double.parseDouble(txtMontoAjuste.getText()));
-                    preparedStatement.setDouble(3, 0.00);
-                } else {
-                    preparedStatement.setDouble(2, 0.00);
-                    preparedStatement.setDouble(3, Double.parseDouble(txtMontoAjuste.getText()));
-                }
-
-                preparedStatement.setInt(4, Integer.valueOf(txtidAjuste.getText()));
-                preparedStatement.executeUpdate();
-
-                UpdateJTable();
-
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error al actualizar ajuste");
+                e.printStackTrace();
             }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al actualizar ajuste");
-            e.printStackTrace();
         }
+        
         // UpdateJTable();
         limpiar();
         habilitarControles(false);
@@ -899,6 +920,7 @@ public class AjustesP extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboCuentaAfectada;
     private javax.swing.JPanel cboCuentaAjuste;
     private javax.swing.JComboBox<String> cboSaldoAjuste;
+    private com.toedter.calendar.JDateChooser dateTransaccion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

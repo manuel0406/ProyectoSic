@@ -114,6 +114,17 @@ public class Transacciones extends javax.swing.JFrame {
 
     }
 
+    private boolean validando() {
+
+        boolean vacio = false;
+
+        if (txtMontoTransaccion.getText().isEmpty() || txtConceptoTransaccion.getText().isEmpty() || cboSaldoTransaccion.getSelectedIndex() == 0 || cboCuentaTrasaccion.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "No dejar casillas en blanco. Seleccione un tipo de saldo y cuenta", "Error", JOptionPane.ERROR_MESSAGE);
+            vacio = true;
+        }
+        return vacio;
+    }
+
     private void cbo() {
         try {
             Statement statement = conexion.conectar().createStatement();
@@ -585,7 +596,9 @@ public class Transacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarTransaccionActionPerformed
 
     private void btnGuardarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarTransaccionActionPerformed
-        // TODO add your handling code here:
+        if (!validando()) {
+            
+        
         try {
 
             Transaccion transaccion = new Transaccion();
@@ -630,7 +643,7 @@ public class Transacciones extends javax.swing.JFrame {
         totalizacion();
         TransaccionTableModel model = (TransaccionTableModel) tablaTransacion.getModel();
         model.fireTableDataChanged();
-
+        }
     }//GEN-LAST:event_btnGuardarTransaccionActionPerformed
 
     private void tablaTransacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaTransacionMouseClicked
@@ -662,10 +675,11 @@ public class Transacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaTransacionMouseClicked
 
     private void btnActualizarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTransaccionActionPerformed
-        // TODO add your handling code here:
+     
         String seleccion = (String) cboCuentaTrasaccion.getSelectedItem();
         int codigo = 0;
 
+        if(!validando()){
         try {
             String sentenciaSql = "UPDATE transaccion SET codigo = ?, concepto=?, debe=?, haber=? WHERE idtransaccion= ?";
 
@@ -691,6 +705,7 @@ public class Transacciones extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al actualizar");
             e.printStackTrace();
+        }
         }
         // UpdateJTable();
         limpiar();
