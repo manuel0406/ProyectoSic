@@ -179,6 +179,8 @@ public class AjustesP extends javax.swing.JFrame {
         }
 
         cbo();
+        TableColumn columna3 = tablaAjuste.getColumnModel().getColumn(2);
+        columna3.setPreferredWidth(250);
 
     }
 
@@ -449,6 +451,7 @@ public class AjustesP extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ajustes");
+        setUndecorated(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -494,33 +497,42 @@ public class AjustesP extends javax.swing.JFrame {
 
         cboCuentaAjuste.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 107, 503, 257));
 
+        btnNuevoAjuste.setBackground(new java.awt.Color(0, 102, 0));
+        btnNuevoAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNuevoAjuste.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevoAjuste.setText("Nuevo ajuste");
         btnNuevoAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnNuevoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 410, -1, -1));
+        cboCuentaAjuste.add(btnNuevoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 110, -1));
 
+        btnEliminarAjuste.setBackground(new java.awt.Color(170, 0, 0));
+        btnEliminarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminarAjuste.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarAjuste.setText("Eliminar ajuste");
         btnEliminarAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnEliminarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 410, -1, -1));
+        cboCuentaAjuste.add(btnEliminarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, -1, -1));
 
+        btnRegresar.setBackground(new java.awt.Color(0, 89, 255));
+        btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
         btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnRegresarMouseClicked(evt);
             }
         });
-        cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(309, 410, -1, -1));
+        cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 110, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Ingresar nuevos ajuste");
-        cboCuentaAjuste.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 75, 179, -1));
+        cboCuentaAjuste.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 80, 179, -1));
 
         jLabel3.setText("Monto: ");
         cboCuentaAjuste.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(579, 125, 104, -1));
@@ -544,6 +556,9 @@ public class AjustesP extends javax.swing.JFrame {
         cboSaldoAjuste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Debe", "Haber" }));
         cboCuentaAjuste.add(cboSaldoAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(701, 246, 163, -1));
 
+        btnGuardarAjuste.setBackground(new java.awt.Color(0, 102, 0));
+        btnGuardarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnGuardarAjuste.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarAjuste.setText("Guardar");
         btnGuardarAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -552,6 +567,9 @@ public class AjustesP extends javax.swing.JFrame {
         });
         cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(698, 308, -1, -1));
 
+        btnCancelarAjuste.setBackground(new java.awt.Color(170, 0, 0));
+        btnCancelarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCancelarAjuste.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelarAjuste.setText("Cancelar");
         btnCancelarAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -563,7 +581,11 @@ public class AjustesP extends javax.swing.JFrame {
         jLabel8.setText("Hacer doble clic en un registros para editar");
         cboCuentaAjuste.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 382, -1, -1));
 
+        btnEditarAjuste.setBackground(new java.awt.Color(51, 153, 255));
+        btnEditarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEditarAjuste.setForeground(new java.awt.Color(255, 255, 255));
         btnEditarAjuste.setText("Actualizar registro");
+        btnEditarAjuste.setBorderPainted(false);
         btnEditarAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarAjusteActionPerformed(evt);
@@ -586,7 +608,7 @@ public class AjustesP extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(cboCuentaAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         pack();

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  *
  * @author Manuel Alcides Ascencio Aleman
@@ -96,22 +95,22 @@ public class Transacciones extends javax.swing.JFrame {
             tColumnModel.addColumn(col);
 
         }
-        
+
         tablaTransacion.setColumnModel(tColumnModel);
-        
+
         TableColumn columna0 = tablaTransacion.getColumnModel().getColumn(0); // Reemplaza 'indiceColumna' con el índice de la columna que deseas ajustar.
         columna0.setPreferredWidth(1);
-        
-      TableColumn   columna1 = tablaTransacion.getColumnModel().getColumn(1);
-       columna1.setPreferredWidth(10);
-      TableColumn   columna2 = tablaTransacion.getColumnModel().getColumn(2);
-       columna2.setPreferredWidth(2);
-      TableColumn   columna3 = tablaTransacion.getColumnModel().getColumn(3);
-       columna3.setPreferredWidth(250);
-       TableColumn  columna4 = tablaTransacion.getColumnModel().getColumn(4);
-       columna4.setPreferredWidth(2);
-       TableColumn  columna5 = tablaTransacion.getColumnModel().getColumn(5);
-       columna5.setPreferredWidth(2);
+
+        TableColumn columna1 = tablaTransacion.getColumnModel().getColumn(1);
+        columna1.setPreferredWidth(10);
+        TableColumn columna2 = tablaTransacion.getColumnModel().getColumn(2);
+        columna2.setPreferredWidth(2);
+        TableColumn columna3 = tablaTransacion.getColumnModel().getColumn(3);
+        columna3.setPreferredWidth(250);
+        TableColumn columna4 = tablaTransacion.getColumnModel().getColumn(4);
+        columna4.setPreferredWidth(2);
+        TableColumn columna5 = tablaTransacion.getColumnModel().getColumn(5);
+        columna5.setPreferredWidth(2);
 
     }
 
@@ -215,8 +214,7 @@ public class Transacciones extends javax.swing.JFrame {
 
             String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
 
-          //  System.out.println(seleccion + " ya en el metodo");
-
+            //  System.out.println(seleccion + " ya en el metodo");
             ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
 
             if (resultadoCbo.next()) {
@@ -415,6 +413,9 @@ public class Transacciones extends javax.swing.JFrame {
 
         cboCuentaAjuste.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 101, 604, 285));
 
+        btnNuevaTransaccion.setBackground(new java.awt.Color(0, 106, 0));
+        btnNuevaTransaccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNuevaTransaccion.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevaTransaccion.setText("Nueva transaccion");
         btnNuevaTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +424,9 @@ public class Transacciones extends javax.swing.JFrame {
         });
         cboCuentaAjuste.add(btnNuevaTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 430, -1, -1));
 
+        btnEliminarTransaccion.setBackground(new java.awt.Color(175, 0, 0));
+        btnEliminarTransaccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminarTransaccion.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminarTransaccion.setText("Eliminar transaccion");
         btnEliminarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -433,7 +437,7 @@ public class Transacciones extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Ingresar nueva transaccion");
-        cboCuentaAjuste.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 75, 208, -1));
+        cboCuentaAjuste.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 80, 208, -1));
 
         jLabel3.setText("Monto: ");
         cboCuentaAjuste.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(663, 120, 104, -1));
@@ -466,6 +470,9 @@ public class Transacciones extends javax.swing.JFrame {
         });
         cboCuentaAjuste.add(cboSaldoTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 300, 170, 30));
 
+        btnGuardarTransaccion.setBackground(new java.awt.Color(0, 106, 0));
+        btnGuardarTransaccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnGuardarTransaccion.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarTransaccion.setText("Guardar");
         btnGuardarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -474,6 +481,9 @@ public class Transacciones extends javax.swing.JFrame {
         });
         cboCuentaAjuste.add(btnGuardarTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(783, 386, -1, -1));
 
+        btnCancelarTransaccion.setBackground(new java.awt.Color(175, 0, 0));
+        btnCancelarTransaccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCancelarTransaccion.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelarTransaccion.setText("Cancelar");
         btnCancelarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -485,6 +495,9 @@ public class Transacciones extends javax.swing.JFrame {
         jLabel8.setText("Hacer doble clic en un registros para editar");
         cboCuentaAjuste.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 404, -1, -1));
 
+        btnActualizarTransaccion.setBackground(new java.awt.Color(0, 89, 255));
+        btnActualizarTransaccion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnActualizarTransaccion.setForeground(new java.awt.Color(255, 255, 255));
         btnActualizarTransaccion.setText("Actualizar");
         btnActualizarTransaccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -524,7 +537,7 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void BtnInicioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionActionPerformed
         // TODO add your handling code here:
-        
+
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
@@ -532,11 +545,11 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void BtnInventarioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioTransaccionActionPerformed
         // TODO add your handling code here:
-        
+
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_BtnInventarioTransaccionActionPerformed
 
     private void btnNuevaTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaTransaccionActionPerformed
@@ -584,7 +597,7 @@ public class Transacciones extends javax.swing.JFrame {
 
             transaccion.codigo = buscandoSeleccion(seleccion);
 
-            if(transaccion.codigo== 415 ){
+            if (transaccion.codigo == 415) {
             }
             transaccion.concepto = txtConceptoTransaccion.getText();
             if (cboSaldoTransaccion.getSelectedItem() == "Debe") {
@@ -695,8 +708,8 @@ public class Transacciones extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
         JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
-        
-        
+
+
     }//GEN-LAST:event_formWindowClosing
 
     private void btnCancelarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarTransaccionActionPerformed
@@ -706,7 +719,7 @@ public class Transacciones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarTransaccionActionPerformed
 
     private void txtMontoTransaccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoTransaccionKeyTyped
-      
+
         char c = evt.getKeyChar();
         String text = txtMontoTransaccion.getText();
 
