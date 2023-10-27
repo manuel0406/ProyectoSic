@@ -10,7 +10,7 @@ package clases;
  */
 public class Producto {
     
-    int id;
-    String nombre;
-    double precioUnitario;
+    public int id;
+    public String nombre;
+    public double precioUnitario;
 }

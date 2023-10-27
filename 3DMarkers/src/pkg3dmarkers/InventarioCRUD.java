@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
+import clases.Producto;
+import java.sql.PreparedStatement;
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,6 +20,10 @@ import javax.swing.table.JTableHeader;
  */
 public class InventarioCRUD extends javax.swing.JFrame {
 
+    Conexion conexion = new Conexion();
+    
+    
+    
     /**
      * Creates new form InventarioCRUD
      */
@@ -43,6 +50,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
         lblSalida.setForeground(new java.awt.Color(255,255,255));
         lblMonto.setHorizontalAlignment(SwingConstants.CENTER);
         lblMonto.setBackground(new java.awt.Color(255,255,5));
+        consultaProductosl();
         
     }
     
@@ -57,6 +65,190 @@ public class InventarioCRUD extends javax.swing.JFrame {
         int y = (screenSize.height - windowSize.height) / 2;
         // Establece la ubicación de la ventana
         setLocation(x, y);
+    }
+    
+    //Productos de BD
+    private void consultaProductosl() {
+        try {
+            //Setencia SQL
+            String sentenciaSql = "SELECT * FROM producto";
+            Statement statement = conexion.conectar().createStatement();
+            //Resultado de Tablas
+            ResultSet resultado = statement.executeQuery(sentenciaSql);
+            
+            //Iterador de productos
+            while (resultado.next()) {
+                Producto productos = new Producto();
+                productos.nombre = resultado.getString("nombreproduto");
+                cbxProducto.addItem(productos.nombre);
+            }
+            
+        }
+        catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base");
+        }
+    }
+    
+    //VALIDAR ACTUAL ID
+    private int consultaIDProducto() 
+    {
+        String selectedItem = (String) cbxProducto.getSelectedItem();
+         try {
+               
+               //CALCULO DE LA ID DEL PRODUCTO SELECCIONADO
+                   //Setencia SQL
+                   String sentenciaProducto = "SELECT * FROM producto";
+                   Statement statement = conexion.conectar().createStatement();
+                   //Resultado de Tablas
+                   ResultSet resultado = statement.executeQuery(sentenciaProducto);
+                   //Creamos objeto producto
+                   Producto productos = new Producto();
+                   
+                   //Iterador de productos
+                   while (resultado.next()) {
+                       if(selectedItem.equals(resultado.getString("nombreproduto"))){
+                           productos.id = resultado.getInt("idproducto");
+                       }
+                       
+                   }
+                  return productos.id;
+            }
+           catch (SQLException ex) {
+               JOptionPane.showMessageDialog(this, "Error al recuperar id del producto: "+selectedItem);
+           }
+        return 0;
+    }
+    
+   //Metodo CPP
+    private void llenadoTabla()
+    {
+        //Obtenemos ID Producto
+       int id = consultaIDProducto();
+       
+       //MODELO DE TABLA
+      DefaultTableModel modelo = new DefaultTableModel()
+      {
+          @Override
+                public boolean isCellEditable(int row, int column) {
+                             return false;
+            }
+                
+      };
+      modelo.setRowCount(0); //Limpiar tabla
+      tbInventario.setModel(modelo);
+      
+      
+      //Creamos encabezados de tabla
+       modelo.addColumn("Fecha");
+       modelo.addColumn("Unit");
+       modelo.addColumn("C/U");
+        modelo.addColumn("Total");
+        modelo.addColumn("Unit");
+        modelo.addColumn("C/U");
+        modelo.addColumn("Total");
+        modelo.addColumn("Unit");
+        modelo.addColumn("C/U");
+        modelo.addColumn("Total");
+        String[] datos = new String[10];
+        
+        try {
+             PreparedStatement statement = null;
+            //Setencia SQL
+            String sentenciaSql = " SELECT nombreproduto, fechamovimiento, cantidadmovimiento,totalmovimiento, clasificacion \n" +
+                                                  "FROM producto JOIN movimiento ON movimiento.idproducto = producto.idproducto\n" +
+                                                  "WHERE producto.idproducto = ? ORDER BY fechamovimiento ASC";
+            statement = this.conexion.conectar().prepareStatement(sentenciaSql);
+            statement.setInt(1, id);
+            ResultSet resultado = statement.executeQuery();
+            // Variables para CPP
+            double total=0;
+            long sumacompra=0; //Para compras
+            long restaventa=0; //Para ventas
+            double precioAnterior=0;//Precio anterior
+            double recalculadorCosto=0; //Para aplicar CPP
+            double totalAnterior=0;
+            double entradasT =0, salidasT=0, ultimo=0;
+            //Ejecutador de  CPP
+            while (resultado.next()) {
+                String clasificacion = resultado.getString("clasificacion");
+                       if("Entrada".equals(clasificacion)){
+
+                                //Total de venta
+                                total = resultado.getInt("cantidadmovimiento")*resultado.getDouble("totalmovimiento");
+                                sumacompra= sumacompra + resultado.getInt("cantidadmovimiento");
+                                
+                                 //Información de entrada
+                                 datos[0] = resultado.getString("fechamovimiento");
+                                 datos[1] =  resultado.getString("cantidadmovimiento");
+                                 datos[2] = resultado.getString("totalmovimiento");
+                                 datos[3] =Double.toString(total);
+                                 entradasT=total+entradasT; //Para totales de entradas
+                                 
+                                 //Información de salida
+                                 datos[4]="";
+                                 datos[5]="";
+                                 datos[6]="";
+                                 
+                                 //Información de saldo
+                                if (modelo.getRowCount() == 0) {
+                                    datos[7] = resultado.getString("cantidadmovimiento");
+                                    datos[8]= resultado.getString("totalmovimiento");
+                                    precioAnterior = resultado.getDouble("totalmovimiento");
+                                    datos[9]=Double.toString(total);
+                                    totalAnterior=total;
+                                    ultimo=total;
+                                } else {
+                                    datos[7] = String.valueOf(sumacompra);
+                                    recalculadorCosto= (total+totalAnterior)/sumacompra; //Promedio
+                                    datos[8] = Double.toString(recalculadorCosto);
+                                    precioAnterior = recalculadorCosto;
+                                    total = sumacompra*recalculadorCosto;
+                                    datos[9] = Double.toString(total);
+                                    totalAnterior=total;
+                                    ultimo=total;
+                                }
+                                 modelo.addRow(datos); 
+                       }
+                       else{
+                           
+                                //Información de entrada
+                                datos[0]= resultado.getString("fechamovimiento");
+                                datos[1] = "";
+                                datos[2] = "";
+                                datos[3] = "";
+                                
+                                //Información de salida
+                                datos[4] = resultado.getString("cantidadmovimiento");
+                                datos[5]= String.valueOf(precioAnterior);
+                                total = precioAnterior*resultado.getInt("cantidadmovimiento");;
+                                datos[6]=String.valueOf(total);
+                                salidasT=total+salidasT; //Para totales de salidas
+                                
+                                //Información de saldo
+                                restaventa=sumacompra-resultado.getInt("cantidadmovimiento"); //Restamos compras-ventas
+                                sumacompra=restaventa; //Reasignación de total
+                                datos[7] = String.valueOf(restaventa);
+                                datos[8]= String.valueOf(precioAnterior);
+                                total = restaventa*precioAnterior;
+                                datos[9]= String.valueOf(total);
+                                totalAnterior=total;
+                                ultimo=total;
+                                modelo.addRow(datos);
+                       }
+                       
+           }
+            
+            
+            tbInventario.setModel(modelo);
+
+            lblEntradaT.setText("Total de Entradas: " + entradasT);
+            lblSalidaT.setText("Total de Salida: " + salidasT);
+            lblMontoT.setText("Total de Saldo: " + ultimo);
+
+        }
+        catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al recuperar inventario del producto");
+        }
     }
 
     /**
@@ -145,11 +337,16 @@ public class InventarioCRUD extends javax.swing.JFrame {
         cbxProducto.setBackground(new java.awt.Color(255, 255, 255));
         cbxProducto.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         cbxProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+        cbxProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxProductoActionPerformed(evt);
+            }
+        });
         getContentPane().add(cbxProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 200, 36));
 
         lblProductos.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         lblProductos.setForeground(new java.awt.Color(0, 0, 0));
-        lblProductos.setText("Tipo de Movimiento:");
+        lblProductos.setText("Seleccione Producto:");
         getContentPane().add(lblProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 150, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -286,6 +483,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
         jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
 
+        tbInventario.setForeground(new java.awt.Color(0, 0, 0));
         tbInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
@@ -297,9 +495,16 @@ public class InventarioCRUD extends javax.swing.JFrame {
                 "Fecha", "Unit", "C/U", "Total", "Unit", "C/U", "Total", "Unit", "C/U", "Total"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -310,6 +515,11 @@ public class InventarioCRUD extends javax.swing.JFrame {
         tbInventario.setSelectionBackground(new java.awt.Color(255, 255, 153));
         tbInventario.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tbInventario.setShowGrid(true);
+        tbInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbInventarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbInventario);
         if (tbInventario.getColumnModel().getColumnCount() > 0) {
             tbInventario.getColumnModel().getColumn(0).setResizable(false);
@@ -324,43 +534,43 @@ public class InventarioCRUD extends javax.swing.JFrame {
             tbInventario.getColumnModel().getColumn(9).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 590, 210));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 620, 210));
 
         lblMonto.setBackground(new java.awt.Color(255, 255, 51));
         lblMonto.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
         lblMonto.setForeground(new java.awt.Color(0, 0, 0));
         lblMonto.setText("Monto");
         lblMonto.setOpaque(true);
-        getContentPane().add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(423, 131, 175, -1));
+        getContentPane().add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 130, 190, -1));
 
         lblSalida.setBackground(new java.awt.Color(0, 0, 0));
         lblSalida.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
         lblSalida.setForeground(new java.awt.Color(255, 255, 255));
         lblSalida.setText("Salida");
         lblSalida.setOpaque(true);
-        getContentPane().add(lblSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(242, 131, 180, -1));
+        getContentPane().add(lblSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(252, 131, 190, -1));
 
         lblEntrada.setBackground(new java.awt.Color(255, 255, 51));
         lblEntrada.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
         lblEntrada.setForeground(new java.awt.Color(0, 0, 0));
         lblEntrada.setText("Entradas");
         lblEntrada.setOpaque(true);
-        getContentPane().add(lblEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 131, 180, -1));
+        getContentPane().add(lblEntrada, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 131, 190, -1));
 
         lblMontoT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         lblMontoT.setForeground(new java.awt.Color(0, 0, 0));
         lblMontoT.setText("Total de Saldo:");
-        getContentPane().add(lblMontoT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 140, 30));
+        getContentPane().add(lblMontoT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, 270, 30));
 
         lblEntradaT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         lblEntradaT.setForeground(new java.awt.Color(0, 0, 0));
         lblEntradaT.setText("Total de Entradas:");
-        getContentPane().add(lblEntradaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 140, 30));
+        getContentPane().add(lblEntradaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 290, 30));
 
         lblSalidaT.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         lblSalidaT.setForeground(new java.awt.Color(0, 0, 0));
         lblSalidaT.setText("Total de Salida:");
-        getContentPane().add(lblSalidaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 140, 30));
+        getContentPane().add(lblSalidaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 270, 30));
 
         btnNuevoMovimiento.setBackground(new java.awt.Color(255, 255, 51));
         btnNuevoMovimiento.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
@@ -449,6 +659,11 @@ public class InventarioCRUD extends javax.swing.JFrame {
         login.setVisible(true);
         // Cierra la ventana actual
         this.dispose();
+        try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
     }//GEN-LAST:event_btnCerrarMouseClicked
 
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
@@ -468,6 +683,11 @@ public class InventarioCRUD extends javax.swing.JFrame {
         inicio.setVisible(true);
         // Cierra la ventana actual
         this.dispose();
+        try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
     }//GEN-LAST:event_btnInicioMouseClicked
 
     private void btnInicioMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseEntered
@@ -581,7 +801,80 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxMovimientoActionPerformed
 
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
-        // TODO add your handling code here:
+      if (btnIngresar.isEnabled()){
+        int id;
+        id = consultaIDProducto();
+        if( cbxMovimiento.getSelectedItem()!="Seleccione" && jdcFecha.getDate()!=null && !"Ingrese cantidad...".equals(txtCantidad.getText().trim()) )
+        {
+            //Obtenemos Valores del formulario
+            String tipoMov = (String) cbxMovimiento.getSelectedItem();
+            int cantidadcompra= Integer.parseInt( txtCantidad.getText().trim());
+            Date fecha = jdcFecha.getDate();
+            java.sql.Date fechaSQL = new java.sql.Date(fecha.getTime());
+            //Validar dato de costo unitario por compra
+            if("Entrada".equals(tipoMov))
+            {
+                 if(!"Ingrese costo unitario...".equals(txtCantidad.getText().trim()))
+                 {
+                     double montocompra = Double.parseDouble( txtCosto.getText().trim());
+                     try {
+                        //Setencia SQL
+                        String sentenciaSql = " INSERT INTO movimiento (idproducto, cantidadmovimiento, totalmovimiento, fechamovimiento, clasificacion) VALUES (?,?,?,?,?)";
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
+                        preparedStatement.setInt(1, id);
+                        preparedStatement.setInt(2, cantidadcompra);
+                        preparedStatement.setDouble(3, montocompra);
+                        preparedStatement.setDate(4, fechaSQL);
+                        preparedStatement.setString(5, "Entrada");
+                        preparedStatement.execute();
+                     } 
+                    catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Error al crear la nueva compra");
+                     }
+                 }
+                 else {JOptionPane.showMessageDialog(this, "Ingrese los datos pertinentes.", "Información no ingresada.", JOptionPane.INFORMATION_MESSAGE);}
+                 
+            }
+            else if("Salida".equals(tipoMov))
+            {
+                try {
+                        //Setencia SQL
+                         String sentenciaSql = " INSERT INTO movimiento (idproducto, cantidadmovimiento, fechamovimiento, clasificacion) VALUES (?,?,?,?)";
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaSql);
+                        preparedStatement.setInt(1, id);
+                        preparedStatement.setInt(2, cantidadcompra);
+                        preparedStatement.setDate(3, fechaSQL);
+                        preparedStatement.setString(4, "Salida");
+                        preparedStatement.execute();
+                     } 
+                    catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Error al crear la nueva venta");
+                     }
+            }
+            
+            // Restablecimiento de valores por defecto
+            txtCosto.setText("Ingrese costo unitario...");
+            txtCantidad.setText("Ingrese cantidad...");
+            cbxMovimiento.setSelectedItem("Seleccione");
+            jdcFecha.setDate(null);
+            txtCosto.setVisible(true);
+            lblCostoUnitario.setVisible(true);
+           lblMovimiento.setEnabled(false);
+           lblFecha.setEnabled(false);
+           lblCantidad.setEnabled(false);
+           lblCostoUnitario.setEnabled(false);
+           txtCosto.setEnabled(false);
+           jdcFecha.setEnabled(false);
+           cbxMovimiento.setEnabled(false);
+           txtCantidad.setEnabled(false);
+           btnNuevoMovimiento.setEnabled(true);
+           btnIngresar.setEnabled(false);
+           btnCancelar.setEnabled(false);
+           btnCancelar.setForeground(new java.awt.Color(0,0,0));
+        }
+          else {JOptionPane.showMessageDialog(this, "Ingrese los datos pertinentes.", "Información no ingresada.", JOptionPane.INFORMATION_MESSAGE);}
+    }
+     llenadoTabla();
     }//GEN-LAST:event_btnIngresarMouseClicked
 
     private void btnIngresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseEntered
@@ -602,7 +895,6 @@ public class InventarioCRUD extends javax.swing.JFrame {
         jdcFecha.setDate(null);
         txtCosto.setVisible(true);
         lblCostoUnitario.setVisible(true);
-         
        lblMovimiento.setEnabled(false);
        lblFecha.setEnabled(false);
        lblCantidad.setEnabled(false);
@@ -636,18 +928,27 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarMouseExited
 
     private void btnNuevoMovimientoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseClicked
-       lblMovimiento.setEnabled(true);
-       lblFecha.setEnabled(true);
-       lblCantidad.setEnabled(true);
-       lblCostoUnitario.setEnabled(true);
-       txtCosto.setEnabled(true);
-       jdcFecha.setEnabled(true);
-       cbxMovimiento.setEnabled(true);
-       txtCantidad.setEnabled(true);
-       btnIngresar.setEnabled(true);
-       btnCancelar.setEnabled(true);
-       btnCancelar.setForeground(new java.awt.Color(255,255,255));
-       btnNuevoMovimiento.setEnabled(false);
+       String valorSeleccionado = (String) cbxProducto.getSelectedItem();
+        if(!"Seleccione".equals(valorSeleccionado))
+       {
+           lblMovimiento.setEnabled(true);
+           lblFecha.setEnabled(true);
+           lblCantidad.setEnabled(true);
+           lblCostoUnitario.setEnabled(true);
+           txtCosto.setEnabled(true);
+           jdcFecha.setEnabled(true);
+           cbxMovimiento.setEnabled(true);
+           txtCantidad.setEnabled(true);
+           btnIngresar.setEnabled(true);
+           btnCancelar.setEnabled(true);
+           btnCancelar.setForeground(new java.awt.Color(255,255,255));
+           btnNuevoMovimiento.setEnabled(false);
+       }
+        else 
+        {
+            JOptionPane.showMessageDialog(null, "Debe de seleccionar el producto al que se le valuara su inventario", "SELECCIONE EL PRODUCTO", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnNuevoMovimientoMouseClicked
 
     private void btnNuevoMovimientoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseEntered
@@ -660,21 +961,114 @@ public class InventarioCRUD extends javax.swing.JFrame {
         btnNuevoMovimiento.setBackground(new Color(255,255,51));
     }//GEN-LAST:event_btnNuevoMovimientoMouseExited
 
-    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarMouseClicked
+    private void cbxProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxProductoActionPerformed
+        // Filtro de Productos
+        String selectedItem = (String) cbxProducto.getSelectedItem();
+        if (selectedItem.equals("Seleccione"))
+        {
+            
+            //Limpiado de tabla
+             tbInventario.setModel(new DefaultTableModel());
+            //Restablecido de tabla
+            tbInventario.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object [][] {{null, null, null, null, null, null, null, null, null, null}},
+                    new String [] {"Fecha", "Unit", "C/U", "Total", "Unit", "C/U", "Total", "Unit", "C/U", "Total"})
+            { boolean[] canEdit = new boolean [] {false, false, false, false, false, false, false, false, false, false};
+                    public boolean isCellEditable(int rowIndex, int columnIndex) { return canEdit [columnIndex];}});
+            //FALLO DE CAMBIO-INGRESO
+            if( btnCancelar.isEnabled())
+            {
+                // Limpiar Ingrese costo unitario...
+                txtCosto.setText("Ingrese costo unitario...");
+                txtCantidad.setText("Ingrese cantidad...");
+                cbxMovimiento.setSelectedItem("Seleccione");
+                jdcFecha.setDate(null);
+                txtCosto.setVisible(true);
+                lblCostoUnitario.setVisible(true);
+               lblMovimiento.setEnabled(false);
+               lblFecha.setEnabled(false);
+               lblCantidad.setEnabled(false);
+               lblCostoUnitario.setEnabled(false);
+               txtCosto.setEnabled(false);
+               jdcFecha.setEnabled(false);
+               cbxMovimiento.setEnabled(false);
+               txtCantidad.setEnabled(false);
+               btnNuevoMovimiento.setEnabled(true);
+               btnIngresar.setEnabled(false);
+               btnCancelar.setEnabled(false);
+               btnCancelar.setForeground(new java.awt.Color(0,0,0));
+            }
+        }
+        else
+        {
+                
+           try {
+               
+               //CALCULO DE LA ID DEL PRODUCTO SELECCIONADO
+                   //Setencia SQL
+                   String sentenciaProducto = "SELECT * FROM producto";
+                   Statement statement = conexion.conectar().createStatement();
+                   //Resultado de Tablas
+                   ResultSet resultado = statement.executeQuery(sentenciaProducto);
+                   //Creamos objeto producto
+                   Producto productos = new Producto();
+                   
+                   //Iterador de productos
+                   while (resultado.next()) {
+                       if(selectedItem.equals(resultado.getString("nombreproduto"))){
+                           productos.id = resultado.getInt("idproducto");
+                           System.out.println(productos.id);
+                       }
+                   }
+                   llenadoTabla();
+            }
+           catch (SQLException ex) {
+               JOptionPane.showMessageDialog(this, "Error al recuperar inventario del producto: "+selectedItem);
+           }
+        }
+    }//GEN-LAST:event_cbxProductoActionPerformed
+
+    private void tbInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbInventarioMouseClicked
+        // Contador de clicks
+         int clics = evt.getClickCount();
+         int filaSeleccionada = tbInventario.getSelectedRow();
+         if (clics == 2) 
+         {   
+             DefaultTableModel modelo = (DefaultTableModel) tbInventario.getModel();
+             String[] datos = new String[10];
+             int contador=0;
+             while (contador<10 )
+             { 
+                datos [contador]= modelo.getValueAt(filaSeleccionada, contador).toString(); // Valores de la columna
+                contador++;
+            }
+             if ("".equals(datos [4]))
+             {
+                 
+             }
+             else
+             {
+                 
+             }
+         }
+         
+    }//GEN-LAST:event_tbInventarioMouseClicked
+
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        // Color retorno
+        btnEliminar.setBackground(new Color(0,0,0));
+        btnEliminar.setForeground(new Color(255,255,255));
+    }//GEN-LAST:event_btnEliminarMouseExited
 
     private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
-      //Color cambiante
+        //Color cambiante
         btnEliminar.setBackground(new Color(255,255,255));
         btnEliminar.setForeground(new Color(0,0,0));
     }//GEN-LAST:event_btnEliminarMouseEntered
 
-    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
-       // Color retorno
-        btnEliminar.setBackground(new Color(0,0,0));
-        btnEliminar.setForeground(new Color(255,255,255));
-    }//GEN-LAST:event_btnEliminarMouseExited
+    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarMouseClicked
 
     /**
      * @param args the command line arguments
