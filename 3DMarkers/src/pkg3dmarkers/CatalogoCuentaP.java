@@ -10,8 +10,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Connection;
 import java.sql.Statement;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 
 /**
@@ -29,6 +31,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         initComponents();
         
         mostrarCatalogo(tableCatalogo);
+        centrarVentanaEnPantalla();
 
     }
     
@@ -58,20 +61,42 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         btnGuardarCuenta = new javax.swing.JButton();
         btnCancelarNuevaCuenta = new javax.swing.JButton();
         btnModificarCuenta = new javax.swing.JButton();
-        btnEliminarCuenta = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         txtCod = new javax.swing.JTextField();
+        btnEliminarCuenta = new javax.swing.JButton();
+        txtNom = new javax.swing.JTextField();
+        btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         BtnInicioCatalogo.setText("Inicio");
+        BtnInicioCatalogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnInicioCatalogoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BtnInicioCatalogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 15, 104, -1));
 
         BtnTransaCatalogo.setText("Transacciones");
+        BtnTransaCatalogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTransaCatalogoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BtnTransaCatalogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 15, -1, -1));
 
         BtnInventarioCatalogo.setText("Inventario");
+        BtnInventarioCatalogo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnInventarioCatalogoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BtnInventarioCatalogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 15, 104, -1));
 
         jLabel1.setText("Catálogo actual");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 75, -1, -1));
 
         tableCatalogo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -96,14 +121,21 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableCatalogo);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 98, 506, 273));
+
+        btnNuevaCuenta.setBackground(new java.awt.Color(0, 102, 0));
+        btnNuevaCuenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNuevaCuenta.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevaCuenta.setText("Nueva Cuenta");
         btnNuevaCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaCuentaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnNuevaCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 371, 121, -1));
 
-        jLabel5.setText("Para actualizar un registro, haga clic en la fila que desea editar.");
+        jLabel5.setText("Para editar un registro, haga doble clic en la fila que desea actualizar.");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 411, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -125,6 +157,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
+        btnGuardarCuenta.setBackground(new java.awt.Color(0, 102, 0));
+        btnGuardarCuenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnGuardarCuenta.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarCuenta.setText("Guardar");
         btnGuardarCuenta.setEnabled(false);
         btnGuardarCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +168,9 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
+        btnCancelarNuevaCuenta.setBackground(new java.awt.Color(170, 0, 0));
+        btnCancelarNuevaCuenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCancelarNuevaCuenta.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelarNuevaCuenta.setText("Cancelar");
         btnCancelarNuevaCuenta.setEnabled(false);
         btnCancelarNuevaCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -141,19 +179,14 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         });
 
+        btnModificarCuenta.setBackground(new java.awt.Color(0, 89, 255));
+        btnModificarCuenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnModificarCuenta.setForeground(new java.awt.Color(255, 255, 255));
         btnModificarCuenta.setText("Actualizar");
         btnModificarCuenta.setEnabled(false);
         btnModificarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarCuentaActionPerformed(evt);
-            }
-        });
-
-        btnEliminarCuenta.setText("Eliminar");
-        btnEliminarCuenta.setEnabled(false);
-        btnEliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarCuentaActionPerformed(evt);
             }
         });
 
@@ -170,18 +203,17 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addGap(23, 23, 23)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnCancelarNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnEliminarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnGuardarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnModificarCuenta))
-                            .addComponent(txtCuentaNombre)
-                            .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnModificarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtCuentaNombre)
+                                .addComponent(txtCuentaCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(btnGuardarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnCancelarNuevaCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(1, 1, 1))))))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,78 +229,54 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(txtCuentaNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardarCuenta)
-                    .addComponent(btnModificarCuenta))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelarNuevaCuenta)
-                    .addComponent(btnEliminarCuenta))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnGuardarCuenta))
+                .addGap(18, 18, 18)
+                .addComponent(btnModificarCuenta)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 98, -1, 273));
 
         jLabel6.setText("Editor de registros");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 75, -1, -1));
 
-        jLabel7.setText("Para eliminar un registro, haga doble clic en la fila que desea eliminar.");
-
+        txtCod.setEditable(false);
         txtCod.setEnabled(false);
+        getContentPane().add(txtCod, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 440, 20, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(btnNuevaCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(393, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(BtnInicioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnTransaCatalogo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnInventarioCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(312, 312, 312))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGap(21, 21, 21))
-                    .addComponent(txtCod, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnInicioCatalogo)
-                    .addComponent(BtnTransaCatalogo)
-                    .addComponent(BtnInventarioCatalogo))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addComponent(btnNuevaCuenta)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        btnEliminarCuenta.setBackground(new java.awt.Color(170, 0, 0));
+        btnEliminarCuenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminarCuenta.setText("Eliminar");
+        btnEliminarCuenta.setEnabled(false);
+        btnEliminarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCuentaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 371, 121, -1));
+
+        txtNom.setEditable(false);
+        getContentPane().add(txtNom, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 10, -1));
+
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 15, 104, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -341,21 +349,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
         
         //En este caso esta eliminando un registro
         if (clics == 2) {
-            //Desactivando entradas
-            seleccionarRegistro(tableCatalogo, txtCod,txtCuentaCodigo, txtCuentaNombre);
-            txtCuentaCodigo.setEditable(false);
-            txtCuentaNombre.setEditable(false);
-            
-            //activando botones necesarios
-            btnGuardarCuenta.setEnabled(false);
-            btnModificarCuenta.setEnabled(false);
-            btnCancelarNuevaCuenta.setEnabled(true);
-            btnEliminarCuenta.setEnabled(true);
-            lblData.setText("Estás eliminando la siguiente cuenta");
-        }
-        
-        //En este caso esta editando un registro
-        else {
             //activando entradas
             seleccionarRegistro(tableCatalogo, txtCod, txtCuentaCodigo, txtCuentaNombre);
             txtCuentaCodigo.setEnabled(true);
@@ -368,7 +361,21 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             btnModificarCuenta.setEnabled(true);
             btnCancelarNuevaCuenta.setEnabled(true);
             btnEliminarCuenta.setEnabled(false);
-            lblData.setText("Estás actualizando la siguiente cuenta");
+            lblData.setText("Estás editando la siguiente cuenta");
+        } //En este caso esta editando un registro
+        else {
+            //Desactivando entradas
+            seleccionarRegistro(tableCatalogo, txtCod, txtCod, txtNom);
+            txtCuentaCodigo.setEditable(false);
+            txtCuentaNombre.setEditable(false);
+
+            //activando botones necesarios
+            btnGuardarCuenta.setEnabled(false);
+            btnModificarCuenta.setEnabled(false);
+            btnCancelarNuevaCuenta.setEnabled(false);
+            btnEliminarCuenta.setEnabled(true);
+            //lblData.setText("Estás eliminando la siguiente cuenta");
+            lblData.setText("");
         }
     }//GEN-LAST:event_tableCatalogoMouseClicked
 
@@ -380,13 +387,55 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
 
     private void btnEliminarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCuentaActionPerformed
         // TODO add your handling code here:
-        eliminarCuenta(txtCuentaCodigo, txtCuentaNombre);
+        eliminarCuenta(txtCod, txtNom);
         mostrarCatalogo(tableCatalogo);
     }//GEN-LAST:event_btnEliminarCuentaActionPerformed
-    
-    
+
+    private void BtnInicioCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioCatalogoActionPerformed
+        // TODO add your handling code here:
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BtnInicioCatalogoActionPerformed
+
+    private void BtnTransaCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaCatalogoActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        Transacciones transaccion = new Transacciones();
+        transaccion.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BtnTransaCatalogoActionPerformed
+
+    private void BtnInventarioCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioCatalogoActionPerformed
+        // TODO add your handling code here:
+        InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BtnInventarioCatalogoActionPerformed
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255,102,102));
+        btnCerrar.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setForeground(new java.awt.Color(255,255,255));
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+
     public void mostrarCatalogo(JTable tablaCatalogo) {
         txtCod.setVisible(false);
+        txtNom.setVisible(false);
         DefaultTableModel modelo = new DefaultTableModel();
 
         //modelo.addColumn("id");
@@ -562,9 +611,14 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
                 cs.execute();
 
                 // Mostrando el registro eliminado
-                String mensaje = "La cuenta con código: " + codigoAEliminar + " y de nombre: " + nombreAEliminar + " ha sido eliminada.";
-                JOptionPane.showMessageDialog(null, mensaje, "Cuenta eliminada", JOptionPane.INFORMATION_MESSAGE);
+                //String mensaje = "La cuenta \n" + codigoAEliminar + ": " + nombreAEliminar + "\nHa sido eliminada.";
+                //JOptionPane.showMessageDialog(null, mensaje, "Cuenta eliminada", JOptionPane.INFORMATION_MESSAGE);
+                String mensaje = "¡Cuenta eliminada con éxito!\n\n";
+                mensaje += "Código: " + codigoAEliminar + "\n";
+                mensaje += "Nombre: " + nombreAEliminar;
 
+                JOptionPane.showMessageDialog(null,mensaje,"Cuenta eliminada", JOptionPane.INFORMATION_MESSAGE);
+                        
                 // Limpia del formulario el registro eliminado  para evitar problemas
                 txtCuentaCodigo.setText("");
                 txtCuentaNombre.setText("");
@@ -575,10 +629,20 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
             }
         }
     }
-    
-    
-    
-    
+
+    private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
+
+
     
     
     /**
@@ -636,6 +700,7 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JButton BtnInventarioCatalogo;
     private javax.swing.JButton BtnTransaCatalogo;
     private javax.swing.JButton btnCancelarNuevaCuenta;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEliminarCuenta;
     private javax.swing.JButton btnGuardarCuenta;
     private javax.swing.JButton btnModificarCuenta;
@@ -645,7 +710,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblData;
@@ -653,5 +717,6 @@ public class CatalogoCuentaP extends javax.swing.JFrame {
     private javax.swing.JTextField txtCod;
     private javax.swing.JTextField txtCuentaCodigo;
     private javax.swing.JTextField txtCuentaNombre;
+    private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }
