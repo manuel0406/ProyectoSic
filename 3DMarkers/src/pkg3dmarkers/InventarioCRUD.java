@@ -11,7 +11,12 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import clases.Producto;
 import java.sql.PreparedStatement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.sql.CallableStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -235,18 +240,74 @@ public class InventarioCRUD extends javax.swing.JFrame {
                                 ultimo=total;
                                 modelo.addRow(datos);
                        }
-                       
+                      
            }
             
             
             tbInventario.setModel(modelo);
 
+            //Totales finales
             lblEntradaT.setText("Total de Entradas: " + entradasT);
             lblSalidaT.setText("Total de Salida: " + salidasT);
             lblMontoT.setText("Total de Saldo: " + ultimo);
+            
+            //Conexion a base
+            String sentenciatotal= "SELECT idinventario, idproducto FROM inventario;";
+            statement = this.conexion.conectar().prepareStatement(sentenciatotal);
+            ResultSet respuesta = statement.executeQuery();
+            
+            //Datos a insertar o actualizar
+            int idProducto = consultaIDProducto();
+            int idinventario = 0;
+            boolean bandera = true;
+
+            if(!respuesta.next()){
+               bandera = false;  
+            }
+            else{
+                while(respuesta.next())
+                { 
+                    idinventario = respuesta.getInt("idinventario");
+                    if(idinventario != idProducto)
+                    {
+                        bandera = false;          
+                    }
+                }
+            }
+            
+           
+            if(bandera == true)
+            {
+                //Actualización de inventario      
+                String actualizarInventario = "UPDATE inventario SET cantidadinvetario = ?, preciototal = ?, totalcompras = ?, costovendido = ?, inventariofinal = ? WHERE idinventario = ?;";
+                CallableStatement cs = conexion.conectar().prepareCall(actualizarInventario);
+                cs.setInt(1, Integer.valueOf(datos[7]));
+                cs.setDouble(2, Double.valueOf(datos[8]));
+                cs.setDouble(3, entradasT);
+                cs.setDouble(4, salidasT);
+                cs.setDouble(5, ultimo);
+                cs.setInt(6, idProducto);
+                cs.execute();
+            }
+            else
+            {
+                //Nuevo inventario debido a nuevo producto
+                String nuevoInventario = " INSERT INTO inventario (idinventario, idproducto, cantidadinvetario, preciototal, totalcompras, costovendido, inventariofinal) VALUES (?,?,?,?,?,?,?)";
+                PreparedStatement pr = conexion.conectar().prepareStatement(nuevoInventario);
+                pr.setInt(1, idProducto);
+                pr.setInt(2, idProducto);
+                pr.setInt(3, Integer.valueOf(datos[7]));
+                pr.setDouble(4, Double.valueOf(datos[8]));
+                pr.setDouble(5, entradasT);
+                pr.setDouble(6, salidasT);
+                pr.setDouble(7, ultimo);
+                pr.execute();
+
+            }
 
         }
         catch (SQLException ex) {
+            System.out.println(ex);//--------------------------
             JOptionPane.showMessageDialog(this, "Error al recuperar inventario del producto");
         }
     }
@@ -288,6 +349,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
         btnIngresar = new javax.swing.JButton();
         lblCuerpo = new javax.swing.JLabel();
         lblMenu = new javax.swing.JLabel();
+        lblValidador = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -650,6 +712,9 @@ public class InventarioCRUD extends javax.swing.JFrame {
         lblMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Recursos/FondoNegro.png"))); // NOI18N
         getContentPane().add(lblMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
 
+        lblValidador.setText("0");
+        getContentPane().add(lblValidador, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 80, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -801,7 +866,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxMovimientoActionPerformed
 
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
-      if (btnIngresar.isEnabled()){
+      if (btnIngresar.isEnabled() && "0".equals(lblValidador.getText()) ){
         int id;
         id = consultaIDProducto();
         if( cbxMovimiento.getSelectedItem()!="Seleccione" && jdcFecha.getDate()!=null && !"Ingrese cantidad...".equals(txtCantidad.getText().trim()) )
@@ -874,6 +939,91 @@ public class InventarioCRUD extends javax.swing.JFrame {
         }
           else {JOptionPane.showMessageDialog(this, "Ingrese los datos pertinentes.", "Información no ingresada.", JOptionPane.INFORMATION_MESSAGE);}
     }
+      //Para actualizar 
+       else
+       {
+           //Obtenemos ID
+           int id;
+            id = consultaIDProducto();
+            if( cbxMovimiento.getSelectedItem()!="Seleccione" && jdcFecha.getDate()!=null && !"Ingrese cantidad...".equals(txtCantidad.getText().trim()) )
+            {
+                
+                //Obtenemos Valores del formulario
+                String tipoMov = (String) cbxMovimiento.getSelectedItem();
+                int cantidadcompra= Integer.parseInt( txtCantidad.getText().trim());
+                Date fecha = jdcFecha.getDate();
+                java.sql.Date fechaSQL = new java.sql.Date(fecha.getTime());
+                int idActualizable = Integer.parseInt(lblValidador.getText());
+                int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de actualizar este registro?", "Actualizar registro", JOptionPane.YES_NO_OPTION);
+                //Actualizar datos
+                if("Entrada".equals(tipoMov))
+                { 
+                    double montocompra = Double.parseDouble( txtCosto.getText().trim());
+                     try {
+                        //Setencia SQL
+                        String sentenciaSql = "UPDATE movimiento SET cantidadmovimiento = ?, totalmovimiento = ?, fechamovimiento = ? WHERE idmovimiento = ?;";
+                        
+                         if (respuesta == JOptionPane.YES_OPTION) 
+                         {
+                                Conexion conexion = new Conexion();
+                                CallableStatement cs = conexion.conectar().prepareCall(sentenciaSql);
+                                cs.setInt(1, cantidadcompra);
+                                cs.setDouble(2,montocompra);
+                                cs.setDate(3,fechaSQL);
+                                cs.setInt(4, idActualizable);
+                                cs.execute();
+                         }
+                     } 
+                    catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Error al actualizar la compra");
+                     }
+                }
+                 else if("Salida".equals(tipoMov))
+                {
+                    try {
+                            //Setencia SQL
+                        String sentenciaSql = "UPDATE movimiento SET cantidadmovimiento = ?, fechamovimiento = ? WHERE idmovimiento = ?;";
+                        
+                         if (respuesta == JOptionPane.YES_OPTION) 
+                         {
+                                Conexion conexion = new Conexion();
+                                CallableStatement cs = conexion.conectar().prepareCall(sentenciaSql);
+                                cs.setInt(1, cantidadcompra);
+                                cs.setDate(2,fechaSQL);
+                                cs.setInt(3, idActualizable);
+                                cs.execute();
+                         }
+                    } 
+                   catch (SQLException e) {
+                       JOptionPane.showMessageDialog(this, "Error al actualizar la venta");
+                    }
+                }
+
+                // Restablecimiento de valores por defecto
+                txtCosto.setText("Ingrese costo unitario...");
+                txtCantidad.setText("Ingrese cantidad...");
+                cbxMovimiento.setSelectedItem("Seleccione");
+                jdcFecha.setDate(null);
+                txtCosto.setVisible(true);
+                lblCostoUnitario.setVisible(true);
+               lblMovimiento.setEnabled(false);
+               lblFecha.setEnabled(false);
+               lblCantidad.setEnabled(false);
+               lblCostoUnitario.setEnabled(false);
+               txtCosto.setEnabled(false);
+               jdcFecha.setEnabled(false);
+               cbxMovimiento.setEnabled(false);
+               txtCantidad.setEnabled(false);
+               btnNuevoMovimiento.setEnabled(true);
+               btnIngresar.setEnabled(false);
+               btnCancelar.setEnabled(false);
+               btnCancelar.setForeground(new java.awt.Color(0,0,0));
+               System.out.printf("Estado: "+ lblValidador.getText()); //--------------------------------------------
+               lblValidador.setText("0");
+            }
+             else {JOptionPane.showMessageDialog(this, "Ingrese los datos pertinentes.", "Información no ingresada.", JOptionPane.INFORMATION_MESSAGE);}
+       }
+       
      llenadoTabla();
     }//GEN-LAST:event_btnIngresarMouseClicked
 
@@ -888,7 +1038,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresarMouseExited
 
     private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
-        // Limpiar Ingrese costo unitario...
+        // Limpiar 
         txtCosto.setText("Ingrese costo unitario...");
         txtCantidad.setText("Ingrese cantidad...");
         cbxMovimiento.setSelectedItem("Seleccione");
@@ -907,6 +1057,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
        btnIngresar.setEnabled(false);
        btnCancelar.setEnabled(false);
        btnCancelar.setForeground(new java.awt.Color(0,0,0));
+       lblValidador.setText("0");
     }//GEN-LAST:event_btnCancelarMouseClicked
 
     private void btnCancelarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseEntered
@@ -1017,7 +1168,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
                    while (resultado.next()) {
                        if(selectedItem.equals(resultado.getString("nombreproduto"))){
                            productos.id = resultado.getInt("idproducto");
-                           System.out.println(productos.id);
+                           
                        }
                    }
                    llenadoTabla();
@@ -1029,29 +1180,106 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_cbxProductoActionPerformed
 
     private void tbInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbInventarioMouseClicked
-        // Contador de clicks
-         int clics = evt.getClickCount();
-         int filaSeleccionada = tbInventario.getSelectedRow();
-         if (clics == 2) 
+        if (cbxProducto.getSelectedItem()!="Seleccione")
+        {    
+            // Contador de clicks
+            int clics = evt.getClickCount();
+            int filaSeleccionada = tbInventario.getSelectedRow();
+           
+         if (clics == 3) 
          {   
-             DefaultTableModel modelo = (DefaultTableModel) tbInventario.getModel();
-             String[] datos = new String[10];
-             int contador=0;
-             while (contador<10 )
-             { 
-                datos [contador]= modelo.getValueAt(filaSeleccionada, contador).toString(); // Valores de la columna
-                contador++;
+             
+           //  Habilitamos el sistema de edicion
+           lblMovimiento.setEnabled(true);
+           cbxMovimiento.setEnabled(true);
+           lblFecha.setEnabled(true);
+           jdcFecha.setEnabled(true);
+           lblCantidad.setEnabled(true);
+           txtCantidad.setEnabled(true);
+           txtCantidad.setForeground(new java.awt.Color(0,0,0));
+           lblCostoUnitario.setEnabled(true);
+           txtCosto.setEnabled(true);
+           txtCosto.setForeground(new java.awt.Color(0,0,0));
+           btnIngresar.setEnabled(true);
+           btnCancelar.setEnabled(true);
+           btnCancelar.setForeground(new java.awt.Color(255,255,255));
+           btnNuevoMovimiento.setEnabled(false);
+           
+           //Obtener datos de fila
+            DefaultTableModel modelo = (DefaultTableModel) tbInventario.getModel();
+            String[] datos = new String[10];
+            int contador=0;
+            while (contador<10 )
+            { 
+               datos [contador]= modelo.getValueAt(filaSeleccionada, contador).toString(); // Valores de la columna
+               contador++;
             }
+        
+            //Asignacion de fila a edicion
              if ("".equals(datos [4]))
              {
-                 
+                 //Es una entrada
+                 try {
+                     SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //Formato fecha
+                     Date fecha = formato.parse(datos [0]);
+                     jdcFecha.setDate(fecha);
+                     txtCantidad.setText(datos [1]);
+                     txtCosto.setText(datos [2]);
+                     cbxMovimiento.setSelectedItem("Entrada");
+                 } catch (ParseException ex) {
+                     JOptionPane.showMessageDialog(this, "No se pudo convertir la fecha");
+                 }
              }
              else
              {
-                 
+                 //Es una salida
+                  try {
+                     SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd"); //Formato fecha
+                     Date fecha = formato.parse(datos [0]);
+                     jdcFecha.setDate(fecha);
+                     txtCantidad.setText(datos [4]);
+                     cbxMovimiento.setSelectedItem("Salida");
+                 } catch (ParseException ex) {
+                     JOptionPane.showMessageDialog(this, "No se pudo convertir la fecha");
+                 }
              }
+             
+               //Obtener id a modificar
+                try 
+                {
+                    int idActualizable = 0;
+                    int id =consultaIDProducto();
+                    String idMovimiento = "SELECT idmovimiento, cantidadmovimiento, fechamovimiento, clasificacion FROM movimiento WHERE idproducto = " +id;
+                    Conexion conect = new Conexion();
+                    Statement statement = conect.conectar().createStatement();
+                    //Resultado de Tablas
+                   ResultSet resultado = statement.executeQuery(idMovimiento);
+                   //Iterador de productos
+                   while (resultado.next()) {
+                       //Cantidades
+                       int cantidadBase = resultado.getInt("cantidadmovimiento");
+                       int cantidad= Integer.parseInt(txtCantidad.getText());
+                       //Fechas
+                       Date fechaBase = resultado.getDate("fechamovimiento");
+                       Date fecha = jdcFecha.getDate();
+                       java.sql.Date fechaSQL = new java.sql.Date(fecha.getTime());
+                       String fechaB = ""+fechaBase;
+                      String fechaI = ""+fechaSQL;
+                       //Movimiento
+                       String movBase = resultado.getString("clasificacion");
+                       String movimiento = ""+cbxMovimiento.getSelectedItem();
+                       if( movBase.equals(movimiento) & fechaI.equals(fechaB) & cantidadBase == cantidad){
+                               idActualizable = resultado.getInt("idmovimiento");
+                       }
+
+                   }
+                  lblValidador.setText(Integer.toString(idActualizable));
+                } 
+                    catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Error al buscar id");
+                }
          }
-         
+        }
     }//GEN-LAST:event_tbInventarioMouseClicked
 
     private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
@@ -1067,7 +1295,94 @@ public class InventarioCRUD extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarMouseEntered
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        // TODO add your handling code here:
+         int filaSeleccionada = tbInventario.getSelectedRow();
+         lblValidador.setText("0");
+         
+         //Datos del movimiento a borrar
+         String eleccion="", fecha = "", unidad= "";
+         Date fechaS=null;
+         
+         //Validación de tabla
+         if (cbxProducto.getSelectedItem()!="Seleccione" && filaSeleccionada >=0 )
+         {
+            DefaultTableModel modelo = (DefaultTableModel) tbInventario.getModel();
+            String[] datos = new String[10];
+            int contador=0;
+            while (contador<10 )
+            { 
+              datos [contador]= modelo.getValueAt(filaSeleccionada, contador).toString(); // Valores de la columna
+              contador++;
+            }
+            //Proceso de eliminación
+              try {
+                    if ("".equals(datos [4]))
+                    {
+                         //Es una entrada
+                       eleccion="Entrada";
+                       fecha=datos [0];
+                       unidad =datos [1];
+                    }
+                    else
+                    {
+                        //Es una salida
+                       eleccion="Salida";
+                       fecha=datos [0];
+                       unidad =datos [4];
+                    }
+                    
+                    //Conexión a base
+                    Conexion conexion = new Conexion();
+                    String sentenciaEliminado = "DELETE FROM movimiento\n" + 
+                           "WHERE  clasificacion = ? AND cantidadmovimiento = ? AND fechamovimiento = ?;";
+                  //Confirmación de borrado
+                    int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que deseas eliminar este registro?", "Eliminar registro", JOptionPane.YES_NO_OPTION);
+                  //Validador de borrado
+                    if (respuesta == JOptionPane.YES_OPTION) { 
+                         CallableStatement cs = conexion.conectar().prepareCall(sentenciaEliminado);
+                         cs.setString(1, eleccion);
+                         cs.setInt(2,Integer.parseInt(unidad));
+                         
+                         //Formato Fecha
+                         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                        try {
+                            fechaS= formato.parse(fecha);
+                        } catch (ParseException ex) {
+                           JOptionPane.showMessageDialog(this, "Error al convertir fecha");
+                        }
+                         java.sql.Date fechaSQL = new java.sql.Date(fechaS.getTime());
+                         cs.setDate(3,fechaSQL);
+                         cs.execute();
+                          JOptionPane.showMessageDialog(null, "Se ha eliminado el movimiento hecho "+fecha, "Movimiento eliminado", JOptionPane.INFORMATION_MESSAGE);
+                         llenadoTabla();
+                          // Limpiar 
+                            txtCosto.setText("Ingrese costo unitario...");
+                            txtCantidad.setText("Ingrese cantidad...");
+                            cbxMovimiento.setSelectedItem("Seleccione");
+                            jdcFecha.setDate(null);
+                            txtCosto.setVisible(true);
+                            lblCostoUnitario.setVisible(true);
+                           lblMovimiento.setEnabled(false);
+                           lblFecha.setEnabled(false);
+                           lblCantidad.setEnabled(false);
+                           lblCostoUnitario.setEnabled(false);
+                           txtCosto.setEnabled(false);
+                           jdcFecha.setEnabled(false);
+                           cbxMovimiento.setEnabled(false);
+                           txtCantidad.setEnabled(false);
+                           btnNuevoMovimiento.setEnabled(true);
+                           btnIngresar.setEnabled(false);
+                           btnCancelar.setEnabled(false);
+                           btnCancelar.setForeground(new java.awt.Color(0,0,0));
+                           lblValidador.setText("0");
+
+                   }
+            }
+           catch (SQLException ex) {
+               System.out.println(ex);
+               JOptionPane.showMessageDialog(this, "Error al eliminar movimiento");
+           }
+         }
+         
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     /**
@@ -1131,6 +1446,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
     private javax.swing.JLabel lblProductos;
     private javax.swing.JLabel lblSalida;
     private javax.swing.JLabel lblSalidaT;
+    private javax.swing.JLabel lblValidador;
     private javax.swing.JTable tbInventario;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCosto;
