@@ -389,6 +389,11 @@ public class InventarioCRUD extends javax.swing.JFrame {
                 btnCerrarMouseExited(evt);
             }
         });
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 10, 170, 40));
 
         Encabezada.setFont(new java.awt.Font("Dosis ExtraBold", 0, 24)); // NOI18N
@@ -1384,6 +1389,10 @@ public class InventarioCRUD extends javax.swing.JFrame {
          }
          
     }//GEN-LAST:event_btnEliminarMouseClicked
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     /**
      * @param args the command line arguments

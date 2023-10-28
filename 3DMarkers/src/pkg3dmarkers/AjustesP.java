@@ -9,6 +9,7 @@ import clases.AjusteTableModel;
 import clases.BalanceComprobacion;
 import clases.CatalogoCuenta;
 import clases.Transaccion;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -37,6 +38,7 @@ public class AjustesP extends javax.swing.JFrame {
     public AjusteTableModel ajusteTModel = new AjusteTableModel();
     Ajuste ajusteActual = new Ajuste();
     double costV = 0, compras = 0, gastoCompras = 0, devCompras = 0, rcompras = 0, inventarioI = 0, inventarioF = 0;
+    Conexion conexion = new Conexion();
 
     public AjustesP() {
 
@@ -50,7 +52,6 @@ public class AjustesP extends javax.swing.JFrame {
         centrarVentanaEnPantalla();
 
     }
-    Conexion conexion = new Conexion();
 
     private void centrarVentanaEnPantalla() {
         // Obtiene el tamaño de la pantalla
@@ -116,6 +117,7 @@ public class AjustesP extends javax.swing.JFrame {
         }
 
         tablaAjuste.setColumnModel(tColumnModel);
+
     }
 
     private int buscandoSeleccion(String seleccion) {
@@ -146,7 +148,7 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void consultaIncial() {
 
-        Conexion conexion = new Conexion();
+       // Conexion conexion = new Conexion();
         try {
 
             String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
@@ -182,6 +184,11 @@ public class AjustesP extends javax.swing.JFrame {
         cbo();
         TableColumn columna3 = tablaAjuste.getColumnModel().getColumn(2);
         columna3.setPreferredWidth(250);
+        /*   int columnIndexToHide = 0;
+            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setMinWidth(0);
+            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setMaxWidth(0);
+            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setWidth(0);
+         */
 
     }
 
@@ -219,7 +226,7 @@ public class AjustesP extends javax.swing.JFrame {
     private void extrayendoBC() {
         ArrayList<BalanceComprobacion> listBalanceC = new ArrayList<BalanceComprobacion>();
 
-        Conexion conexion = new Conexion();
+        //  Conexion conexion = new Conexion();
         try {
 
             String setenciaSql = "SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s \n"
@@ -247,6 +254,7 @@ public class AjustesP extends javax.swing.JFrame {
 
             }
 
+            //cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los datos de la base comprobacion");
 
@@ -295,11 +303,13 @@ public class AjustesP extends javax.swing.JFrame {
                 }
 
             }
+            // cerrarConexion();
         } catch (SQLException e) {
             System.out.println(e);
         }
 
         calcularCostoVenta();
+       // cerrarConexion();
     }
 
     // private int invetarioFinal(){}
@@ -355,7 +365,8 @@ public class AjustesP extends javax.swing.JFrame {
         }
 
         costV = compras + gastoCompras - (devCompras + rcompras) + inventarioI - inventarioF;
-        System.out.println(costV);
+        // System.out.println(costV);
+
         try {
             String setenciaSql = "Select * from ajuste where codigo=612  ";
 
@@ -371,7 +382,7 @@ public class AjustesP extends javax.swing.JFrame {
                     preparedStatement.executeUpdate();
 
                 } catch (SQLException e) {
-                    System.out.println("Error: " + e);
+                    System.out.println("Error : " + e);
 
                 }
 
@@ -380,8 +391,8 @@ public class AjustesP extends javax.swing.JFrame {
                     String setencia = "INSERT INTO ajuste(codigo, saldodeudor, saldoacredor) VALUES(612,?,?)";
                     PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
 
-                    preparedStatement.setDouble(2, costV);
-                    preparedStatement.setDouble(3, 0);
+                    preparedStatement.setDouble(1, costV);
+                    preparedStatement.setDouble(2, 0);
                     preparedStatement.execute();
 
                 } catch (SQLException e) {
@@ -391,7 +402,11 @@ public class AjustesP extends javax.swing.JFrame {
             }
 
         } catch (SQLException e) {
+
+            JOptionPane.showMessageDialog(this, e);
         }
+
+       // cerrarConexion();
 
     }
 
@@ -416,6 +431,14 @@ public class AjustesP extends javax.swing.JFrame {
         btnCancelarAjuste.setEnabled(f);
         btnEditarAjuste.setEnabled(f);
         btnGuardarAjuste.setEnabled(f);
+    }
+
+    private void cerrarConexion() {
+        try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
     }
 
     /**
@@ -449,7 +472,7 @@ public class AjustesP extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         btnEditarAjuste = new javax.swing.JButton();
         txtidAjuste = new javax.swing.JTextField();
-        dateTransaccion = new com.toedter.calendar.JDateChooser();
+        btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ajustes");
@@ -530,6 +553,11 @@ public class AjustesP extends javax.swing.JFrame {
                 btnRegresarMouseClicked(evt);
             }
         });
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
         cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 110, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -567,7 +595,7 @@ public class AjustesP extends javax.swing.JFrame {
                 btnGuardarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 330, -1, -1));
+        cboCuentaAjuste.add(btnGuardarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, -1, -1));
 
         btnCancelarAjuste.setBackground(new java.awt.Color(170, 0, 0));
         btnCancelarAjuste.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -578,7 +606,7 @@ public class AjustesP extends javax.swing.JFrame {
                 btnCancelarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnCancelarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, -1, -1));
+        cboCuentaAjuste.add(btnCancelarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 300, -1, -1));
 
         jLabel8.setText("Hacer doble clic en un registros para editar");
         cboCuentaAjuste.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 382, -1, -1));
@@ -593,11 +621,32 @@ public class AjustesP extends javax.swing.JFrame {
                 btnEditarAjusteActionPerformed(evt);
             }
         });
-        cboCuentaAjuste.add(btnEditarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 360, 166, -1));
+        cboCuentaAjuste.add(btnEditarAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 340, 166, -1));
 
         txtidAjuste.setEnabled(false);
         cboCuentaAjuste.add(txtidAjuste, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 52, 71, -1));
-        cboCuentaAjuste.add(dateTransaccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 290, 160, -1));
+
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+        cboCuentaAjuste.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 0, 140, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -623,6 +672,10 @@ public class AjustesP extends javax.swing.JFrame {
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
+
+         cerrarConexion();
+        // JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+
     }//GEN-LAST:event_BtnInicioAjustesActionPerformed
 
     private void BtnTransaccionAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaccionAjustesActionPerformed
@@ -630,6 +683,8 @@ public class AjustesP extends javax.swing.JFrame {
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
+
+        cerrarConexion();
     }//GEN-LAST:event_BtnTransaccionAjustesActionPerformed
 
     private void BtnInventarioAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioAjustesActionPerformed
@@ -637,6 +692,8 @@ public class AjustesP extends javax.swing.JFrame {
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
+
+         cerrarConexion();
     }//GEN-LAST:event_BtnInventarioAjustesActionPerformed
     private boolean validando() {
 
@@ -706,8 +763,6 @@ public class AjustesP extends javax.swing.JFrame {
             //totalizacion();
             AjusteTableModel model = (AjusteTableModel) tablaAjuste.getModel();
             model.fireTableDataChanged();
-            Date fecha = dateTransaccion.getDate();
-            System.out.println(fecha);
 
         }
     }//GEN-LAST:event_btnGuardarAjusteActionPerformed
@@ -845,7 +900,7 @@ public class AjustesP extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-        
+
         // UpdateJTable();
         limpiar();
         habilitarControles(false);
@@ -870,7 +925,46 @@ public class AjustesP extends javax.swing.JFrame {
         BalanceComprobacionP balance = new BalanceComprobacionP();
         balance.setVisible(true);
         this.dispose();
+        //  cerrarConexion();
     }//GEN-LAST:event_btnRegresarMouseClicked
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+        /*
+        try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }*/
+        //JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255, 102, 102));
+        btnCerrar.setForeground(new Color(0, 0, 0));
+
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -912,6 +1006,7 @@ public class AjustesP extends javax.swing.JFrame {
     private javax.swing.JButton BtnInventarioAjustes;
     private javax.swing.JButton BtnTransaccionAjustes;
     private javax.swing.JButton btnCancelarAjuste;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditarAjuste;
     private javax.swing.JButton btnEliminarAjuste;
     private javax.swing.JButton btnGuardarAjuste;
@@ -920,7 +1015,6 @@ public class AjustesP extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboCuentaAfectada;
     private javax.swing.JPanel cboCuentaAjuste;
     private javax.swing.JComboBox<String> cboSaldoAjuste;
-    private com.toedter.calendar.JDateChooser dateTransaccion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

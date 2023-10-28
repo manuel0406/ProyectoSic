@@ -9,6 +9,7 @@ import clases.AjusteBalanceTableModel;
 import clases.BalanceCTableModel;
 import clases.BalanceComprobacion;
 import clases.Cuenta;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.PreparedStatement;
@@ -16,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
@@ -70,8 +73,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
      */
     public void extrayendoCuentas() {
 
-        Conexion conexion = new Conexion();
-
+        // Conexion conexion = new Conexion();
         try {
             String setenciaSql = "Select * from cuenta";
             Statement statement = conexion.conectar().createStatement();
@@ -92,21 +94,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al extraer los datos de la tabla cuenta " + e);
         }
 
-       
         insertandoDatos(listCuenta);
     }
 
     public void insertandoDatos(ArrayList<Cuenta> listCuenta) {
 
-        Conexion conexion = new Conexion();
+        //Conexion conexion = new Conexion();
         double totalDebe = 0, totalHaber = 0;
-        /**
-         * for (Cuenta cuenta1 : listCuenta) {
-         * System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + "
-         * deudor: " + cuenta1.deudor + " Totalizacion: " +
-         * cuenta1.totalizacion);
-        }*
-         */
 
         try {
             PreparedStatement statement = null;
@@ -217,7 +211,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     }
 
     public void consultaInicial() {
-        Conexion conexion = new Conexion();
+        // Conexion conexion = new Conexion();
         try {
 
             String setenciaSql = "SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s \n"
@@ -237,7 +231,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 balance.saldodeudor = resultado.getDouble("saldodeudor");
                 balance.saldoacredor = resultado.getDouble("saldoacredor");
 
-               
                 this.balanceTModel.balances.add(balance);
 
             }
@@ -304,6 +297,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         labelTotalHaber = new javax.swing.JLabel();
         labelAjusteD = new javax.swing.JLabel();
         labelAjusteH = new javax.swing.JLabel();
+        btnCerrar = new javax.swing.JButton();
 
         tableBalanceCAjustado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -335,7 +329,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Balance de Comprobación");
-        setUndecorated(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -351,7 +344,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnInicioBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnInicioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 100, -1));
+        jPanel1.add(BtnInicioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 100, 30));
 
         BtnInventarioBalanceC.setText("Inventario");
         BtnInventarioBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -359,7 +352,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnInventarioBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnInventarioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 110, -1));
+        jPanel1.add(BtnInventarioBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 110, 30));
 
         BtnTransaBalanceC.setText("Transacciones");
         BtnTransaBalanceC.addActionListener(new java.awt.event.ActionListener() {
@@ -367,7 +360,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 BtnTransaBalanceCActionPerformed(evt);
             }
         });
-        jPanel1.add(BtnTransaBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, -1, -1));
+        jPanel1.add(BtnTransaBalanceC, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, -1, 30));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setText("Balance de Comprobación");
@@ -397,10 +390,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 335, 593, 210));
 
         labelTotalDebe.setText("Total Debe.");
-        jPanel1.add(labelTotalDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 237, 117, 22));
+        jPanel1.add(labelTotalDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 237, 140, 22));
 
         labelTotalHaber.setText("Total Haber: ");
-        jPanel1.add(labelTotalHaber, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 271, 117, -1));
+        jPanel1.add(labelTotalHaber, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 271, 140, 20));
 
         labelAjusteD.setText("Total Debe: ");
         jPanel1.add(labelAjusteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 553, 154, -1));
@@ -408,21 +401,41 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         labelAjusteH.setText("Total Haber: ");
         jPanel1.add(labelAjusteH, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 584, 154, -1));
 
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 140, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
@@ -430,8 +443,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void ajusteBalance() {
 
-        Conexion conexion = new Conexion();
-
+        //Conexion conexion = new Conexion();
         try {
             String setenciaSql = "SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, COALESCE(bc.saldoAcredor, 0) + COALESCE(ab.saldoacredor, 0) AS saldo_total_acredor,\n"
                     + "COALESCE(bc.saldoDeudor, 0) + COALESCE(ab.saldodeudor, 0) AS saldo_total_deudor FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo\n"
@@ -447,7 +459,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                 ajustesBalance.codigo = resultado.getInt("codigo_cuenta");
                 ajustesBalance.nombreCuenta = resultado.getString("nombre_cuenta");
-                if (resultado.getDouble("saldo_total_acredor") > resultado.getDouble("saldo_total_deudor")) {
+                if (resultado.getDouble("saldo_total_acredor") >= resultado.getDouble("saldo_total_deudor")) {
 
                     ajustesBalance.saldoacredor = resultado.getDouble("saldo_total_acredor") - resultado.getDouble("saldo_total_deudor");
                     ajustesBalance.deudor = false;
@@ -474,20 +486,22 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     }
 
+    private void cerrarConexion() {
+        try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+    }
+
     private void insertandoAjustes(ArrayList<AjusteBalanceComprobacion> listBalanceAjus) {
 
         double tDebe = 0, tHaber = 0;
-        double costoV=0;
-        double gastoSobreC=0; 
-        
+        double costoV = 0;
+        double gastoSobreC = 0;
+
         Conexion conexion = new Conexion();
 
-        /**
-         * for (Cuenta cuenta1 : listCuenta) {
-         * System.out.println(cuenta1.idCuenta + " " + cuenta1.codigo + "
-         * deudor: " + cuenta1.deudor + " Totalizacion: " +
-         * cuenta1.totalizacion); }*
-         */
         try {
             PreparedStatement statement = null;
 
@@ -502,7 +516,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 ResultSet resultado = statement.executeQuery();
 
                 if (resultado.next()) {
-                   
 
                     try {
 
@@ -557,6 +570,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
+        cerrarConexion();
     }//GEN-LAST:event_BtnInicioBalanceCActionPerformed
 
     private void BtnInventarioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioBalanceCActionPerformed
@@ -564,6 +578,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
+        cerrarConexion();
     }//GEN-LAST:event_BtnInventarioBalanceCActionPerformed
 
     private void BtnTransaBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaBalanceCActionPerformed
@@ -571,6 +586,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
+        cerrarConexion();
     }//GEN-LAST:event_BtnTransaBalanceCActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -591,7 +607,38 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         pAjuste.setVisible(true);
         this.dispose();
+        cerrarConexion();
     }//GEN-LAST:event_btnAjusteActionPerformed
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+        /* try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }*/
+        // JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255, 102, 102));
+        btnCerrar.setForeground(new Color(0, 0, 0));
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -633,6 +680,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     private javax.swing.JButton BtnInventarioBalanceC;
     private javax.swing.JButton BtnTransaBalanceC;
     private javax.swing.JButton btnAjuste;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
