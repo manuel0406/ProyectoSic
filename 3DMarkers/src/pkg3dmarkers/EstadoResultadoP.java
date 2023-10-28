@@ -4,20 +4,23 @@
  */
 package pkg3dmarkers;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
+
 import java.awt.Toolkit;
 import java.awt.print.PrinterException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
 
 /**
  *
@@ -30,10 +33,10 @@ public class EstadoResultadoP extends javax.swing.JFrame {
      */
     public EstadoResultadoP() {
         initComponents();
-        
+
         mostrarEstado(tableEstado);
         centrarVentanaEnPantalla();
-        
+
     }
 
     /**
@@ -148,13 +151,17 @@ public class EstadoResultadoP extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
-        
-        String tituloTabla = "Reporte - Estado de resultados";
+        // TODO add your handling code here:
+        Date fechaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));
+        String fechaFormateada = formato.format(fechaActual);
+
+        String tituloTabla = "Estado de resultados al " + fechaFormateada;
         imprimirTabla(tableEstado, tituloTabla);
-        
+
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
@@ -187,14 +194,14 @@ public class EstadoResultadoP extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarMouseClicked
 
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(new Color(255,102,102));
-        btnCerrar.setForeground(new Color(0,0,0));
+        btnCerrar.setBackground(new Color(255, 102, 102));
+        btnCerrar.setForeground(new Color(0, 0, 0));
     }//GEN-LAST:event_btnCerrarMouseEntered
 
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
         // Regresa al color original fuera
         btnCerrar.setBackground(new Color(255, 0, 0));
-        btnCerrar.setForeground(new java.awt.Color(255,255,255));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
     }//GEN-LAST:event_btnCerrarMouseExited
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -260,7 +267,7 @@ public class EstadoResultadoP extends javax.swing.JFrame {
 
             resultado = sumaHaber - sumaDebe;
             String mensaje = "";
-            
+
             if (resultado > 0) {
                 mensaje = "se tiene una utilidad por el valor de $" + resultado;
                 datos[0] = "611";
@@ -296,7 +303,6 @@ public class EstadoResultadoP extends javax.swing.JFrame {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
             }
-            
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.toString());
@@ -306,7 +312,7 @@ public class EstadoResultadoP extends javax.swing.JFrame {
     private void imprimirTabla(JTable tabla, String tituloTabla) {
         try {
             MessageFormat header = new MessageFormat(tituloTabla);
-            MessageFormat footer = new MessageFormat("Dmakers contabilidad");
+            MessageFormat footer = new MessageFormat("Informe hecho por Bryan Pérez");
 
             tabla.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 
@@ -329,32 +335,6 @@ public class EstadoResultadoP extends javax.swing.JFrame {
         setLocation(x, y);
     }
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -389,6 +369,7 @@ public class EstadoResultadoP extends javax.swing.JFrame {
             }
         });
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnImprimir;

@@ -12,9 +12,12 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -33,7 +36,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
      */
     public BalanceGeneralP() {
         initComponents();
-        
+
         mostrarGeneral(tableGeneral);
         centrarVentanaEnPantalla();
     }
@@ -119,7 +122,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
         getContentPane().add(txtDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 460, 122, -1));
 
         jLabel2.setText("Total:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 464, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 465, -1, -1));
 
         btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
         btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -148,8 +151,11 @@ public class BalanceGeneralP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+        Date fechaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));
+        String fechaFormateada = formato.format(fechaActual);
 
-        String tituloTabla = "Reporte - Balance general";
+        String tituloTabla = "Balance general al " + fechaFormateada;
         imprimirTabla(tableGeneral, tituloTabla);
 
      }//GEN-LAST:event_BtnImprimirActionPerformed
@@ -185,28 +191,28 @@ public class BalanceGeneralP extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarMouseClicked
 
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(new Color(255,102,102));
-        btnCerrar.setForeground(new Color(0,0,0));
+        btnCerrar.setBackground(new Color(255, 102, 102));
+        btnCerrar.setForeground(new Color(0, 0, 0));
     }//GEN-LAST:event_btnCerrarMouseEntered
 
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
         // Regresa al color original fuera
         btnCerrar.setBackground(new Color(255, 0, 0));
-        btnCerrar.setForeground(new java.awt.Color(255,255,255));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
     }//GEN-LAST:event_btnCerrarMouseExited
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-
     public void mostrarGeneral(JTable tablaGeneral) {
+        reCalcularEstadoCapital();
         DefaultTableModel modelo = new DefaultTableModel();
 
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
         modelo.addColumn("Debe");
-        modelo.addColumn("Haber");       
+        modelo.addColumn("Haber");
 
         String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
                 + "FROM ajustebalancecomprobacion abc "
@@ -324,7 +330,6 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
             }
 
-
             tablaGeneral.getTableHeader().setResizingAllowed(false);
             tablaGeneral.getTableHeader().setReorderingAllowed(false);
 
@@ -345,7 +350,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
     private void imprimirTabla(JTable tabla, String tituloTabla) {
         try {
             MessageFormat header = new MessageFormat(tituloTabla);
-            MessageFormat footer = new MessageFormat("Dmakers contabilidad");
+            MessageFormat footer = new MessageFormat("Informe hecho por Bryan Pérez");
 
             tabla.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 
@@ -368,21 +373,141 @@ public class BalanceGeneralP extends javax.swing.JFrame {
         setLocation(x, y);
     }
 
+    public void reCalcularEstadoResultados() {
+        String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
+                + "FROM ajustebalancecomprobacion abc "
+                + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
+                + "WHERE cc.nombreCuenta ILIKE '%gasto%' "
+                + "OR cc.nombreCuenta ILIKE '%ingreso%' "
+                + "OR cc.nombreCuenta ILIKE '%venta%' "
+                + "OR cc.nombreCuenta ILIKE '%costo' "
+                + "ORDER BY codigo::text;";
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        List<Double> debe = new ArrayList<>();
+        List<Double> haber = new ArrayList<>();
+        double resultado = 0;
+
+        Statement statement = null;
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                //Guardando datos
+                double saldoDeudor = resultSet.getDouble(3);
+                double saldoAcredor = resultSet.getDouble(4);
+                debe.add(saldoDeudor);
+                haber.add(saldoAcredor);
+            }
+
+            //Operando las listas
+            double sumaDebe = 0.0;
+            for (Double valor : debe) {
+                sumaDebe += valor;
+            }
+
+            double sumaHaber = 0.0;
+            for (Double valor : haber) {
+                sumaHaber += valor;
+            }
+
+            resultado = sumaHaber - sumaDebe;
+
+            //Metiendo los datos pertinentes a la base de datos
+            String consulta = "UPDATE estadoderesultado SET utilidadneta = ? WHERE idestadoresultado = 1;";
+
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setDouble(1, resultado);
+
+                cs.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
+    }
+
+    public void reCalcularEstadoCapital() {
+        reCalcularEstadoResultados();
+        String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
+                + "FROM ajustebalancecomprobacion abc "
+                + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
+                + "WHERE cc.nombreCuenta ILIKE '%capital%' "
+                + "OR cc.nombreCuenta ILIKE '%utilidades%' "
+                + "OR cc.nombreCuenta ILIKE '%reserva%' "
+                + "OR cc.nombreCuenta ILIKE '%resultado' "
+                + "ORDER BY codigo::text;";
+
+        List<Double> debe = new ArrayList<>();
+        List<Double> haber = new ArrayList<>();
+        double resultado;
+        double sumaDebe = 0;
+        double sumaHaber = 0;
+
+        Statement statement;
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                //Guardando datos
+                double saldoDeudor = resultSet.getDouble(3);
+                double saldoAcredor = resultSet.getDouble(4);
+                debe.add(saldoDeudor);
+                haber.add(saldoAcredor);
+            }
+
+            //Trayendo y mostrando el valor de la utilidad 
+            String sql2 = "SELECT utilidadneta FROM estadoderesultado;";
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet2 = statement.executeQuery(sql2);
+            double utilidad = 0;
+
+            if (resultSet2.next()) {
+                utilidad = resultSet2.getDouble("utilidadneta");
+            } else {
+            }
+            resultSet2.close();
+
+            //Operando las listas
+            sumaDebe = 0.0;
+            for (Double valor : debe) {
+                sumaDebe += valor;
+            }
+
+            sumaHaber = 0.0;
+            for (Double valor : haber) {
+                sumaHaber += valor;
+            }
+
+            resultado = sumaHaber - sumaDebe;
+            resultado = resultado + utilidad;
+
+            //Metiendo los datos pertinentes a la base de datos
+            String consulta = "UPDATE estadocapital SET nuevocapital = ? WHERE idestadocapital = 1;";
+
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setDouble(1, resultado);
+
+                cs.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
+
+    }
+
     /**
      * @param args the command line arguments
      */
