@@ -229,8 +229,8 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "OR cc.nombreCuenta ILIKE '%robo' "
                 + "OR cc.nombreCuenta ILIKE '%faltante' "
                 + "OR cc.nombreCuenta ILIKE '%aportacion' "
-                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
-                + "OR cc.nombreCuenta ILIKE '%descuentos' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones ' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos ' "
                 + "OR cc.nombreCuenta ILIKE '%rebaja' "
                 + ") "
                 + "ORDER BY codigo::text;";
