@@ -4,11 +4,26 @@
  */
 package pkg3dmarkers;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.print.PrinterException;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -21,8 +36,9 @@ public class BalanceGeneralP extends javax.swing.JFrame {
      */
     public BalanceGeneralP() {
         initComponents();
-        
+
         mostrarGeneral(tableGeneral);
+        centrarVentanaEnPantalla();
     }
 
     /**
@@ -41,8 +57,15 @@ public class BalanceGeneralP extends javax.swing.JFrame {
         btnInventario = new javax.swing.JButton();
         BtnImprimir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        txtHaber = new javax.swing.JTextField();
+        txtDebe = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnCerrar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tableGeneral.setFocusable(false);
         tableGeneral = new javax.swing.JTable(){
@@ -52,125 +75,288 @@ public class BalanceGeneralP extends javax.swing.JFrame {
         };
         jScrollPane1.setViewportView(tableGeneral);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 89, 680, 350));
+
         btnInicio.setText("Inicio");
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 104, -1));
 
         btnTransacciones.setText("Transacciones");
+        btnTransacciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransaccionesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnTransacciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, -1));
 
         btnInventario.setText("Inventario");
+        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInventarioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 104, -1));
 
+        BtnImprimir.setBackground(new java.awt.Color(0, 89, 255));
+        BtnImprimir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        BtnImprimir.setForeground(new java.awt.Color(255, 255, 255));
         BtnImprimir.setText("Imprimir");
         BtnImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnImprimirActionPerformed(evt);
             }
         });
+        getContentPane().add(BtnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 104, -1));
 
         jLabel1.setText("Balance general");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTransacciones)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel1)))
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTransacciones)
-                    .addComponent(btnInicio)
-                    .addComponent(btnInventario))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(BtnImprimir)
-                .addGap(22, 22, 22))
-        );
+        txtHaber.setEditable(false);
+        getContentPane().add(txtHaber, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 460, 122, -1));
+
+        txtDebe.setEditable(false);
+        getContentPane().add(txtDebe, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 460, 122, -1));
+
+        jLabel2.setText("Total:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 465, -1, -1));
+
+        btnCerrar.setBackground(new java.awt.Color(255, 0, 0));
+        btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrar.setText("Cerrar Sesión");
+        btnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarMouseExited(evt);
+            }
+        });
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 104, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 500, 24, 25));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
+        Date fechaActual = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));
+        String fechaFormateada = formato.format(fechaActual);
 
-        String tituloTabla = "Reporte - Balance general";
+        String tituloTabla = "Balance general al " + fechaFormateada;
         imprimirTabla(tableGeneral, tituloTabla);
 
      }//GEN-LAST:event_BtnImprimirActionPerformed
 
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        // TODO add your handling code here:
+        Inicio inicio = new Inicio();
+        inicio.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnTransaccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaccionesActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        Transacciones transaccion = new Transacciones();
+        transaccion.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnTransaccionesActionPerformed
+
+    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+        // TODO add your handling code here:
+        InventarioCRUD inventario = new InventarioCRUD();
+        inventario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
+        // Crea una nueva instancia de NuevoVentana
+        Login login = new Login();
+        login.setVisible(true);
+        // Cierra la ventana actual
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarMouseClicked
+
+    private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
+        btnCerrar.setBackground(new Color(255, 102, 102));
+        btnCerrar.setForeground(new Color(0, 0, 0));
+    }//GEN-LAST:event_btnCerrarMouseEntered
+
+    private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
+        // Regresa al color original fuera
+        btnCerrar.setBackground(new Color(255, 0, 0));
+        btnCerrar.setForeground(new java.awt.Color(255, 255, 255));
+    }//GEN-LAST:event_btnCerrarMouseExited
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
     public void mostrarGeneral(JTable tablaGeneral) {
+        reCalcularEstadoCapital();
         DefaultTableModel modelo = new DefaultTableModel();
-        
-        tableGeneral.getTableHeader().setResizingAllowed(false);
-        tableGeneral.getTableHeader().setReorderingAllowed(false);
 
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
         modelo.addColumn("Debe");
         modelo.addColumn("Haber");
 
-        tablaGeneral.setModel(modelo);
+        String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
+                + "FROM ajustebalancecomprobacion abc "
+                + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
+                + "WHERE NOT ("
+                + "    cc.nombreCuenta ILIKE '%capital%' "
+                + "    OR cc.nombreCuenta ILIKE '%utilidades%' "
+                + "    OR cc.nombreCuenta ILIKE '%reserva%' "
+                + "    OR cc.nombreCuenta ILIKE '%resultado%' "
+                + "    OR cc.nombreCuenta ILIKE '%gasto%' "
+                + "    OR cc.nombreCuenta ILIKE '%ingreso%' "
+                + "    OR cc.nombreCuenta ILIKE '%venta%' "
+                + "    OR cc.nombreCuenta ILIKE '%costo' "
+                + "OR cc.nombreCuenta ILIKE '%robo' "
+                + "OR cc.nombreCuenta ILIKE '%faltante' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones ' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos ' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + ") "
+                + "ORDER BY codigo::text;";
 
         String[] datos = new String[4];
-        datos[0] = "111";
-        datos[1] = "Caja";
-        datos[2] = "$300";
-        datos[3] = "$0";
-        modelo.addRow(datos);
+        List<Double> debe = new ArrayList<>();
+        List<Double> haber = new ArrayList<>();
+        double resultado;
+        double sumaDebe = 0;
+        double sumaHaber = 0;
 
-        /*
-        String sql = "SELECT codigo, nombrecuenta FROM catalogocuenta ORDER BY codigo::text;";
-
-        String[] datos = new String[4];
-
-        Statement statement = null;
-
+        Statement statement;
         Conexion objetoConexion = new Conexion();
 
         try {
             statement = objetoConexion.conectar().createStatement();
-
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
+                //Guardando datos
+                double saldoDeudor = resultSet.getDouble(3);
+                double saldoAcredor = resultSet.getDouble(4);
+                debe.add(saldoDeudor);
+                haber.add(saldoAcredor);
+
+                //Mostrando datos
                 datos[0] = resultSet.getString(1);
                 datos[1] = resultSet.getString(2);
                 datos[2] = resultSet.getString(3);
                 datos[3] = resultSet.getString(4);
                 modelo.addRow(datos);
             }
+            tablaGeneral.setModel(modelo);
 
-            tablaCatalogo.setModel(modelo);
+            //Trayendo y mostrando el valor de la utilidad 
+            String sql2 = "SELECT nuevocapital FROM estadocapital WHERE idestadocapital = 1;";
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet2 = statement.executeQuery(sql2);
+            double nCapital = 0;
+
+            if (resultSet2.next()) {
+                nCapital = resultSet2.getDouble("nuevocapital");
+            } else {
+            }
+            resultSet2.close();
+
+            //Operando las listas
+            sumaDebe = 0.0;
+            for (Double valor : debe) {
+                sumaDebe += valor;
+            }
+
+            sumaHaber = 0.0;
+            for (Double valor : haber) {
+                sumaHaber += valor;
+            }
+
+            resultado = sumaHaber - sumaDebe;
+
+            if (nCapital > 0) {
+                datos[0] = "110";
+                datos[1] = "Capital";
+                datos[2] = "0";
+                datos[3] = "" + nCapital;
+                modelo.addRow(datos);
+
+                sumaHaber = sumaHaber + nCapital;
+                txtDebe.setText("" + sumaDebe);
+                txtHaber.setText("" + sumaHaber);
+
+            } else if (nCapital == 0) {
+                datos[0] = "110";
+                datos[1] = "Capital";
+                datos[2] = "0";
+                datos[3] = "0";
+                modelo.addRow(datos);
+
+                txtDebe.setText("" + sumaDebe);
+                txtHaber.setText("" + sumaHaber);
+            } else {
+                datos[0] = "110";
+                datos[1] = "Capital";
+                datos[2] = "" + nCapital;
+                datos[3] = "0";
+                modelo.addRow(datos);
+
+                sumaHaber = sumaHaber + nCapital;
+                txtDebe.setText("" + sumaDebe);
+                txtHaber.setText("" + sumaHaber);
+            }
+
+            String mensaje;
+
+            //Metiendo los datos pertinentes a la base de datos, falta total activos y total pasivos
+            String consulta = "UPDATE balancegeneral SET totalcapital = ? WHERE idbalanceg = 1;";
+
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setDouble(1, nCapital);
+
+                cs.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+            }
+
+            tablaGeneral.getTableHeader().setResizingAllowed(false);
+            tablaGeneral.getTableHeader().setReorderingAllowed(false);
+
+            //Permite al usuario ordenar pero nel
+            //TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+            //tablaGeneral.setRowSorter(sorter);
+            tablaGeneral.setAutoCreateRowSorter(true);
+            TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) tablaGeneral.getRowSorter();
+            sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+            sorter.sort();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
 
-        }*/
     }
 
     private void imprimirTabla(JTable tabla, String tituloTabla) {
         try {
             MessageFormat header = new MessageFormat(tituloTabla);
-            MessageFormat footer = new MessageFormat("Dmakers contabilidad");
+            MessageFormat footer = new MessageFormat("Informe hecho por Bryan Pérez");
 
             tabla.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 
@@ -181,26 +367,159 @@ public class BalanceGeneralP extends javax.swing.JFrame {
         }
     }
 
+    private void centrarVentanaEnPantalla() {
+        // Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Obtiene el tamaño de la ventana
+        Dimension windowSize = getSize();
+        // Calcula la posición en la que se debe colocar la ventana para centrarla
+        int x = (screenSize.width - windowSize.width) / 2;
+        int y = (screenSize.height - windowSize.height) / 2;
+        // Establece la ubicación de la ventana
+        setLocation(x, y);
+    }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void reCalcularEstadoResultados() {
+        String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
+                + "FROM ajustebalancecomprobacion abc "
+                + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
+                + "WHERE cc.nombreCuenta ILIKE '%gasto%' "
+                + "OR cc.nombreCuenta ILIKE '%ingreso%' "
+                + "OR cc.nombreCuenta ILIKE '%venta%' "
+                + "OR cc.nombreCuenta ILIKE '%costo' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + "ORDER BY codigo::text;";
+
+        List<Double> debe = new ArrayList<>();
+        List<Double> haber = new ArrayList<>();
+        double resultado = 0;
+
+        Statement statement = null;
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                //Guardando datos
+                double saldoDeudor = resultSet.getDouble(3);
+                double saldoAcredor = resultSet.getDouble(4);
+                debe.add(saldoDeudor);
+                haber.add(saldoAcredor);
+            }
+
+            //Operando las listas
+            double sumaDebe = 0.0;
+            for (Double valor : debe) {
+                sumaDebe += valor;
+            }
+
+            double sumaHaber = 0.0;
+            for (Double valor : haber) {
+                sumaHaber += valor;
+            }
+
+            resultado = sumaHaber - sumaDebe;
+
+            //Metiendo los datos pertinentes a la base de datos
+            String consulta = "UPDATE estadoderesultado SET utilidadneta = ? WHERE idestadoresultado = 1;";
+
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setDouble(1, resultado);
+
+                cs.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
+    }
+
+    public void reCalcularEstadoCapital() {
+        reCalcularEstadoResultados();
+        String sql = "SELECT cc.codigo, cc.nombreCuenta, abc.saldodeudor, abc.saldoacredor "
+                + "FROM ajustebalancecomprobacion abc "
+                + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
+                + "WHERE cc.nombreCuenta ILIKE '%capital%' "
+                + "OR cc.nombreCuenta ILIKE '%utilidades%' "
+                + "OR cc.nombreCuenta ILIKE '%reserva%' "
+                + "OR cc.nombreCuenta ILIKE '%resultado' "
+                + "OR cc.nombreCuenta ILIKE '%robo' "
+                + "OR cc.nombreCuenta ILIKE '%faltante' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion' "
+                + "ORDER BY codigo::text;";
+
+        List<Double> debe = new ArrayList<>();
+        List<Double> haber = new ArrayList<>();
+        double resultado;
+        double sumaDebe = 0;
+        double sumaHaber = 0;
+
+        Statement statement;
+        Conexion objetoConexion = new Conexion();
+
+        try {
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                //Guardando datos
+                double saldoDeudor = resultSet.getDouble(3);
+                double saldoAcredor = resultSet.getDouble(4);
+                debe.add(saldoDeudor);
+                haber.add(saldoAcredor);
+            }
+
+            //Trayendo y mostrando el valor de la utilidad 
+            String sql2 = "SELECT utilidadneta FROM estadoderesultado;";
+            statement = objetoConexion.conectar().createStatement();
+            ResultSet resultSet2 = statement.executeQuery(sql2);
+            double utilidad = 0;
+
+            if (resultSet2.next()) {
+                utilidad = resultSet2.getDouble("utilidadneta");
+            } else {
+            }
+            resultSet2.close();
+
+            //Operando las listas
+            sumaDebe = 0.0;
+            for (Double valor : debe) {
+                sumaDebe += valor;
+            }
+
+            sumaHaber = 0.0;
+            for (Double valor : haber) {
+                sumaHaber += valor;
+            }
+
+            resultado = sumaHaber - sumaDebe;
+            resultado = resultado + utilidad;
+
+            //Metiendo los datos pertinentes a la base de datos
+            String consulta = "UPDATE estadocapital SET nuevocapital = ? WHERE idestadocapital = 1;";
+
+            try {
+                CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+                cs.setDouble(1, resultado);
+
+                cs.execute();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+        }
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -238,11 +557,16 @@ public class BalanceGeneralP extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnImprimir;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnTransacciones;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableGeneral;
+    private javax.swing.JTextField txtDebe;
+    private javax.swing.JTextField txtHaber;
     // End of variables declaration//GEN-END:variables
 }

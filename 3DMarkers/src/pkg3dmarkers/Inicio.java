@@ -3,6 +3,8 @@ package pkg3dmarkers;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -17,6 +19,7 @@ public class Inicio extends javax.swing.JFrame {
          centrarVentanaEnPantalla();
          iconoBotones();
     }
+    Conexion conexion= new Conexion();
     
      //CENTRADO DE VENTANA
     private void centrarVentanaEnPantalla() {
@@ -203,7 +206,7 @@ public class Inicio extends javax.swing.JFrame {
         btnComprobación.setBackground(new java.awt.Color(153, 255, 255));
         btnComprobación.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N
         btnComprobación.setForeground(new java.awt.Color(0, 0, 0));
-        btnComprobación.setText("\nBalance de Comprobación");
+        btnComprobación.setText(" Balance de Comprobación");
         btnComprobación.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnComprobaciónMouseClicked(evt);
@@ -378,6 +381,12 @@ public class Inicio extends javax.swing.JFrame {
         balance.setVisible(true);
          // Cierra la ventana actual
          this.dispose();
+        /* 
+         try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }*/
     }//GEN-LAST:event_btnComprobaciónMouseClicked
 
     private void btnResultadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResultadoMouseClicked
