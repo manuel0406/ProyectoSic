@@ -273,7 +273,6 @@ public class Transacciones extends javax.swing.JFrame {
 
     public void totalizacion() {
 
-        
         ArrayList<Cuenta> listCuenta = new ArrayList<Cuenta>();
 
         // Statement statement = conexion.conectar().createStatement();
@@ -305,12 +304,12 @@ public class Transacciones extends javax.swing.JFrame {
             }
 
             //tablaTransacion.repaint();
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la base");
 
             ex.printStackTrace();
         }
-       
 
         try {
             PreparedStatement statement = null;
@@ -334,6 +333,7 @@ public class Transacciones extends javax.swing.JFrame {
                         preparedStatement.setBoolean(2, cuenta.deudor);
                         preparedStatement.setInt(3, cuenta.codigo);
                         preparedStatement.executeUpdate();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
 
@@ -349,9 +349,9 @@ public class Transacciones extends javax.swing.JFrame {
                         preparedStatement.setInt(1, cuenta.codigo);
                         preparedStatement.setDouble(2, cuenta.totalizacion);
                         preparedStatement.setBoolean(3, cuenta.deudor);
-                        preparedStatement.execute();
+                        preparedStatement.executeUpdate();
+                        cerrarConexion();
 
-                       
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar la totalizacion " + e);
                     }
@@ -366,7 +366,7 @@ public class Transacciones extends javax.swing.JFrame {
         }
         // cerrarConexion();
         resetear(listCuenta);
-        
+
         //resetear(listCuenta);
     }
 
@@ -391,6 +391,7 @@ public class Transacciones extends javax.swing.JFrame {
 
                 listaprueba.add(cuenta1);
             }
+            cerrarConexion();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los datos1 de cuenta " + e);
@@ -422,7 +423,7 @@ public class Transacciones extends javax.swing.JFrame {
                 prepStat.executeUpdate();
 
                 UpdateJTable();
-
+                cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
             }
@@ -434,6 +435,7 @@ public class Transacciones extends javax.swing.JFrame {
                 prepStat.executeUpdate();
 
                 UpdateJTable();
+                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
@@ -659,7 +661,7 @@ public class Transacciones extends javax.swing.JFrame {
         inicio.setVisible(true);
         this.dispose();
 
-         cerrarConexion();
+        // cerrarConexion();
         //JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
 
     }//GEN-LAST:event_BtnInicioTransaccionActionPerformed
@@ -671,7 +673,7 @@ public class Transacciones extends javax.swing.JFrame {
         inventario.setVisible(true);
         this.dispose();
 
-        cerrarConexion();
+        // cerrarConexion();
         //   JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
 
     }//GEN-LAST:event_BtnInventarioTransaccionActionPerformed
@@ -699,13 +701,15 @@ public class Transacciones extends javax.swing.JFrame {
                 prepStat.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Elimino correctamente " + transaccion.idTransaccion);
                 UpdateJTable();
+                tablaTransacion.repaint();
+                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        tablaTransacion.repaint();
+
     }//GEN-LAST:event_btnEliminarTransaccionActionPerformed
     private void cerrarConexion() {
         try {
@@ -751,7 +755,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -763,7 +768,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Calculo del credito fiscal");
                                 preparedStatement.setDouble(3, (montoIva));
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
                             }
@@ -774,7 +780,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Ingresando monto total que se debe");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, transaccion.debe + montoIva);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -789,7 +796,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -803,7 +811,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Calculo del credito fiscal");
                                 preparedStatement.setDouble(3, (montoIva));
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
                             }
@@ -814,9 +823,12 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, transaccion.debe + montoIva);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
+
+                                JOptionPane.showConfirmDialog(this, e);
 
                             }
 
@@ -832,7 +844,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -846,7 +859,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Calculo del devito fiscal");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, (montoIva));
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
                             }
@@ -857,7 +871,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, transaccion.haber + montoIva);
                                 preparedStatement.setDouble(4, 0);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
 
@@ -866,6 +881,7 @@ public class Transacciones extends javax.swing.JFrame {
                         } else {
 
                             montoIva = transaccion.haber * IVA;
+
                             try {
                                 String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
@@ -873,7 +889,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -887,7 +904,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Calculo del devito fiscal");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, (montoIva));
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
@@ -899,7 +917,8 @@ public class Transacciones extends javax.swing.JFrame {
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, transaccion.haber + montoIva);
                                 preparedStatement.setDouble(4, 0);
-                                preparedStatement.execute();
+                                preparedStatement.executeUpdate();
+                                cerrarConexion();
 
                             } catch (SQLException e) {
 
@@ -914,20 +933,23 @@ public class Transacciones extends javax.swing.JFrame {
                         preparedStatement.setString(2, transaccion.concepto);
                         preparedStatement.setDouble(3, transaccion.debe);
                         preparedStatement.setDouble(4, transaccion.haber);
-                        preparedStatement.execute();
+                        preparedStatement.executeUpdate();
                         transaccionTModel.transacciones.add(transaccion);
                         break;
                 }
+                // tablaTransacion.repaint();
+                UpdateJTable();
+                totalizacion();
+               // cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
                 e.printStackTrace();
             }
-            UpdateJTable();
 
             // consultaIncial();
             limpiar();
             habilitarControles(false);
-            totalizacion();
+
             TransaccionTableModel model = (TransaccionTableModel) tablaTransacion.getModel();
             model.fireTableDataChanged();
         }
@@ -989,6 +1011,7 @@ public class Transacciones extends javax.swing.JFrame {
                 preparedStatement.executeUpdate();
 
                 UpdateJTable();
+                cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar");
                 e.printStackTrace();
@@ -1003,14 +1026,14 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-
+/*
         try {
             conexion.conectar().close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
         JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
-
+         */
 
     }//GEN-LAST:event_formWindowClosing
 

@@ -268,7 +268,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         } catch (SQLException e) {
 
-            System.out.println("Error al extrar los ajustes" + e);
+            JOptionPane.showMessageDialog(this,"Error al extraer los ajustes"+ e);
+            //System.out.println("Error al extrar los ajustes" + e);
         }
 
     }
@@ -329,6 +330,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Balance de Comprobación");
+        setUndecorated(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -427,9 +429,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,7 +570,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
-        cerrarConexion();
+        //cerrarConexion();
     }//GEN-LAST:event_BtnInicioBalanceCActionPerformed
 
     private void BtnInventarioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioBalanceCActionPerformed
@@ -578,7 +578,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
-        cerrarConexion();
+       // cerrarConexion();
     }//GEN-LAST:event_BtnInventarioBalanceCActionPerformed
 
     private void BtnTransaBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaBalanceCActionPerformed
@@ -586,7 +586,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
-        cerrarConexion();
+      //  cerrarConexion();
     }//GEN-LAST:event_BtnTransaBalanceCActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

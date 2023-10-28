@@ -77,6 +77,7 @@ public class AjustesP extends javax.swing.JFrame {
                 cuenta.nombre = resultadoCbo.getString("nombrecuenta");
                 cboCuentaAfectada.addItem(cuenta.nombre);
             }
+            cerrarConexion();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la BD");
@@ -137,6 +138,7 @@ public class AjustesP extends javax.swing.JFrame {
                 codigo = resultadoCbo.getInt("codigo");
                 System.out.println(codigo);
             }
+            cerrarConexion();
 
         } catch (SQLException e) {
 
@@ -175,6 +177,7 @@ public class AjustesP extends javax.swing.JFrame {
             }
 
             tablaAjuste.repaint();
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los ajustes de la base");
 
@@ -248,13 +251,13 @@ public class AjustesP extends javax.swing.JFrame {
                 listBalanceC.add(balance);
 
             }
-
+/*
             for (BalanceComprobacion balanceComprobacion : listBalanceC) {
                 System.out.println(balanceComprobacion.codigo + " " + balanceComprobacion.nombreCuenta);
 
-            }
+            }*/
 
-            //cerrarConexion();
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los datos de la base comprobacion");
 
@@ -278,6 +281,7 @@ public class AjustesP extends javax.swing.JFrame {
                         preparedStatement.setDouble(1, balanceComprobacion.saldodeudor);
                         preparedStatement.setInt(2, balanceComprobacion.codigo);
                         preparedStatement.executeUpdate();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
@@ -295,6 +299,7 @@ public class AjustesP extends javax.swing.JFrame {
                             preparedStatement.setDouble(2, balanceComprobacion.saldodeudor);
                             preparedStatement.execute();
                         }
+                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error al insertar: " + e);
@@ -336,6 +341,7 @@ public class AjustesP extends javax.swing.JFrame {
             }
 
             // tablaAjuste.repaint();
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los ajustes de la base");
 
@@ -380,6 +386,7 @@ public class AjustesP extends javax.swing.JFrame {
 
                     preparedStatement.setDouble(1, costV);
                     preparedStatement.executeUpdate();
+                    cerrarConexion();
 
                 } catch (SQLException e) {
                     System.out.println("Error : " + e);
@@ -393,7 +400,8 @@ public class AjustesP extends javax.swing.JFrame {
 
                     preparedStatement.setDouble(1, costV);
                     preparedStatement.setDouble(2, 0);
-                    preparedStatement.execute();
+                    preparedStatement.executeUpdate();
+                    cerrarConexion();
 
                 } catch (SQLException e) {
                     System.out.println("Error: " + e);
@@ -551,11 +559,6 @@ public class AjustesP extends javax.swing.JFrame {
         btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnRegresarMouseClicked(evt);
-            }
-        });
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
             }
         });
         cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 110, -1));
@@ -726,6 +729,8 @@ public class AjustesP extends javax.swing.JFrame {
 
                         preparedStatement.executeUpdate();
                         calcularCostoVenta();
+                         cerrarConexion();
+                        
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
 
@@ -750,6 +755,7 @@ public class AjustesP extends javax.swing.JFrame {
                     ajusteTModel.ajustes.add(ajuste);
                 }
                 //transaccion.concepto = txtConceptoTransaccion.getText();
+                cerrarConexion();
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
@@ -797,6 +803,7 @@ public class AjustesP extends javax.swing.JFrame {
                 prepStat.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Elimino correctamente " + ajuste.idAjuste);
                 UpdateJTable();
+                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
@@ -866,6 +873,7 @@ public class AjustesP extends javax.swing.JFrame {
                         preparedStatement.executeUpdate();
                         calcularCostoVenta();
                         UpdateJTable();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
@@ -894,6 +902,7 @@ public class AjustesP extends javax.swing.JFrame {
                     UpdateJTable();
 
                 }
+                cerrarConexion();
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar ajuste");
@@ -961,10 +970,6 @@ public class AjustesP extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnCerrarActionPerformed
-
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
