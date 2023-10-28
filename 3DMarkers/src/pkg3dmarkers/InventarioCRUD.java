@@ -15,8 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.CallableStatement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -307,8 +305,8 @@ public class InventarioCRUD extends javax.swing.JFrame {
 
         }
         catch (SQLException ex) {
-            System.out.println(ex);//--------------------------
-            JOptionPane.showMessageDialog(this, "Error al recuperar inventario del producto");
+            System.out.println("Ya existe registro");//--------------------------
+           // JOptionPane.showMessageDialog(this, "Error al recuperar inventario del producto");
         }
     }
 
@@ -634,9 +632,9 @@ public class InventarioCRUD extends javax.swing.JFrame {
         lblSalidaT.setText("Total de Salida:");
         getContentPane().add(lblSalidaT, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 270, 30));
 
-        btnNuevoMovimiento.setBackground(new java.awt.Color(255, 255, 51));
+        btnNuevoMovimiento.setBackground(new java.awt.Color(0, 102, 0));
         btnNuevoMovimiento.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
-        btnNuevoMovimiento.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevoMovimiento.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevoMovimiento.setText("Nuevo Movimiento");
         btnNuevoMovimiento.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -651,7 +649,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
         });
         getContentPane().add(btnNuevoMovimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 190, 40));
 
-        btnEliminar.setBackground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setBackground(new java.awt.Color(170, 0, 0));
         btnEliminar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
         btnEliminar.setText("Eliminar Movimiento");
@@ -668,7 +666,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
         });
         getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 190, 40));
 
-        btnCancelar.setBackground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setBackground(new java.awt.Color(170, 0, 0));
         btnCancelar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
@@ -686,9 +684,9 @@ public class InventarioCRUD extends javax.swing.JFrame {
         });
         getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 340, 110, 40));
 
-        btnIngresar.setBackground(new java.awt.Color(255, 255, 51));
+        btnIngresar.setBackground(new java.awt.Color(0, 102, 0));
         btnIngresar.setFont(new java.awt.Font("Dubai", 1, 18)); // NOI18N
-        btnIngresar.setForeground(new java.awt.Color(0, 0, 0));
+        btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("Ingresar");
         btnIngresar.setEnabled(false);
         btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1029,12 +1027,18 @@ public class InventarioCRUD extends javax.swing.JFrame {
 
     private void btnIngresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseEntered
        //Color cambiante
+       if(btnIngresar.isEnabled())
+        {
         btnIngresar.setBackground(new Color(255,255,255));
+        btnIngresar.setForeground(new Color(0,0,0));  }
     }//GEN-LAST:event_btnIngresarMouseEntered
 
     private void btnIngresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseExited
         // Color retorno
-        btnIngresar.setBackground(new Color(255,255,51));
+        if(btnIngresar.isEnabled())
+        {
+        btnIngresar.setBackground(new Color(0,102,0));
+        btnIngresar.setForeground(new Color(255,255,255));}
     }//GEN-LAST:event_btnIngresarMouseExited
 
     private void btnCancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarMouseClicked
@@ -1073,7 +1077,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
          // Color retorno
          if(btnCancelar.isEnabled())
         {
-            btnCancelar.setBackground(new Color(0,0,0));
+            btnCancelar.setBackground(new Color(170,0,0));
             btnCancelar.setForeground(new Color(255,255,255));
         }
     }//GEN-LAST:event_btnCancelarMouseExited
@@ -1104,12 +1108,18 @@ public class InventarioCRUD extends javax.swing.JFrame {
 
     private void btnNuevoMovimientoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseEntered
         //Color cambiante
+        if (btnNuevoMovimiento.isEnabled()){    
         btnNuevoMovimiento.setBackground(new Color(255,255,255));
+        btnNuevoMovimiento.setForeground(new Color(0,0,0));
+        }  
     }//GEN-LAST:event_btnNuevoMovimientoMouseEntered
 
     private void btnNuevoMovimientoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNuevoMovimientoMouseExited
          // Color retorno
-        btnNuevoMovimiento.setBackground(new Color(255,255,51));
+          if (btnNuevoMovimiento.isEnabled()){    
+            btnNuevoMovimiento.setBackground(new Color(0,102,0));
+            btnNuevoMovimiento.setForeground(new Color(255,255,255));
+         }  
     }//GEN-LAST:event_btnNuevoMovimientoMouseExited
 
     private void cbxProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxProductoActionPerformed
@@ -1284,7 +1294,7 @@ public class InventarioCRUD extends javax.swing.JFrame {
 
     private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
         // Color retorno
-        btnEliminar.setBackground(new Color(0,0,0));
+        btnEliminar.setBackground(new Color(170,0,0));
         btnEliminar.setForeground(new Color(255,255,255));
     }//GEN-LAST:event_btnEliminarMouseExited
 
