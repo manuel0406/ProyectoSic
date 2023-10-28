@@ -88,6 +88,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 listCuenta.add(cuenta);
 
             }
+            cerrarConexion();
 
         } catch (SQLException e) {
 
@@ -133,6 +134,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         preparedStatement.setInt(3, cuenta.idCuenta);
                         preparedStatement.executeUpdate();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
 
@@ -159,6 +161,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         }
 
                         preparedStatement.execute();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar la totalizacion " + e);
@@ -265,10 +268,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             }
             tableBalanceAjustado.repaint();
-
+           // cerrarConexion();
         } catch (SQLException e) {
 
-            JOptionPane.showMessageDialog(this,"Error al extraer los ajustes"+ e);
+            JOptionPane.showMessageDialog(this, "Error al extraer los ajustes" + e);
             //System.out.println("Error al extrar los ajustes" + e);
         }
 
@@ -471,6 +474,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 listaAjustes.add(ajustesBalance);
 
             }
+            cerrarConexion();
 
         } catch (SQLException e) {
 
@@ -528,6 +532,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         preparedStatement.setInt(3, ajuste.codigo);
 
                         preparedStatement.executeUpdate();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
 
@@ -546,6 +551,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         preparedStatement.setInt(3, ajuste.codigo);
 
                         preparedStatement.execute();
+                        cerrarConexion();
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar los ajustes " + e);
@@ -554,6 +560,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 }
 
             }
+            
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
@@ -578,7 +585,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
-       // cerrarConexion();
+        // cerrarConexion();
     }//GEN-LAST:event_BtnInventarioBalanceCActionPerformed
 
     private void BtnTransaBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaBalanceCActionPerformed
@@ -586,7 +593,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
-      //  cerrarConexion();
+        //  cerrarConexion();
     }//GEN-LAST:event_BtnTransaBalanceCActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
