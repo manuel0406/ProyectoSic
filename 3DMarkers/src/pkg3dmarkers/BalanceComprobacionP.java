@@ -240,7 +240,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             //   tablaTransacion.repaint();
             tableBcomprobacion.repaint();
-
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
 
@@ -268,7 +268,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             }
             tableBalanceAjustado.repaint();
-           // cerrarConexion();
+            // cerrarConexion();
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, "Error al extraer los ajustes" + e);
@@ -504,8 +504,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         double costoV = 0;
         double gastoSobreC = 0;
 
-        Conexion conexion = new Conexion();
-
+        //  Conexion conexion = new Conexion();
         try {
             PreparedStatement statement = null;
 
@@ -551,6 +550,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         preparedStatement.setInt(3, ajuste.codigo);
 
                         preparedStatement.execute();
+                        
                         cerrarConexion();
 
                     } catch (SQLException e) {
@@ -560,7 +560,6 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 }
 
             }
-            
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
