@@ -226,6 +226,12 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "    OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "    OR cc.nombreCuenta ILIKE '%venta%' "
                 + "    OR cc.nombreCuenta ILIKE '%costo' "
+                + "OR cc.nombreCuenta ILIKE '%robo' "
+                + "OR cc.nombreCuenta ILIKE '%faltante' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja' "
                 + ") "
                 + "ORDER BY codigo::text;";
 
@@ -381,6 +387,9 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "OR cc.nombreCuenta ILIKE '%venta%' "
                 + "OR cc.nombreCuenta ILIKE '%costo' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja' "
                 + "ORDER BY codigo::text;";
 
         List<Double> debe = new ArrayList<>();
@@ -441,6 +450,9 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "OR cc.nombreCuenta ILIKE '%utilidades%' "
                 + "OR cc.nombreCuenta ILIKE '%reserva%' "
                 + "OR cc.nombreCuenta ILIKE '%resultado' "
+                + "OR cc.nombreCuenta ILIKE '%robo' "
+                + "OR cc.nombreCuenta ILIKE '%faltante' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion' "
                 + "ORDER BY codigo::text;";
 
         List<Double> debe = new ArrayList<>();
