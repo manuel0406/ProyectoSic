@@ -212,6 +212,9 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 + "OR cc.nombreCuenta ILIKE '%utilidades%' "
                 + "OR cc.nombreCuenta ILIKE '%reserva%' "
                 + "OR cc.nombreCuenta ILIKE '%resultado' "
+                + "OR cc.nombreCuenta ILIKE '%robo' "
+                + "OR cc.nombreCuenta ILIKE '%faltante' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion' "
                 + "ORDER BY codigo::text;";
 
         String[] datos = new String[4];

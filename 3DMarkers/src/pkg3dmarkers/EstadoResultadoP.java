@@ -223,6 +223,9 @@ public class EstadoResultadoP extends javax.swing.JFrame {
                 + "OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "OR cc.nombreCuenta ILIKE '%venta%' "
                 + "OR cc.nombreCuenta ILIKE '%costo' "
+                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
+                + "OR cc.nombreCuenta ILIKE '%descuentos' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja' "
                 + "ORDER BY codigo::text;";
 
         String[] datos = new String[4];
