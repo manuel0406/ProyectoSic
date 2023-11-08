@@ -219,19 +219,22 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "JOIN catalogoCuenta cc ON cc.codigo = abc.codigocuenta "
                 + "WHERE NOT ("
                 + "    cc.nombreCuenta ILIKE '%capital%' "
+                + "    OR cc.nombreCuenta ILIKE '%compras%' "
+                + "    OR cc.nombreCuenta ILIKE '%descuento%' "
+                + "    OR cc.nombreCuenta ILIKE '%Descuentos' "
                 + "    OR cc.nombreCuenta ILIKE '%utilidades%' "
                 + "    OR cc.nombreCuenta ILIKE '%reserva%' "
                 + "    OR cc.nombreCuenta ILIKE '%resultado%' "
                 + "    OR cc.nombreCuenta ILIKE '%gasto%' "
                 + "    OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "    OR cc.nombreCuenta ILIKE '%venta%' "
-                + "    OR cc.nombreCuenta ILIKE '%costo' "
-                + "OR cc.nombreCuenta ILIKE '%robo' "
-                + "OR cc.nombreCuenta ILIKE '%faltante' "
-                + "OR cc.nombreCuenta ILIKE '%aportacion' "
-                + "OR cc.nombreCuenta ILIKE '%devoluciones ' "
-                + "OR cc.nombreCuenta ILIKE '%descuentos ' "
-                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + "    OR cc.nombreCuenta ILIKE '%costo%' "
+                + "    OR cc.nombreCuenta ILIKE '%robo%' "
+                + "    OR cc.nombreCuenta ILIKE '%faltante%' "
+                + "    OR cc.nombreCuenta ILIKE '%aportacion%' "
+                + "    OR cc.nombreCuenta ILIKE '%rebaja%' "
+                + "    OR cc.nombreCuenta ILIKE '%descuento%' "
+                + "    OR cc.nombreCuenta ILIKE '%devolucion%' "
                 + ") "
                 + "ORDER BY codigo::text;";
 
@@ -347,6 +350,12 @@ public class BalanceGeneralP extends javax.swing.JFrame {
             sorter.setSortKeys(Collections.singletonList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
             sorter.sort();
 
+            datos[0] = "                                                                    T";
+            datos[1] = "Totales";
+            datos[2] = "" + sumaDebe;
+            datos[3] = "" + sumaHaber;
+            modelo.addRow(datos);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.toString());
         }
@@ -386,12 +395,13 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "WHERE cc.nombreCuenta ILIKE '%gasto%' "
                 + "OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "OR cc.nombreCuenta ILIKE '%venta%' "
-                + "OR cc.nombreCuenta ILIKE '%costo' "
-                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
-                + "OR cc.nombreCuenta ILIKE '%descuentos' "
-                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + "OR cc.nombreCuenta ILIKE '%costo%' "
+                + "OR cc.nombreCuenta ILIKE '%devolucion%' "
+                + "OR cc.nombreCuenta ILIKE '%descuento%' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja%' "
                 + "ORDER BY codigo::text;";
 
+        String[] datos = new String[4];
         List<Double> debe = new ArrayList<>();
         List<Double> haber = new ArrayList<>();
         double resultado = 0;
@@ -423,6 +433,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
             }
 
             resultado = sumaHaber - sumaDebe;
+            String mensaje = "";
 
             //Metiendo los datos pertinentes a la base de datos
             String consulta = "UPDATE estadoderesultado SET utilidadneta = ? WHERE idestadoresultado = 1;";
@@ -449,10 +460,10 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 + "WHERE cc.nombreCuenta ILIKE '%capital%' "
                 + "OR cc.nombreCuenta ILIKE '%utilidades%' "
                 + "OR cc.nombreCuenta ILIKE '%reserva%' "
-                + "OR cc.nombreCuenta ILIKE '%resultado' "
-                + "OR cc.nombreCuenta ILIKE '%robo' "
-                + "OR cc.nombreCuenta ILIKE '%faltante' "
-                + "OR cc.nombreCuenta ILIKE '%aportacion' "
+                + "OR cc.nombreCuenta ILIKE '%resultado%' "
+                + "OR cc.nombreCuenta ILIKE '%robo%' "
+                + "OR cc.nombreCuenta ILIKE '%faltante%' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion%' "
                 + "ORDER BY codigo::text;";
 
         List<Double> debe = new ArrayList<>();

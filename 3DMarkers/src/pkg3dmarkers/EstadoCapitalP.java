@@ -211,10 +211,10 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 + "WHERE cc.nombreCuenta ILIKE '%capital%' "
                 + "OR cc.nombreCuenta ILIKE '%utilidades%' "
                 + "OR cc.nombreCuenta ILIKE '%reserva%' "
-                + "OR cc.nombreCuenta ILIKE '%resultado' "
-                + "OR cc.nombreCuenta ILIKE '%robo' "
-                + "OR cc.nombreCuenta ILIKE '%faltante' "
-                + "OR cc.nombreCuenta ILIKE '%aportacion' "
+                + "OR cc.nombreCuenta ILIKE '%resultado%' "
+                + "OR cc.nombreCuenta ILIKE '%robo%' "
+                + "OR cc.nombreCuenta ILIKE '%faltante%' "
+                + "OR cc.nombreCuenta ILIKE '%aportacion%' "
                 + "ORDER BY codigo::text;";
 
         String[] datos = new String[4];
@@ -295,7 +295,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 mensaje = resultado + " La empresa ha tenido pérdidas en el ejercicio";
                 datos[0] = "611";
                 datos[1] = "Resultado del ejercicio";
-                datos[2] = "" + Math.abs(resultado);
+                datos[2] = "" + Math.abs(utilidad);
                 datos[3] = "0";
                 modelo.addRow(datos);
             }
@@ -356,12 +356,13 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 + "WHERE cc.nombreCuenta ILIKE '%gasto%' "
                 + "OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "OR cc.nombreCuenta ILIKE '%venta%' "
-                + "OR cc.nombreCuenta ILIKE '%costo' "
-                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
-                + "OR cc.nombreCuenta ILIKE '%descuentos' "
-                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + "OR cc.nombreCuenta ILIKE '%costo%' "
+                + "OR cc.nombreCuenta ILIKE '%devolucion%' "
+                + "OR cc.nombreCuenta ILIKE '%descuento%' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja%' "
                 + "ORDER BY codigo::text;";
 
+        String[] datos = new String[4];
         List<Double> debe = new ArrayList<>();
         List<Double> haber = new ArrayList<>();
         double resultado = 0;
@@ -393,6 +394,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
             }
 
             resultado = sumaHaber - sumaDebe;
+            String mensaje = "";
 
             //Metiendo los datos pertinentes a la base de datos
             String consulta = "UPDATE estadoderesultado SET utilidadneta = ? WHERE idestadoresultado = 1;";

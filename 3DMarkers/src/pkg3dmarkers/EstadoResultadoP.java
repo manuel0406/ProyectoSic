@@ -210,7 +210,6 @@ public class EstadoResultadoP extends javax.swing.JFrame {
 
     public void mostrarEstado(JTable tablaEstado) {
         DefaultTableModel modelo = new DefaultTableModel();
-
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
         modelo.addColumn("Debe");
@@ -222,10 +221,10 @@ public class EstadoResultadoP extends javax.swing.JFrame {
                 + "WHERE cc.nombreCuenta ILIKE '%gasto%' "
                 + "OR cc.nombreCuenta ILIKE '%ingreso%' "
                 + "OR cc.nombreCuenta ILIKE '%venta%' "
-                + "OR cc.nombreCuenta ILIKE '%costo' "
-                + "OR cc.nombreCuenta ILIKE '%devoluciones' "
-                + "OR cc.nombreCuenta ILIKE '%descuentos' "
-                + "OR cc.nombreCuenta ILIKE '%rebaja' "
+                + "OR cc.nombreCuenta ILIKE '%costo%' "
+                + "OR cc.nombreCuenta ILIKE '%devolucion%' "
+                + "OR cc.nombreCuenta ILIKE '%descuento%' "
+                + "OR cc.nombreCuenta ILIKE '%rebaja%' "
                 + "ORDER BY codigo::text;";
 
         String[] datos = new String[4];
@@ -372,7 +371,6 @@ public class EstadoResultadoP extends javax.swing.JFrame {
             }
         });
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnImprimir;
