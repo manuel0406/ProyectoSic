@@ -116,7 +116,7 @@ public class Inicio extends javax.swing.JFrame {
                 btnCerrarMouseExited(evt);
             }
         });
-        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 160, 30));
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, 160, 30));
 
         btnCatalogo.setBackground(new java.awt.Color(153, 255, 153));
         btnCatalogo.setFont(new java.awt.Font("Lucida Fax", 1, 14)); // NOI18N

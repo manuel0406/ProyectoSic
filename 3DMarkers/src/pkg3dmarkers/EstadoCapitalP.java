@@ -82,7 +82,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 btnInicioActionPerformed(evt);
             }
         });
-        getContentPane().add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 104, -1));
+        getContentPane().add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 104, -1));
 
         btnTransacciones.setText("Transacciones");
         btnTransacciones.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +90,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 btnTransaccionesActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTransacciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, -1));
+        getContentPane().add(btnTransacciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, -1, -1));
 
         btnInventario.setText("Inventario");
         btnInventario.addActionListener(new java.awt.event.ActionListener() {
@@ -98,7 +98,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 btnInventarioActionPerformed(evt);
             }
         });
-        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 104, -1));
+        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, 104, -1));
 
         tableEstadoCapital.setFocusable(false);
         tableEstadoCapital = new javax.swing.JTable(){
@@ -135,7 +135,7 @@ public class EstadoCapitalP extends javax.swing.JFrame {
                 btnCerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 104, -1));
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 104, -1));
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 510, 20, 20));
 
         pack();
