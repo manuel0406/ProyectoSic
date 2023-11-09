@@ -150,7 +150,7 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void consultaIncial() {
 
-       // Conexion conexion = new Conexion();
+        // Conexion conexion = new Conexion();
         try {
 
             String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
@@ -177,7 +177,7 @@ public class AjustesP extends javax.swing.JFrame {
             }
 
             tablaAjuste.repaint();
-            
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los ajustes de la base");
 
@@ -251,7 +251,7 @@ public class AjustesP extends javax.swing.JFrame {
                 listBalanceC.add(balance);
 
             }
-/*
+            /*
             for (BalanceComprobacion balanceComprobacion : listBalanceC) {
                 System.out.println(balanceComprobacion.codigo + " " + balanceComprobacion.nombreCuenta);
 
@@ -276,11 +276,12 @@ public class AjustesP extends javax.swing.JFrame {
                 if (resultado.next()) {
                     try {
                         String setencia = "UPDATE ajuste SET saldoacredor=? where codigo=?";
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setencia);
 
                         preparedStatement.setDouble(1, balanceComprobacion.saldodeudor);
                         preparedStatement.setInt(2, balanceComprobacion.codigo);
                         preparedStatement.executeUpdate();
+
                         cerrarConexion();
 
                     } catch (SQLException e) {
@@ -308,13 +309,13 @@ public class AjustesP extends javax.swing.JFrame {
                 }
 
             }
-            // cerrarConexion();
+            cerrarConexion();
         } catch (SQLException e) {
             System.out.println(e);
         }
 
         calcularCostoVenta();
-       // cerrarConexion();
+        // cerrarConexion();
     }
 
     // private int invetarioFinal(){}
@@ -408,14 +409,14 @@ public class AjustesP extends javax.swing.JFrame {
 
                 }
             }
+            cerrarConexion();
 
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, e);
         }
 
-       // cerrarConexion();
-
+        // cerrarConexion();
     }
 
     private void limpiar() {
@@ -561,6 +562,11 @@ public class AjustesP extends javax.swing.JFrame {
                 btnRegresarMouseClicked(evt);
             }
         });
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
         cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 110, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -671,32 +677,33 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void BtnInicioAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioAjustesActionPerformed
         // TODO add your handling code here:
-
+        cerrarConexion();
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
 
-         cerrarConexion();
         // JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
 
     }//GEN-LAST:event_BtnInicioAjustesActionPerformed
 
     private void BtnTransaccionAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaccionAjustesActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
 
-        cerrarConexion();
+
     }//GEN-LAST:event_BtnTransaccionAjustesActionPerformed
 
     private void BtnInventarioAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioAjustesActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
 
-         cerrarConexion();
+
     }//GEN-LAST:event_BtnInventarioAjustesActionPerformed
     private boolean validando() {
 
@@ -729,8 +736,8 @@ public class AjustesP extends javax.swing.JFrame {
 
                         preparedStatement.executeUpdate();
                         calcularCostoVenta();
-                         cerrarConexion();
-                        
+                        cerrarConexion();
+
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
 
@@ -750,9 +757,11 @@ public class AjustesP extends javax.swing.JFrame {
                     preparedStatement.setInt(1, ajuste.codigo);
                     preparedStatement.setDouble(2, ajuste.debe);
                     preparedStatement.setDouble(3, ajuste.haber);
-                    preparedStatement.execute();
+                    preparedStatement.executeUpdate();
+                    
 
                     ajusteTModel.ajustes.add(ajuste);
+                    
                 }
                 //transaccion.concepto = txtConceptoTransaccion.getText();
                 cerrarConexion();
@@ -931,6 +940,7 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void btnRegresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseClicked
         // TODO add your handling code here:
+        cerrarConexion();
         BalanceComprobacionP balance = new BalanceComprobacionP();
         balance.setVisible(true);
         this.dispose();
@@ -970,6 +980,10 @@ public class AjustesP extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments

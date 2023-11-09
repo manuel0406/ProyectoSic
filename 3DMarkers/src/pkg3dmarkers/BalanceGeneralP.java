@@ -270,7 +270,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
 
             //Trayendo y mostrando el valor de la utilidad 
             String sql2 = "SELECT nuevocapital FROM estadocapital WHERE idestadocapital = 1;";
-            statement = objetoConexion.conectar().createStatement();
+           // statement = objetoConexion.conectar().createStatement();
             ResultSet resultSet2 = statement.executeQuery(sql2);
             double nCapital = 0;
 
@@ -337,6 +337,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
                 cs.execute();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error " + e.toString());
+                System.out.println(e);
             }
 
             tablaGeneral.getTableHeader().setResizingAllowed(false);
@@ -358,6 +359,7 @@ public class BalanceGeneralP extends javax.swing.JFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.toString());
+            
         }
 
     }

@@ -18,7 +18,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
@@ -44,11 +43,12 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     public BalanceComprobacionP() {
         initComponents();
-        extrayendoCuentas();
-        inicializarColumnas();
-        consultaInicial();
-        ajusteBalance();
         centrarVentanaEnPantalla();
+        inicializarColumnas();
+        extrayendoCuentas();
+       
+        ajusteBalance();
+         consultaInicial();
 
     }
 
@@ -119,7 +119,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         String sentencia = " UPDATE balancecomprobacion SET saldoacredor= ?, saldodeudor= ? WHERE idcuenta=? ";
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentencia);
 
                         if (cuenta.deudor) {
                             totalDebe += cuenta.totalizacion;
@@ -160,7 +160,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         }
 
-                        preparedStatement.execute();
+                        preparedStatement.executeUpdate();
                         cerrarConexion();
 
                     } catch (SQLException e) {
@@ -168,8 +168,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                     }
 
                 }
+                cerrarConexion();
 
             }
+            
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
@@ -242,7 +244,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             tableBcomprobacion.repaint();
             cerrarConexion();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
+            //JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
+            System.out.println("Error: " + ex);
 
             ex.printStackTrace();
         }
@@ -268,11 +271,11 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             }
             tableBalanceAjustado.repaint();
-            // cerrarConexion();
+            cerrarConexion();
         } catch (SQLException e) {
 
-            JOptionPane.showMessageDialog(this, "Error al extraer los ajustes" + e);
-            //System.out.println("Error al extrar los ajustes" + e);
+            // JOptionPane.showMessageDialog(this, "Error al extraer los ajustes" + e);
+            System.out.println("Error" + e);
         }
 
     }
@@ -524,7 +527,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         String sentencia = "UPDATE ajustebalancecomprobacion SET saldoacredor= ?, saldodeudor=? WHERE codigocuenta=? ";
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
+                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentencia);
 
                         preparedStatement.setDouble(1, ajuste.saldoacredor);
                         preparedStatement.setDouble(2, ajuste.saldodeudor);
@@ -549,8 +552,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         preparedStatement.setDouble(2, ajuste.saldoacredor);
                         preparedStatement.setInt(3, ajuste.codigo);
 
-                        preparedStatement.execute();
-                        
+                        preparedStatement.executeUpdate();
+
                         cerrarConexion();
 
                     } catch (SQLException e) {
@@ -558,9 +561,10 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                     }
 
                 }
+                cerrarConexion();
 
             }
-
+            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
@@ -573,22 +577,25 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void BtnInicioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioBalanceCActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
-        //cerrarConexion();
+
     }//GEN-LAST:event_BtnInicioBalanceCActionPerformed
 
     private void BtnInventarioBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInventarioBalanceCActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
         this.dispose();
-        // cerrarConexion();
+
     }//GEN-LAST:event_BtnInventarioBalanceCActionPerformed
 
     private void BtnTransaBalanceCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTransaBalanceCActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
         this.dispose();
@@ -602,18 +609,18 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
-        JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
+        //JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
 
 
     }//GEN-LAST:event_formWindowClosing
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
         // TODO add your handling code here:
+        cerrarConexion();
         AjustesP pAjuste = new AjustesP();
-
         pAjuste.setVisible(true);
         this.dispose();
-        cerrarConexion();
+
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked

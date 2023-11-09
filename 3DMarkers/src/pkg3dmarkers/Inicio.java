@@ -350,9 +350,17 @@ public class Inicio extends javax.swing.JFrame {
        btnGeneral.setBackground(new Color(255,255,255));
        btnGeneral.setForeground(new Color(0,0,0));
     }//GEN-LAST:event_btnGeneralMouseEntered
-
+ private void cerrarSeccion(){
+     try {
+            conexion.conectar().close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+ }
+    
     private void btnTransaccionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaccionesMouseClicked
         // Crea una nueva instancia de NuevoVentana
+      //  cerrarSeccion();
        Transacciones transaccion = new Transacciones();
         transaccion.setVisible(true);
          // Cierra la ventana actual
@@ -361,6 +369,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInventarioMouseClicked
        // Crea una nueva instancia de NuevoVentana
+      // cerrarSeccion();
        InventarioCRUD inventario = new InventarioCRUD();
         inventario.setVisible(true);
          // Cierra la ventana actual
@@ -369,6 +378,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnCatalogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCatalogoMouseClicked
         // Crea una nueva instancia de NuevoVentana
+      //  cerrarSeccion();
        CatalogoCuentaP catalogo = new CatalogoCuentaP();
         catalogo.setVisible(true);
          // Cierra la ventana actual
@@ -377,6 +387,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnComprobaciónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprobaciónMouseClicked
        // Crea una nueva instancia de NuevoVentana
+      // cerrarSeccion();
        BalanceComprobacionP balance = new BalanceComprobacionP();
         balance.setVisible(true);
          // Cierra la ventana actual
@@ -391,6 +402,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnResultadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResultadoMouseClicked
         // Crea una nueva instancia de NuevoVentana
+      //  cerrarSeccion();
         EstadoResultadoP resultado = new EstadoResultadoP();
         resultado.setVisible(true);
         // Cierra la ventana actual
@@ -399,6 +411,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnCapitalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCapitalMouseClicked
         // Crea una nueva instancia de NuevoVentana
+       // cerrarSeccion();
         EstadoCapitalP capital = new EstadoCapitalP();
         capital.setVisible(true);
         // Cierra la ventana actual
@@ -407,6 +420,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnGeneralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGeneralMouseClicked
         // Crea una nueva instancia de NuevoVentana
+       // cerrarSeccion();
         BalanceGeneralP balance = new BalanceGeneralP();
         balance.setVisible(true);
         // Cierra la ventana actual

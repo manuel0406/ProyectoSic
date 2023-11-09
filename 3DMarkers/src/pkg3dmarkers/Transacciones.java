@@ -101,9 +101,9 @@ public class Transacciones extends javax.swing.JFrame {
         TableColumn columna1 = tablaTransacion.getColumnModel().getColumn(1);
         columna1.setPreferredWidth(10);
         TableColumn columna2 = tablaTransacion.getColumnModel().getColumn(2);
-        columna2.setPreferredWidth(2);
+        columna2.setPreferredWidth(100);
         TableColumn columna3 = tablaTransacion.getColumnModel().getColumn(3);
-        columna3.setPreferredWidth(250);
+        columna3.setPreferredWidth(200);
         TableColumn columna4 = tablaTransacion.getColumnModel().getColumn(4);
         columna4.setPreferredWidth(2);
         TableColumn columna5 = tablaTransacion.getColumnModel().getColumn(5);
@@ -178,6 +178,7 @@ public class Transacciones extends javax.swing.JFrame {
             }
 
             tablaTransacion.repaint();
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base");
 
@@ -213,6 +214,7 @@ public class Transacciones extends javax.swing.JFrame {
             }
 
             tablaTransacion.repaint();
+            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las transaciones de la base de datos");
 
@@ -656,12 +658,12 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void BtnInicioTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnInicioTransaccionActionPerformed
         // TODO add your handling code here:
-
+        cerrarConexion();
         Inicio inicio = new Inicio();
         inicio.setVisible(true);
         this.dispose();
 
-        // cerrarConexion();
+        // 
         //JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
 
     }//GEN-LAST:event_BtnInicioTransaccionActionPerformed
@@ -940,7 +942,7 @@ public class Transacciones extends javax.swing.JFrame {
                 // tablaTransacion.repaint();
                 UpdateJTable();
                 totalizacion();
-               // cerrarConexion();
+                // cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
                 e.printStackTrace();
@@ -1063,6 +1065,7 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         // Crea una nueva instancia de NuevoVentana
+        cerrarConexion();
         Login login = new Login();
         login.setVisible(true);
         // Cierra la ventana actual
