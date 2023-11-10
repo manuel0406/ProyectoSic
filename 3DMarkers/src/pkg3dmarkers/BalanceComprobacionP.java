@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
@@ -46,9 +45,8 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
         centrarVentanaEnPantalla();
         inicializarColumnas();
         extrayendoCuentas();
-       
         ajusteBalance();
-         consultaInicial();
+        consultaInicial();
 
     }
 
@@ -71,13 +69,14 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
      *
      *
      */
-    public void extrayendoCuentas() {
+    private void extrayendoCuentas() {
+        Conexion conexionEx= new Conexion();
 
         // Conexion conexion = new Conexion();
-        try {
-            String setenciaSql = "Select * from cuenta";
-            Statement statement = conexion.conectar().createStatement();
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        String setenciaSql = "Select * from cuenta";
+        try(Statement statement = conexionEx.conectar().createStatement();
+            ResultSet resultado = statement.executeQuery(setenciaSql);) {           
+            
 
             while (resultado.next()) {
                 Cuenta cuenta = new Cuenta();
@@ -88,11 +87,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 listCuenta.add(cuenta);
 
             }
-            cerrarConexion();
+          //  
 
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, "Error al extraer los datos de la tabla cuenta " + e);
+        }finally{
+           cerrarConexion(conexionEx);
         }
 
         insertandoDatos(listCuenta);
@@ -100,7 +101,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     public void insertandoDatos(ArrayList<Cuenta> listCuenta) {
 
-        //Conexion conexion = new Conexion();
+        Conexion conexionIn = new Conexion();
         double totalDebe = 0, totalHaber = 0;
 
         try {
@@ -109,17 +110,14 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
             for (Cuenta cuenta : listCuenta) {
 
                 String sentenciaSql = "Select * from balancecomprobacion where idcuenta=?";
-                statement = conexion.conectar().prepareStatement(sentenciaSql);
+                statement = conexionIn.conectar().prepareStatement(sentenciaSql);
                 statement.setInt(1, cuenta.idCuenta);
                 ResultSet resultado = statement.executeQuery();
 
                 if (resultado.next()) {
+                    String sentencia = " UPDATE balancecomprobacion SET saldoacredor= ?, saldodeudor= ? WHERE idcuenta=? ";
 
-                    try {
-
-                        String sentencia = " UPDATE balancecomprobacion SET saldoacredor= ?, saldodeudor= ? WHERE idcuenta=? ";
-
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentencia);
+                    try ( PreparedStatement preparedStatement = conexionIn.conectar().prepareStatement(sentencia);) {
 
                         if (cuenta.deudor) {
                             totalDebe += cuenta.totalizacion;
@@ -134,19 +132,20 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         preparedStatement.setInt(3, cuenta.idCuenta);
                         preparedStatement.executeUpdate();
-                        cerrarConexion();
+                        // cerrarConexion();
 
                     } catch (SQLException e) {
 
                         JOptionPane.showMessageDialog(this, "Error al actualizar " + e);
+                    }finally{
+                       cerrarConexion(conexionIn);
                     }
 
                 } else {
+                    String sentenciaIn = " INSERT INTO balancecomprobacion(idcuenta, saldoacredor, saldodeudor) Values(?, ?, ?)";
 
-                    try {
-                        String sentenciaIn = " INSERT INTO balancecomprobacion(idcuenta, saldoacredor, saldodeudor) Values(?, ?, ?)";
+                    try ( PreparedStatement preparedStatement = conexionIn.conectar().prepareStatement(sentenciaIn);) {
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
                         preparedStatement.setInt(1, cuenta.idCuenta);
                         if (cuenta.deudor) {
                             totalDebe += cuenta.totalizacion;
@@ -161,21 +160,24 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                         }
 
                         preparedStatement.executeUpdate();
-                        cerrarConexion();
+                        // cerrarConexion();
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar la totalizacion " + e);
+                    }finally{
+                      cerrarConexion(conexionIn);
                     }
 
                 }
-                cerrarConexion();
+                //cerrarConexion();
 
             }
-            
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
+        }finally{
+            cerrarConexion(conexionIn);
         }
 
         labelTotalDebe.setText("Total Debe: $ " + totalDebe);
@@ -183,7 +185,7 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     }
 
-    public void inicializarColumnas() {
+    private void inicializarColumnas() {
 
         TableColumnModel tColumnModel = new DefaultTableColumnModel();
 
@@ -215,17 +217,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     }
 
-    public void consultaInicial() {
+    private void consultaInicial() {
         // Conexion conexion = new Conexion();
-        try {
-
-            String setenciaSql = "SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s \n"
-                    + "JOIN cuenta p ON s.idcuenta = p.idcuenta\n"
-                    + "JOIN catalogoCuenta cc ON p.codigo = cc.codigo;";
-
-            Statement statement = conexion.conectar().createStatement();
-
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        String setenciaSql = """
+                             SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s 
+                             JOIN cuenta p ON s.idcuenta = p.idcuenta
+                             JOIN catalogoCuenta cc ON p.codigo = cc.codigo;""";
+        try ( Statement statement = conexion.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
 
@@ -242,22 +240,24 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             //   tablaTransacion.repaint();
             tableBcomprobacion.repaint();
-            cerrarConexion();
+            // cerrarConexion();
         } catch (SQLException ex) {
             //JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base comprobacion");
             System.out.println("Error: " + ex);
 
-            ex.printStackTrace();
+            // ex.printStackTrace();
+        }finally{
+          cerrarConexion();
         }
+        
+        String setenciaAjusteSql = """
+                                  SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, abc.saldodeudor AS saldo_deudor_ajuste,
+                                      abc.saldoacredor AS saldo_acredor_ajuste FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo
+                                  LEFT JOIN ajustebalancecomprobacion abc ON cc.codigo = abc.codigocuenta;
+                                  """;
 
-        try {
-
-            String setenciaAjusteSql = "SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, abc.saldodeudor AS saldo_deudor_ajuste,\n"
-                    + "    abc.saldoacredor AS saldo_acredor_ajuste FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo\n"
-                    + "LEFT JOIN ajustebalancecomprobacion abc ON cc.codigo = abc.codigocuenta;\n";
-            Statement statement = conexion.conectar().createStatement();
-
-            ResultSet resultado1 = statement.executeQuery(setenciaAjusteSql);
+        try ( Statement statement = conexion.conectar().createStatement();  
+                ResultSet resultado1 = statement.executeQuery(setenciaAjusteSql);) {
 
             while (resultado1.next()) {
 
@@ -271,11 +271,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
             }
             tableBalanceAjustado.repaint();
-            cerrarConexion();
+            //  cerrarConexion();
         } catch (SQLException e) {
 
             // JOptionPane.showMessageDialog(this, "Error al extraer los ajustes" + e);
             System.out.println("Error" + e);
+        }finally{
+           cerrarConexion();
         }
 
     }
@@ -448,17 +450,15 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ajusteBalance() {
+        Conexion conexionAjus = new Conexion();
+        String setenciaSql = """
+                                 SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, COALESCE(bc.saldoAcredor, 0) + COALESCE(ab.saldoacredor, 0) AS saldo_total_acredor,
+                                 COALESCE(bc.saldoDeudor, 0) + COALESCE(ab.saldodeudor, 0) AS saldo_total_deudor FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo
+                                 LEFT JOIN ( SELECT idcuenta, SUM(saldoAcredor) AS saldoAcredor, SUM(saldoDeudor) AS saldoDeudor FROM balanceComprobacion GROUP BY idcuenta
+                                 ) bc ON c.idcuenta = bc.idcuenta LEFT JOIN ( SELECT codigo, SUM(saldoacredor) AS saldoacredor, SUM(saldodeudor) AS saldodeudor FROM ajuste
+                                     GROUP BY codigo) ab ON c.codigo = ab.codigo;""";
 
-        //Conexion conexion = new Conexion();
-        try {
-            String setenciaSql = "SELECT c.codigo AS codigo_cuenta, cc.nombrecuenta AS nombre_cuenta, COALESCE(bc.saldoAcredor, 0) + COALESCE(ab.saldoacredor, 0) AS saldo_total_acredor,\n"
-                    + "COALESCE(bc.saldoDeudor, 0) + COALESCE(ab.saldodeudor, 0) AS saldo_total_deudor FROM cuenta c LEFT JOIN catalogocuenta cc ON c.codigo = cc.codigo\n"
-                    + "LEFT JOIN ( SELECT idcuenta, SUM(saldoAcredor) AS saldoAcredor, SUM(saldoDeudor) AS saldoDeudor FROM balanceComprobacion GROUP BY idcuenta\n"
-                    + ") bc ON c.idcuenta = bc.idcuenta LEFT JOIN ( SELECT codigo, SUM(saldoacredor) AS saldoacredor, SUM(saldodeudor) AS saldodeudor FROM ajuste\n"
-                    + "    GROUP BY codigo) ab ON c.codigo = ab.codigo;";
-
-            Statement statement = conexion.conectar().createStatement();
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        try ( Statement statement = conexionAjus.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
                 AjusteBalanceComprobacion ajustesBalance = new AjusteBalanceComprobacion();
@@ -477,11 +477,13 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 listaAjustes.add(ajustesBalance);
 
             }
-            cerrarConexion();
+            // cerrarConexion();
 
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, "Error al extraer los datos de la tabla cuenta " + e);
+        }finally{
+           cerrarConexion(conexionAjus);
         }
 
         insertandoAjustes(listaAjustes);
@@ -495,13 +497,27 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
     private void cerrarConexion() {
         try {
-            conexion.conectar().close();
+            if (conexion.conectar() != null) {
+                conexion.conectar().close();
+                System.out.println("cerro sin para");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+    }
+     private void cerrarConexion(Conexion x) {
+        try {
+            if (x.conectar() != null) {
+                x.conectar().close();
+                 System.out.println("Si entro");
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
     }
 
     private void insertandoAjustes(ArrayList<AjusteBalanceComprobacion> listBalanceAjus) {
+        Conexion conexionInserAjuste = new Conexion ();
 
         double tDebe = 0, tHaber = 0;
         double costoV = 0;
@@ -517,36 +533,34 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
                 tHaber += ajuste.saldoacredor;
 
                 String sentenciaSql = "select * from ajustebalancecomprobacion where codigocuenta=?";
-                statement = conexion.conectar().prepareStatement(sentenciaSql);
+                statement = conexionInserAjuste.conectar().prepareStatement(sentenciaSql);
                 statement.setInt(1, ajuste.codigo);
                 ResultSet resultado = statement.executeQuery();
 
                 if (resultado.next()) {
+                    
+                    String sentencia = "UPDATE ajustebalancecomprobacion SET saldoacredor= ?, saldodeudor=? WHERE codigocuenta=? ";
 
-                    try {
-
-                        String sentencia = "UPDATE ajustebalancecomprobacion SET saldoacredor= ?, saldodeudor=? WHERE codigocuenta=? ";
-
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentencia);
+                    try ( PreparedStatement preparedStatement = conexionInserAjuste.conectar().prepareStatement(sentencia);) {
 
                         preparedStatement.setDouble(1, ajuste.saldoacredor);
                         preparedStatement.setDouble(2, ajuste.saldodeudor);
                         preparedStatement.setInt(3, ajuste.codigo);
 
                         preparedStatement.executeUpdate();
-                        cerrarConexion();
+                        // cerrarConexion();
 
                     } catch (SQLException e) {
 
                         JOptionPane.showMessageDialog(this, "Error al actualizar " + e);
+                    }finally{
+                      cerrarConexion(conexionInserAjuste);
                     }
 
                 } else {
+                    String sentenciaIn = "INSERT INTO ajustebalancecomprobacion(saldodeudor, saldoacredor, codigocuenta) VALUES ( ?, ?, ?)";
 
-                    try {
-                        String sentenciaIn = "INSERT INTO ajustebalancecomprobacion(saldodeudor, saldoacredor, codigocuenta) VALUES ( ?, ?, ?)";
-
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
+                    try ( PreparedStatement preparedStatement = conexionInserAjuste.conectar().prepareStatement(sentenciaIn);) {
 
                         preparedStatement.setDouble(1, ajuste.saldodeudor);
                         preparedStatement.setDouble(2, ajuste.saldoacredor);
@@ -554,20 +568,23 @@ public class BalanceComprobacionP extends javax.swing.JFrame {
 
                         preparedStatement.executeUpdate();
 
-                        cerrarConexion();
-
+                        // cerrarConexion();
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar los ajustes " + e);
+                    }finally{
+                       cerrarConexion(conexionInserAjuste);
                     }
 
                 }
-                cerrarConexion();
+                // cerrarConexion();
 
             }
-            
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
+        }finally{
+            cerrarConexion(conexionInserAjuste);
         }
 
         labelAjusteD.setText("Total Debe: $ " + tDebe);

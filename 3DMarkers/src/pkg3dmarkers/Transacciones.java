@@ -4,7 +4,6 @@ import clases.CatalogoCuenta;
 import clases.Cuenta;
 import clases.Transaccion;
 import clases.TransaccionTableModel;
-import com.sun.jdi.connect.spi.Connection;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -36,17 +35,20 @@ public class Transacciones extends javax.swing.JFrame {
 
     public Transacciones() {
         initComponents();
+
+        totalizacion();
+
+        cbo();
         //  conexion.conectar();
         inicializarColumnas();
-        consultaIncial();
+
         habilitarControles(false);
-        totalizacion();
         txtidTransaccionTra.setVisible(false);
         centrarVentanaEnPantalla();
-
+        consultaIncial();
     }
 
-    public void habilitarControles(boolean f) {
+    private void habilitarControles(boolean f) {
 
         txtConceptoTransaccion.setEnabled(f);
         // txtidTransaccionTra.setEnabled(f);
@@ -57,6 +59,28 @@ public class Transacciones extends javax.swing.JFrame {
         btnCancelarTransaccion.setEnabled(f);
         btnActualizarTransaccion.setEnabled(f);
         rdTransaccion.setEnabled(f);
+    }
+
+    private void cerrarConexion() {
+        try {
+            if (conexion.conectar() != null) {
+                conexion.conectar().close();
+                System.out.println("cerro sin para");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+    }
+
+    private void cerrarConexion(Conexion x) {
+        try {
+            if (x.conectar() != null) {
+                x.conectar().close();
+                System.out.println("Si cerrro");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
     }
 
     private void inicializarColumnas() {
@@ -129,12 +153,11 @@ public class Transacciones extends javax.swing.JFrame {
     }
 
     private void cbo() {
-
+        Conexion conexionCBO = new Conexion();
+        String setenciaCBO = "SELECT * FROM catalogocuenta";
         try {
-            Statement statement = conexion.conectar().createStatement();
-            String setenciaCBO = "SELECT * FROM catalogocuenta";
+            Statement statement = conexionCBO.conectar().createStatement();
             ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
-
             while (resultadoCbo.next()) {
                 CatalogoCuenta cuenta = new CatalogoCuenta();
 
@@ -145,22 +168,20 @@ public class Transacciones extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la BD");
 
-            ex.printStackTrace();
+            // ex.printStackTrace();
+        } finally {
+            cerrarConexion(conexionCBO);
         }
-        // cerrarConexion();
 
     }
 
     private void consultaIncial() {
 
         // Conexion conexion = new Conexion();
-        try {
+        String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN "
+                + "catalogocuenta p ON s.codigo=p.codigo  ";
 
-            String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
-
-            Statement statement = conexion.conectar().createStatement();
-
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        try ( Statement statement = conexion.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
 
@@ -178,26 +199,22 @@ public class Transacciones extends javax.swing.JFrame {
             }
 
             tablaTransacion.repaint();
-            cerrarConexion();
+            //  cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los productos de la base");
 
-            ex.printStackTrace();
+            // ex.printStackTrace();
         }
 
-        cbo();
-
+        // cbo();
     }
 
     private void UpdateJTable() {
 
         transaccionTModel.transacciones.clear();
+        String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
 
-        try {
-            PreparedStatement statement = null;
-            String setenciaSql = "SELECT s.*, p.nombreCuenta FROM transaccion s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
-            statement = this.conexion.conectar().prepareStatement(setenciaSql);
-            ResultSet resultado = statement.executeQuery();
+        try ( PreparedStatement statement = conexion.conectar().prepareStatement(setenciaSql);  ResultSet resultado = statement.executeQuery();) {
 
             while (resultado.next()) {
 
@@ -209,12 +226,12 @@ public class Transacciones extends javax.swing.JFrame {
                 transaccion.debe = resultado.getDouble("debe");
                 transaccion.haber = resultado.getDouble("haber");
 
-                transaccionTModel.transacciones.add(transaccion);
+                this.transaccionTModel.transacciones.add(transaccion);
 
             }
 
             tablaTransacion.repaint();
-            cerrarConexion();
+            //cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las transaciones de la base de datos");
 
@@ -223,17 +240,13 @@ public class Transacciones extends javax.swing.JFrame {
     }
 
     public int buscandoSeleccion(String seleccion) {
+        Conexion conexionBus = new Conexion();
 
         int codigo = 0;
+        String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
 
-        try {
-
-            Statement statement = this.conexion.conectar().createStatement();
-
-            String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
-
-            //  System.out.println(seleccion + " ya en el metodo");
-            ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
+        try (
+                 Statement statement = conexionBus.conectar().createStatement();  ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);) {
 
             if (resultadoCbo.next()) {
                 codigo = resultadoCbo.getInt("codigo");
@@ -243,6 +256,8 @@ public class Transacciones extends javax.swing.JFrame {
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, "Error en la seleccion " + e);
+        } finally {
+            cerrarConexion(conexionBus);
         }
         //cerrarConexion();
         return codigo;
@@ -273,18 +288,17 @@ public class Transacciones extends javax.swing.JFrame {
         setLocation(x, y);
     }
 
-    public void totalizacion() {
+    private void totalizacion() {
+        Conexion conexionT = new Conexion();
 
-        ArrayList<Cuenta> listCuenta = new ArrayList<Cuenta>();
+        ArrayList<Cuenta> listCuenta = new ArrayList<>();
 
-        // Statement statement = conexion.conectar().createStatement();
-        //Conexion conexion = new Conexion();
         try {
 
             String setenciaSql = "SELECT   c.codigo AS codigo, c.nombrecuenta AS nombre,  SUM(t.debe) AS debe ,  SUM(t.haber) AS haber\n"
                     + "FROM catalogocuenta c INNER JOIN transaccion t ON c.codigo = t.codigo GROUP BY c.codigo, c.nombrecuenta;";
 
-            Statement statement = conexion.conectar().createStatement();
+            Statement statement = conexionT.conectar().createStatement();
             ResultSet resultado = statement.executeQuery(setenciaSql);
 
             while (resultado.next()) {
@@ -305,12 +319,12 @@ public class Transacciones extends javax.swing.JFrame {
 
             }
 
-            //tablaTransacion.repaint();
-            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la base");
 
-            ex.printStackTrace();
+            //ex.printStackTrace();
+        } finally {
+            cerrarConexion(conexionT);
         }
 
         try {
@@ -319,7 +333,7 @@ public class Transacciones extends javax.swing.JFrame {
             for (Cuenta cuenta : listCuenta) {
 
                 String sentenciaSql = "Select * from cuenta where codigo=?";
-                statement = this.conexion.conectar().prepareStatement(sentenciaSql);
+                statement = conexionT.conectar().prepareStatement(sentenciaSql);
                 statement.setInt(1, cuenta.codigo);
                 ResultSet resultado = statement.executeQuery();
 
@@ -329,33 +343,37 @@ public class Transacciones extends javax.swing.JFrame {
 
                         String sentencia = " UPDATE cuenta SET totalizacion= ?, deudor= ? WHERE codigo=? ";
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(sentencia);
+                        PreparedStatement preparedStatement = conexionT.conectar().prepareStatement(sentencia);
 
                         preparedStatement.setDouble(1, cuenta.totalizacion);
                         preparedStatement.setBoolean(2, cuenta.deudor);
                         preparedStatement.setInt(3, cuenta.codigo);
                         preparedStatement.executeUpdate();
-                        cerrarConexion();
+                        // cerrarConexion();
 
                     } catch (SQLException e) {
 
                         JOptionPane.showMessageDialog(this, "Error al actualizar " + e);
+                    } finally {
+                        cerrarConexion(conexionT);
+
                     }
 
                 } else {
+                    String sentenciaIn = " INSERT INTO cuenta(codigo, totalizacion, deudor) Values(?, ?, ?)";
 
-                    try {
-                        String sentenciaIn = " INSERT INTO cuenta(codigo, totalizacion, deudor) Values(?, ?, ?)";
+                    try ( PreparedStatement preparedStatement = conexionT.conectar().prepareStatement(sentenciaIn);) {
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
                         preparedStatement.setInt(1, cuenta.codigo);
                         preparedStatement.setDouble(2, cuenta.totalizacion);
                         preparedStatement.setBoolean(3, cuenta.deudor);
                         preparedStatement.executeUpdate();
-                        cerrarConexion();
+                        // cerrarConexion();
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(this, "Error insertar la totalizacion " + e);
+                    } finally {
+                        cerrarConexion(conexionT);
                     }
 
                 }
@@ -365,24 +383,22 @@ public class Transacciones extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
+        } finally {
+            // cerrarConexion(conexionT);
         }
-        // cerrarConexion();
+
         resetear(listCuenta);
 
-        //resetear(listCuenta);
     }
 
     private void resetear(ArrayList<Cuenta> listCuenta) {
 
-        ArrayList<Cuenta> listaprueba = new ArrayList<Cuenta>();
+        ArrayList<Cuenta> listaprueba = new ArrayList<>();
+        Conexion conexionRe = new Conexion();
 
         Cuenta cuenta = new Cuenta();
-        try {
-            PreparedStatement statement = null;
-            String sentenciaSql = "select * from cuenta";
-            statement = this.conexion.conectar().prepareStatement(sentenciaSql);
-
-            ResultSet resultado = statement.executeQuery();
+        String sentenciaSql = "select * from cuenta";
+        try ( PreparedStatement statement = conexionRe.conectar().prepareStatement(sentenciaSql);  ResultSet resultado = statement.executeQuery();) {
 
             while (resultado.next()) {
                 Cuenta cuenta1 = new Cuenta();
@@ -393,10 +409,11 @@ public class Transacciones extends javax.swing.JFrame {
 
                 listaprueba.add(cuenta1);
             }
-            cerrarConexion();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los datos1 de cuenta " + e);
+        } finally {
+            cerrarConexion(conexionRe);
         }
 
         ArrayList<Cuenta> codigosDiferentes = new ArrayList<Cuenta>();
@@ -418,29 +435,33 @@ public class Transacciones extends javax.swing.JFrame {
         for (Cuenta codigosDiferente : codigosDiferentes) {
 
             //    System.out.println(codigosDiferente.codigo);
-            try {
-                String setenciaSql = "DELETE FROM balancecomprobacion Where idcuenta= ?";
-                PreparedStatement prepStat = conexion.conectar().prepareStatement(setenciaSql);
+            String setenciaSql = "DELETE FROM balancecomprobacion Where idcuenta= ?";
+            try ( PreparedStatement prepStat = conexionRe.conectar().prepareStatement(setenciaSql);) {
+
                 prepStat.setInt(1, codigosDiferente.idCuenta);
                 prepStat.executeUpdate();
 
                 UpdateJTable();
-                cerrarConexion();
+
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
+            } finally {
+                cerrarConexion(conexionRe);
             }
 
-            try {
-                String setenciaSql = "DELETE FROM cuenta Where idcuenta= ?";
-                PreparedStatement prepStat = conexion.conectar().prepareStatement(setenciaSql);
+            setenciaSql = "DELETE FROM cuenta Where idcuenta= ?";
+            try (
+                     PreparedStatement prepStat = conexionRe.conectar().prepareStatement(setenciaSql);) {
+
                 prepStat.setInt(1, codigosDiferente.idCuenta);
                 prepStat.executeUpdate();
 
                 UpdateJTable();
-                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                cerrarConexion(conexionRe);
             }
         }
         //  cerrarConexion();
@@ -704,22 +725,17 @@ public class Transacciones extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Elimino correctamente " + transaccion.idTransaccion);
                 UpdateJTable();
                 tablaTransacion.repaint();
-                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                cerrarConexion();
             }
 
         }
 
     }//GEN-LAST:event_btnEliminarTransaccionActionPerformed
-    private void cerrarConexion() {
-        try {
-            conexion.conectar().close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
-        }
-    }
+
     private void btnGuardarTransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarTransaccionActionPerformed
 
         double montoIva = 0;
@@ -750,88 +766,95 @@ public class Transacciones extends javax.swing.JFrame {
                     case 412:
                         montoIva = transaccion.debe * IVA;
                         if (rdTransaccion.isSelected()) {
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+
                                 preparedStatement.setInt(1, transaccion.codigo);
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // 
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                 cerrarConexion();
                             }
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                // setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+
                                 preparedStatement.setInt(1, 117);
                                 preparedStatement.setString(2, "Calculo del credito fiscal");
                                 preparedStatement.setDouble(3, (montoIva));
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                cerrarConexion();
                             }
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+
                                 preparedStatement.setInt(1, 211);
                                 preparedStatement.setString(2, "Ingresando monto total que se debe");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, transaccion.debe + montoIva);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                 cerrarConexion();
                             }
 
                         } else {
                             montoIva = transaccion.debe * IVA;
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+
                                 preparedStatement.setInt(1, transaccion.codigo);
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
 
+                            } finally {
+                               cerrarConexion();
                             }
 
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //  String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 preparedStatement.setInt(1, 117);
                                 preparedStatement.setString(2, "Calculo del credito fiscal");
                                 preparedStatement.setDouble(3, (montoIva));
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                cerrarConexion();
                             }
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                // String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 preparedStatement.setInt(1, 111);
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, transaccion.debe + montoIva);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
 
                             } catch (SQLException e) {
 
                                 JOptionPane.showConfirmDialog(this, e);
 
+                            } finally {
+                                cerrarConexion();
                             }
 
                         }
@@ -839,91 +862,101 @@ public class Transacciones extends javax.swing.JFrame {
                     case 511:
                         montoIva = transaccion.haber * IVA;
                         if (rdTransaccion.isSelected()) {
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+
                                 preparedStatement.setInt(1, transaccion.codigo);
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
 
+                            } finally {
+                                  cerrarConexion();
                             }
 
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
+
                                 preparedStatement.setInt(1, 213);
                                 preparedStatement.setString(2, "Calculo del devito fiscal");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, (montoIva));
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                 cerrarConexion();
                             }
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //  String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 preparedStatement.setInt(1, 115);
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, transaccion.haber + montoIva);
                                 preparedStatement.setDouble(4, 0);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
 
                             } catch (SQLException e) {
+                                System.out.println(e);
+
+                            } finally {
+                                cerrarConexion();
 
                             }
 
                         } else {
 
                             montoIva = transaccion.haber * IVA;
+                            String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
 
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
                                 preparedStatement.setInt(1, transaccion.codigo);
                                 preparedStatement.setString(2, transaccion.concepto);
                                 preparedStatement.setDouble(3, transaccion.debe);
                                 preparedStatement.setDouble(4, transaccion.haber);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
 
+                            } finally {
+                                cerrarConexion();
                             }
 
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //  String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 preparedStatement.setInt(1, 213);
                                 preparedStatement.setString(2, "Calculo del devito fiscal");
                                 preparedStatement.setDouble(3, 0);
                                 preparedStatement.setDouble(4, (montoIva));
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
 
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(this, e);
+                            } finally {
+                                //cerrarConexion();
                             }
-                            try {
-                                String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
-                                PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);
+                            try ( PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setenciaSql);) {
+                                //  String setenciaSql = "INSERT INTO transaccion(codigo, concepto, debe, haber) Values (?,?,?,?)";
                                 preparedStatement.setInt(1, 111);
                                 preparedStatement.setString(2, "Ingresando monto total");
                                 preparedStatement.setDouble(3, transaccion.haber + montoIva);
                                 preparedStatement.setDouble(4, 0);
                                 preparedStatement.executeUpdate();
-                                cerrarConexion();
+                                // cerrarConexion();
 
                             } catch (SQLException e) {
 
+                            }finally{
+                                cerrarConexion();
                             }
 
                         }
@@ -945,7 +978,9 @@ public class Transacciones extends javax.swing.JFrame {
                 // cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
-                e.printStackTrace();
+                // e.printStackTrace();
+            } finally {
+               cerrarConexion();
             }
 
             // consultaIncial();
@@ -1013,10 +1048,13 @@ public class Transacciones extends javax.swing.JFrame {
                 preparedStatement.executeUpdate();
 
                 UpdateJTable();
-                cerrarConexion();
+                //cerrarConexion();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar");
-                e.printStackTrace();
+                //e.printStackTrace();
+            }
+            finally{
+                cerrarConexion();
             }
         }
         // UpdateJTable();
@@ -1028,14 +1066,7 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-/*
-        try {
-            conexion.conectar().close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
-        }
-        JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
-         */
+
 
     }//GEN-LAST:event_formWindowClosing
 
@@ -1065,7 +1096,7 @@ public class Transacciones extends javax.swing.JFrame {
 
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         // Crea una nueva instancia de NuevoVentana
-        cerrarConexion();
+        //  cerrarConexion();
         Login login = new Login();
         login.setVisible(true);
         // Cierra la ventana actual

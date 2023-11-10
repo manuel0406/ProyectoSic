@@ -66,10 +66,12 @@ public class AjustesP extends javax.swing.JFrame {
     }
 
     private void cbo() {
-        try {
-            Statement statement = conexion.conectar().createStatement();
-            String setenciaCBO = "SELECT * FROM catalogocuenta";
-            ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
+
+        Conexion conexionCbo = new Conexion();
+        String setenciaCBO = "SELECT * FROM catalogocuenta";
+        
+        try ( Statement statement = conexionCbo.conectar().createStatement();  
+                ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);) {
 
             while (resultadoCbo.next()) {
                 CatalogoCuenta cuenta = new CatalogoCuenta();
@@ -77,12 +79,13 @@ public class AjustesP extends javax.swing.JFrame {
                 cuenta.nombre = resultadoCbo.getString("nombrecuenta");
                 cboCuentaAfectada.addItem(cuenta.nombre);
             }
-            cerrarConexion();
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las cuentas de la BD");
 
-            ex.printStackTrace();
+            // ex.printStackTrace();
+        } finally {
+            cerrarConexion(conexionCbo);
         }
 
     }
@@ -122,27 +125,24 @@ public class AjustesP extends javax.swing.JFrame {
     }
 
     private int buscandoSeleccion(String seleccion) {
+        Conexion conexionBus = new Conexion();
 
         int codigo = 0;
+        String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
 
-        try {
-
-            Statement statement = this.conexion.conectar().createStatement();
-
-            String setenciaCBO = "SELECT * FROM catalogocuenta Where nombrecuenta = " + "'" + seleccion + "'";
-
-            //  System.out.println(seleccion + " ya en el metodo");
-            ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);
+        try ( Statement statement = conexionBus.conectar().createStatement();  ResultSet resultadoCbo = statement.executeQuery(setenciaCBO);) {
 
             if (resultadoCbo.next()) {
                 codigo = resultadoCbo.getInt("codigo");
-                System.out.println(codigo);
+                //System.out.println(codigo);
             }
-            cerrarConexion();
+            //cerrarConexion();
 
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, "Error en la seleccion");
+        } finally {
+            cerrarConexion(conexionBus);
         }
         return codigo;
 
@@ -150,14 +150,10 @@ public class AjustesP extends javax.swing.JFrame {
 
     private void consultaIncial() {
 
-        // Conexion conexion = new Conexion();
-        try {
+        //  Conexion conexionCo = new Conexion();
+        String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
 
-            String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
-
-            Statement statement = conexion.conectar().createStatement();
-
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        try ( Statement statement = conexion.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
 
@@ -181,29 +177,25 @@ public class AjustesP extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los ajustes de la base");
 
-            ex.printStackTrace();
+            //  ex.printStackTrace();
+        } finally {
+            cerrarConexion();
         }
 
-        cbo();
+      //  cbo();
         TableColumn columna3 = tablaAjuste.getColumnModel().getColumn(2);
         columna3.setPreferredWidth(250);
-        /*   int columnIndexToHide = 0;
-            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setMinWidth(0);
-            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setMaxWidth(0);
-            tablaAjuste.getColumnModel().getColumn(columnIndexToHide).setWidth(0);
-         */
 
     }
 
     private void UpdateJTable() {
 
+        //Conexion conexionUp = new Conexion();
         ajusteTModel.ajustes.clear();
+        //PreparedStatement statement = null;
+        String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo   ";
 
-        try {
-            PreparedStatement statement = null;
-            String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo   ";
-            statement = this.conexion.conectar().prepareStatement(setenciaSql);
-            ResultSet resultado = statement.executeQuery();
+        try ( PreparedStatement statement = conexion.conectar().prepareStatement(setenciaSql);  ResultSet resultado = statement.executeQuery();) {
 
             while (resultado.next()) {
                 Ajuste ajuste = new Ajuste();
@@ -222,22 +214,25 @@ public class AjustesP extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar las transaciones de la base de datos");
 
+        } finally {
+            cerrarConexion();
         }
 
     }
 
     private void extrayendoBC() {
         ArrayList<BalanceComprobacion> listBalanceC = new ArrayList<BalanceComprobacion>();
+        Conexion conexionE = new Conexion();
 
-        //  Conexion conexion = new Conexion();
-        try {
+        //Conexion conexion = new Conexion();
+        String setenciaSql = """
+                                 SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s 
+                                 JOIN cuenta p ON s.idcuenta = p.idcuenta
+                                 JOIN catalogoCuenta cc ON p.codigo = cc.codigo;""";
 
-            String setenciaSql = "SELECT p.codigo,cc.nombreCuenta, s.saldodeudor, s.saldoacredor FROM balancecomprobacion s \n"
-                    + "JOIN cuenta p ON s.idcuenta = p.idcuenta\n"
-                    + "JOIN catalogoCuenta cc ON p.codigo = cc.codigo;";
-
-            Statement statement = conexion.conectar().createStatement();
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        try (
+                 Statement statement = conexionE.conectar().createStatement(); 
+                ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
 
@@ -251,48 +246,43 @@ public class AjustesP extends javax.swing.JFrame {
                 listBalanceC.add(balance);
 
             }
-            /*
-            for (BalanceComprobacion balanceComprobacion : listBalanceC) {
-                System.out.println(balanceComprobacion.codigo + " " + balanceComprobacion.nombreCuenta);
 
-            }*/
-
-            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los datos de la base comprobacion");
 
-            ex.printStackTrace();
+            // ex.printStackTrace();
+        } finally {
+            cerrarConexion(conexionE);
         }
         try {
             PreparedStatement statement = null;
 
             for (BalanceComprobacion balanceComprobacion : listBalanceC) {
 
-                String setenciaSql = "Select * from ajuste where codigo=?";
-                statement = this.conexion.conectar().prepareStatement(setenciaSql);
+                setenciaSql = "Select * from ajuste where codigo=?";
+                statement = conexionE.conectar().prepareStatement(setenciaSql);
                 statement.setInt(1, balanceComprobacion.codigo);
                 ResultSet resultado = statement.executeQuery();
 
                 if (resultado.next()) {
-                    try {
-                        String setencia = "UPDATE ajuste SET saldoacredor=? where codigo=?";
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(setencia);
+                    String setencia = "UPDATE ajuste SET saldoacredor=? where codigo=?";
+                    try ( PreparedStatement preparedStatement = conexionE.conectar().prepareStatement(setencia);) {
 
                         preparedStatement.setDouble(1, balanceComprobacion.saldodeudor);
                         preparedStatement.setInt(2, balanceComprobacion.codigo);
                         preparedStatement.executeUpdate();
 
-                        cerrarConexion();
-
+                        //cerrarConexion();
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
 
+                    } finally {
+                        cerrarConexion(conexionE);
                     }
                 } else {
-                    try {
-                        String sentenciaIn = " INSERT INTO ajuste(codigo,  saldoacredor) Values(?,  ?)";
+                    String sentenciaIn = " INSERT INTO ajuste(codigo,  saldoacredor) Values(?,  ?)";
+                    try ( PreparedStatement preparedStatement = conexionE.conectar().prepareStatement(sentenciaIn);) {
 
-                        PreparedStatement preparedStatement = conexion.conectar().prepareStatement(sentenciaIn);
                         if (balanceComprobacion.codigo == 415
                                 || balanceComprobacion.codigo == 412 || balanceComprobacion.codigo == 413 || balanceComprobacion.codigo == 414 || balanceComprobacion.codigo == 113) {
                             preparedStatement.setInt(1, balanceComprobacion.codigo);
@@ -300,18 +290,21 @@ public class AjustesP extends javax.swing.JFrame {
                             preparedStatement.setDouble(2, balanceComprobacion.saldodeudor);
                             preparedStatement.execute();
                         }
-                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error al insertar: " + e);
+                    } finally {
+                        cerrarConexion(conexionE);
                     }
 
                 }
 
             }
-            cerrarConexion();
+            // cerrarConexion();
         } catch (SQLException e) {
             System.out.println(e);
+        } finally {
+            cerrarConexion(conexionE);
         }
 
         calcularCostoVenta();
@@ -320,14 +313,12 @@ public class AjustesP extends javax.swing.JFrame {
 
     // private int invetarioFinal(){}
     private void calcularCostoVenta() {
+
+        Conexion conexionCV = new Conexion();
         ArrayList<Ajuste> listAjust = new ArrayList<Ajuste>();
-        try {
+        String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
 
-            String setenciaSql = "SELECT s.idajuste, s.codigo, p.nombreCuenta, s.saldodeudor, s.saldoacredor FROM ajuste s JOIN catalogocuenta p ON s.codigo=p.codigo  ";
-
-            Statement statement = conexion.conectar().createStatement();
-
-            ResultSet resultado = statement.executeQuery(setenciaSql);
+        try ( Statement statement = conexionCV.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
             while (resultado.next()) {
 
@@ -342,11 +333,12 @@ public class AjustesP extends javax.swing.JFrame {
             }
 
             // tablaAjuste.repaint();
-            cerrarConexion();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al recuperar los ajustes de la base");
 
-            ex.printStackTrace();
+            //  ex.printStackTrace();
+        } finally {
+            cerrarConexion(conexionCV);
         }
         for (Ajuste ajuste : listAjust) {
 
@@ -373,47 +365,48 @@ public class AjustesP extends javax.swing.JFrame {
 
         costV = compras + gastoCompras - (devCompras + rcompras) + inventarioI - inventarioF;
         // System.out.println(costV);
+        setenciaSql = "Select * from ajuste where codigo=612  ";
+        try ( Statement statement = conexionCV.conectar().createStatement();  ResultSet resultado = statement.executeQuery(setenciaSql);) {
 
-        try {
-            String setenciaSql = "Select * from ajuste where codigo=612  ";
-
-            Statement statement = conexion.conectar().createStatement();
-            ResultSet resultado = statement.executeQuery(setenciaSql);
             if (resultado.next()) {
+                String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=612";
 
-                try {
-                    String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=612";
-                    PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                try ( PreparedStatement preparedStatement = conexionCV.conectar().prepareStatement(setencia);) {
 
                     preparedStatement.setDouble(1, costV);
                     preparedStatement.executeUpdate();
-                    cerrarConexion();
+                    // cerrarConexion();
 
                 } catch (SQLException e) {
                     System.out.println("Error : " + e);
 
+                } finally {
+                   cerrarConexion(conexionCV);
                 }
 
             } else {
-                try {
-                    String setencia = "INSERT INTO ajuste(codigo, saldodeudor, saldoacredor) VALUES(612,?,?)";
-                    PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                String setencia = "INSERT INTO ajuste(codigo, saldodeudor, saldoacredor) VALUES(612,?,?)";
+                try ( PreparedStatement preparedStatement = conexionCV.conectar().prepareStatement(setencia);) {
 
                     preparedStatement.setDouble(1, costV);
                     preparedStatement.setDouble(2, 0);
                     preparedStatement.executeUpdate();
-                    cerrarConexion();
+                    // cerrarConexion();
 
                 } catch (SQLException e) {
                     System.out.println("Error: " + e);
 
+                } finally {
+                    cerrarConexion(conexionCV);
                 }
             }
-            cerrarConexion();
+            //cerrarConexion();
 
         } catch (SQLException e) {
 
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            cerrarConexion(conexionCV);
         }
 
         // cerrarConexion();
@@ -429,7 +422,7 @@ public class AjustesP extends javax.swing.JFrame {
 
     }
 
-    public void habilitarControles(boolean f) {
+    private void habilitarControles(boolean f) {
 
         // txtConceptoTransaccion.setEnabled(f);
         // txtidTransaccionTra.setEnabled(f);
@@ -442,9 +435,23 @@ public class AjustesP extends javax.swing.JFrame {
         btnGuardarAjuste.setEnabled(f);
     }
 
+    private void cerrarConexion(Conexion x) {
+        try {
+            if (x.conectar() != null) {
+                x.conectar().close();
+                System.out.println("Si entro");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
+        }
+    }
+
     private void cerrarConexion() {
         try {
-            conexion.conectar().close();
+            if (conexion.conectar() != null) {
+                conexion.conectar().close();
+                System.out.println("cerrro sin para");
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
@@ -560,11 +567,6 @@ public class AjustesP extends javax.swing.JFrame {
         btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnRegresarMouseClicked(evt);
-            }
-        });
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
             }
         });
         cboCuentaAjuste.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, 110, -1));
@@ -717,6 +719,7 @@ public class AjustesP extends javax.swing.JFrame {
     }
     private void btnGuardarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAjusteActionPerformed
 
+        //Conexion conexcionG= new Conexion();
         if (!validando()) {
 
             try {
@@ -728,18 +731,19 @@ public class AjustesP extends javax.swing.JFrame {
                 ajuste.codigo = buscandoSeleccion(seleccion);
 
                 if (ajuste.codigo == 113) {
-                    try {
-                        String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                    String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
+                    try ( PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);) {
 
                         preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
 
                         preparedStatement.executeUpdate();
                         calcularCostoVenta();
-                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
+
+                    } finally {
+                         cerrarConexion();
 
                     }
 
@@ -758,17 +762,18 @@ public class AjustesP extends javax.swing.JFrame {
                     preparedStatement.setDouble(2, ajuste.debe);
                     preparedStatement.setDouble(3, ajuste.haber);
                     preparedStatement.executeUpdate();
-                    
 
                     ajusteTModel.ajustes.add(ajuste);
-                    
+
                 }
                 //transaccion.concepto = txtConceptoTransaccion.getText();
-                cerrarConexion();
+                // cerrarConexion();
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al ingresar los datos");
-                e.printStackTrace();
+                //  e.printStackTrace();
+            } finally {
+                 cerrarConexion();
             }
 
             UpdateJTable();
@@ -785,13 +790,13 @@ public class AjustesP extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
 
-        try {
+        /* try {
             conexion.conectar().close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
         }
         JOptionPane.showMessageDialog(this, "La conexion a la base de datos ha sido cerrada");
-
+         */
     }//GEN-LAST:event_formWindowClosing
 
     private void btnEliminarAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarAjusteActionPerformed
@@ -806,16 +811,17 @@ public class AjustesP extends javax.swing.JFrame {
             // Transaccion transaccion = ajusteTModel.ajustes.get(i);
             String setenciaSql = "DELETE FROM ajuste Where idajuste= ?";
             aEliminar.add(ajuste);
-            try {
-                PreparedStatement prepStat = conexion.conectar().prepareStatement(setenciaSql);
+            try ( PreparedStatement prepStat = conexion.conectar().prepareStatement(setenciaSql);) {
+
                 prepStat.setInt(1, ajuste.idAjuste);
                 prepStat.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Elimino correctamente " + ajuste.idAjuste);
                 UpdateJTable();
-                cerrarConexion();
 
             } catch (SQLException ex) {
                 Logger.getLogger(Transacciones.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                 cerrarConexion();
             }
 
         }
@@ -873,20 +879,21 @@ public class AjustesP extends javax.swing.JFrame {
             try {
 
                 if (codigo == 113) {
-                    try {
-                        String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
-                        PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);
+                    String setencia = "UPDATE ajuste SET saldodeudor=? where codigo=113";
+
+                    try ( PreparedStatement preparedStatement = conexion.conectar().prepareCall(setencia);) {
 
                         preparedStatement.setDouble(1, Double.valueOf(txtMontoAjuste.getText()));
 
                         preparedStatement.executeUpdate();
                         calcularCostoVenta();
                         UpdateJTable();
-                        cerrarConexion();
 
                     } catch (SQLException e) {
                         System.out.println("Error: " + e);
 
+                    } finally {
+                        cerrarConexion();
                     }
 
                 } else {
@@ -911,11 +918,13 @@ public class AjustesP extends javax.swing.JFrame {
                     UpdateJTable();
 
                 }
-                cerrarConexion();
+               // cerrarConexion();
 
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error al actualizar ajuste");
-                e.printStackTrace();
+                //  e.printStackTrace();
+            } finally {
+                // cerrarConexion();
             }
         }
 
@@ -980,10 +989,6 @@ public class AjustesP extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnCerrarActionPerformed
-
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
