@@ -65,7 +65,7 @@ public class Transacciones extends javax.swing.JFrame {
         try {
             if (conexion.conectar() != null) {
                 conexion.conectar().close();
-                System.out.println("cerro sin para");
+                //System.out.println("cerro sin para");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
@@ -76,7 +76,7 @@ public class Transacciones extends javax.swing.JFrame {
         try {
             if (x.conectar() != null) {
                 x.conectar().close();
-                System.out.println("Si cerrro");
+               // System.out.println("Si cerrro");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");

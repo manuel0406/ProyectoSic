@@ -439,7 +439,7 @@ public class AjustesP extends javax.swing.JFrame {
         try {
             if (x.conectar() != null) {
                 x.conectar().close();
-                System.out.println("Si entro");
+                //System.out.println("Si entro");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
@@ -450,7 +450,7 @@ public class AjustesP extends javax.swing.JFrame {
         try {
             if (conexion.conectar() != null) {
                 conexion.conectar().close();
-                System.out.println("cerrro sin para");
+               // System.out.println("cerrro sin para");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Ocurrio un error al cerrar la conexion a la base de datos");
